@@ -59,6 +59,6 @@ const OrderSchema = new mongoose.Schema({
   total_amount: { type: Number, required: true }
 }, { timestamps: true });
 
-const Order = mongoose.model("Order", OrderSchema);
+const Order = mongoose.models.Orders || mongoose.model("Orders", OrderSchema);
 
 export default Order;
