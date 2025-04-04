@@ -15,3 +15,21 @@ export const GET = async (req) => {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 };
+
+export const PUT = async req => {
+  try{
+    const body = await req.json();
+    const updatedDoc = await ShipEnv.findByIdAndUpdate(
+      "67eff0c38ee5d99c1f424274",
+      { $set: body }, 
+      {
+        new: true,
+        runValidators: true
+      }
+    );
+    return NextResponse.json(updatedDoc);
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}

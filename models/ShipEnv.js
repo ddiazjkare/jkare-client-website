@@ -64,6 +64,4 @@ const addressSchema = new mongoose.Schema(
 const ShipEnv =
   mongoose.models.ShipEnv || mongoose.model("ShipEnv", addressSchema);
 
-console.log("Collection name:", ShipEnv.collection.collectionName);
-
 export default ShipEnv;
