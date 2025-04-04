@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    // domains: ['www.cpapmiami.com', 'res.cloudinary.com'],
+    domains: ['www.cpapmiami.com', 'res.cloudinary.com' , 'www.directhomemedical.com'],
     remotePatterns: [
       {
         protocol: 'https', // or 'http' if needed
@@ -12,6 +12,12 @@ const nextConfig = {
       {
         protocol: 'https', // or 'http' if needed
         hostname: 'res.cloudinary.com', // Replace with your domain
+        port: '', // Optional, specify port if needed
+        pathname: '/**', // Optional, filter specific paths
+      },        // Add more patterns for other domains if necessary
+      {
+        protocol: 'https', // or 'http' if needed
+        hostname: 'www.directhomemedical.com', // Replace with your domain
         port: '', // Optional, specify port if needed
         pathname: '/**', // Optional, filter specific paths
       },        // Add more patterns for other domains if necessary
