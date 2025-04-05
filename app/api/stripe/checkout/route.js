@@ -3,7 +3,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 export const POST = async (req) => {
   try {
-    let { line_items, email, metadata, selectedRate, total_amount, name, address } = await req.json();
+    let { line_items, email, metadata, selectedRate, total_amount, name, address, threshold } = await req.json();
 
     line_items = line_items.map(item => ({...item, tax_rates : ["txr_1R6upeCcxBtZCrgdsRtoPFQ8"]}));
 
@@ -41,7 +41,7 @@ export const POST = async (req) => {
           shipping_rate_data: {
             type: "fixed_amount",
             fixed_amount: {
-              amount: total_amount < 500 ? shippingAmount : 0, 
+              amount: total_amount < threshold ? shippingAmount : 0, 
               currency: "usd",
             },
             display_name: selectedRate.servicelevel.display_name, // Shipping method name (e.g., "UPS® Ground")
