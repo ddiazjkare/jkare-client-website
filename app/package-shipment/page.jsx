@@ -4,13 +4,18 @@ import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+// Some React Icons (install via `npm i react-icons` if needed)
+import { FaShippingFast, FaShoppingCart, FaRegAddressBook } from "react-icons/fa";
+import { MdOutlineLocalShipping } from "react-icons/md";
+
 const SHIPPO_API_KEY = process.env.NEXT_PUBLIC_SHIPPO_API_KEY;
 
 export default function BorderfreeStyleCheckout() {
+  const router = useRouter();
+
   // =========================================================
   // 1) State
   // =========================================================
-  const router = useRouter();
   const [receiver, setReceiver] = useState({
     email: "",
     firstName: "John",
@@ -28,23 +33,27 @@ export default function BorderfreeStyleCheckout() {
   const [selectedRate, setSelectedRate] = useState(null);
   const [cartItems, setCartItems] = useState([]);
 
-  // This tracks whether we’re busy fetching rates or finalizing the checkout
+  // Tracks whether we’re busy fetching rates or finalizing checkout
   const [isFetchingRates, setIsFetchingRates] = useState(false);
   const [isCreatingShipment, setIsCreatingShipment] = useState(false);
 
-  // For address suggestions
+  // For address suggestions (Shippo’s recommended addresses)
   const [addressSuggestions, setAddressSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const suggestionsRef = useRef(null);
+
+  // The “from” address & carrier, fetched from /api/ship-env
+  const [envData, setEnvData] = useState(null);
 
   // =========================================================
   // 2) Load cart & parcels from localStorage on mount
   // =========================================================
   useEffect(() => {
+    // 2a) Load Cart
     const medCart = JSON.parse(localStorage.getItem("medCart")) || [];
     setCartItems(medCart);
 
-    // Convert each cart item to a Shippo parcel
+    // 2b) Convert each cart item to a Shippo parcel
     const formattedParcels = medCart.map((item) => {
       const length = item.parcel_info?.length ?? 10;
       const width = item.parcel_info?.width ?? 5;
@@ -62,6 +71,9 @@ export default function BorderfreeStyleCheckout() {
       };
     });
     setParcels(formattedParcels);
+
+    // 2c) Fetch environment data (FROM address, carrier, etc.)
+    fetchEnvData();
   }, []);
 
   // Close the suggestions dropdown if the user clicks outside
@@ -81,36 +93,46 @@ export default function BorderfreeStyleCheckout() {
   }, []);
 
   // =========================================================
-  // 3) Fetch shipping rates automatically
-  //    once the address is reasonably complete
+  // 2c) Fetch environment data (/api/ship-env) for “from” address
   // =========================================================
-  useEffect(() => {
-    if (
-      receiver.address &&
-      receiver.city &&
-      receiver.region &&
-      receiver.postalCode
-    ) {
-      fetchRates();
+  const fetchEnvData = async () => {
+    try {
+      const response = await fetch("/api/ship-env");
+      if (!response.ok) {
+        throw new Error("Failed to fetch environment data (/api/ship-env).");
+      }
+      const data = await response.json();
+      // e.g. { name, street1, city, state, zip, country, email, phone, carrier, offer_price }
+      setEnvData(data);
+    } catch (error) {
+      console.error("Error fetching /api/ship-env:", error);
+      toast.error("Error fetching environment data.");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [receiver, parcels]);
+  };
 
+  // =========================================================
+  // 3) Fetch shipping rates when user clicks “Get Shipping Rates”
+  // =========================================================
   const fetchRates = async () => {
+    if (!envData) {
+      toast.error("No environment data available to fetch shipping rates.");
+      return;
+    }
+
     try {
       setIsFetchingRates(true);
       setSelectedRate(null);
 
       const shipmentData = {
         address_from: {
-          name: "Jkare",
-          street1: "4101 SW 73rd Ave",
-          city: "Miami",
-          state: "FL",
-          zip: "33155-4520",
-          country: "US",
-          email: "akash@hexerve.com",
-          phone: "+13052481003",
+          name: envData.name,
+          street1: envData.street1,
+          city: envData.city,
+          state: envData.state,
+          zip: envData.zip,
+          country: envData.country,
+          email: envData.email,
+          phone: envData.phone,
         },
         address_to: {
           name: receiver.firstName + " " + receiver.lastName,
@@ -123,7 +145,7 @@ export default function BorderfreeStyleCheckout() {
           email: receiver.email,
           phone: receiver.phone,
         },
-        parcels,
+        parcels: parcels,
         carrier_accounts: null,
         shipment_date: new Date().toISOString().replace("Z", "+00:00"),
       };
@@ -133,10 +155,9 @@ export default function BorderfreeStyleCheckout() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(shipmentData),
       });
-
       const data = await response.json();
       if (data.error) {
-        // toast.error(`Failed to fetch rates: ${data.error}`);
+        toast.error(`Failed to fetch rates: ${data.error}`);
         setShipment(null);
         return;
       }
@@ -144,8 +165,8 @@ export default function BorderfreeStyleCheckout() {
       setShipment(data);
       toast.success("Shipping rates fetched!");
     } catch (error) {
-      // toast.error("Error fetching rates: " + error.message);
-      // console.error("Error fetching rates:", error);
+      toast.error("Error fetching rates: " + error.message);
+      console.error("Error fetching rates:", error);
       setShipment(null);
     } finally {
       setIsFetchingRates(false);
@@ -156,26 +177,34 @@ export default function BorderfreeStyleCheckout() {
   // 4) Stripe Checkout
   // =========================================================
   const handleProceedToPayment = async () => {
-    // If user clicks without selecting any shipping option
     if (!selectedRate) {
-      toast.warn("Please select any one delivery option to proceed for payment!");
+      toast.warn("Please select a delivery option before proceeding.");
       return;
     }
 
     try {
       setIsCreatingShipment(true);
 
-      let checkoutObj = JSON.parse(localStorage.getItem("checkoutStorage"));
+      let checkoutObj = JSON.parse(localStorage.getItem("checkoutStorage")) || {};
 
-      if(!checkoutObj.email)
-        checkoutObj.email = receiver.email;
+      // If checkoutObj has no email, fill it from receiver
+      if (!checkoutObj.email) checkoutObj.email = receiver.email;
 
+      // Attach shipping rate
       checkoutObj.selectedRate = selectedRate;
-      const checkoutResponse = await fetch("/api/stripe/checkout", {
+
+      // Build final payload for Stripe
+      const response = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({...checkoutObj,
-          metadata: {...checkoutObj.metadata, shipping_rate: selectedRate.object_id},
+        body: JSON.stringify({
+          ...checkoutObj,
+          threshold : envData.offer_price,
+          metadata: {
+
+            ...checkoutObj.metadata,
+            shipping_rate: selectedRate.object_id,
+          },
           name: receiver.firstName.trim() + " " + receiver.lastName.trim(),
           address: {
             line1: receiver.address,
@@ -188,12 +217,11 @@ export default function BorderfreeStyleCheckout() {
         }),
       });
 
-      if (!checkoutResponse.ok) {
+      if (!response.ok) {
         throw new Error("Failed to initiate Stripe checkout.");
       }
 
-      const { session } = await checkoutResponse.json();
-
+      const { session } = await response.json();
       router.push(session.url);
     } catch (error) {
       toast.error("Error redirecting to payment: " + error.message);
@@ -202,8 +230,9 @@ export default function BorderfreeStyleCheckout() {
       setIsCreatingShipment(false);
     }
   };
+
   // =========================================================
-  // 6) Address Handlers (with recommended_address)
+  // 5) Address Handlers (with recommended_address for “To” address)
   // =========================================================
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -212,6 +241,8 @@ export default function BorderfreeStyleCheckout() {
 
   const handleAddressChangeAndSuggest = async (e) => {
     handleInputChange(e);
+
+    // Use “Shippo recommended address” if we want suggestions
     const updatedValue = e.target.value;
     if (updatedValue.length < 5) {
       setAddressSuggestions([]);
@@ -271,7 +302,7 @@ export default function BorderfreeStyleCheckout() {
   };
 
   // =========================================================
-  // 7) Compute item subtotal, shipping, tax, etc.
+  // 6) Compute item subtotal, shipping, tax placeholder, etc.
   // =========================================================
   const itemSubtotal = cartItems.reduce((sum, item) => {
     const itemPrice = parseFloat(item.price) || 0;
@@ -281,6 +312,7 @@ export default function BorderfreeStyleCheckout() {
   const shippingCost = selectedRate ? parseFloat(selectedRate.amount) : 0;
   const grandTotal = itemSubtotal + shippingCost;
 
+  // For “cheapest” or “fastest” tags
   let minCost = Infinity;
   let minDays = Infinity;
   if (shipment?.rates?.length) {
@@ -291,6 +323,7 @@ export default function BorderfreeStyleCheckout() {
       if (days < minDays) minDays = days;
     });
   }
+
   return (
     <>
       <ToastContainer
@@ -303,20 +336,27 @@ export default function BorderfreeStyleCheckout() {
         theme="colored"
       />
 
-      <div className="max-w-7xl mx-auto mt-36 px-4 md:px-0">
-        <h1 className="text-xl md:text-2xl font-bold text-gray-800 mb-6">
+      <div className="max-w-7xl mx-auto mt-36 px-4 md:px-0 mb-12">
+        <h1 className="text-2xl md:text-3xl font-extrabold text-gray-800 mb-2 flex items-center gap-2">
+          <FaShoppingCart />
           Secure Checkout
         </h1>
+        <p className="text-gray-500 mb-6">
+          {envData
+            ? `You're shipping from ${envData.street1}, ${envData.city}, ${envData.country}`
+            : "Loading default warehouse address..."}
+        </p>
 
         <div className="flex flex-col md:flex-row gap-6">
           {/* =========================================== */}
           {/* LEFT: Delivery & Shipping Method */}
           {/* =========================================== */}
-          <div className="w-full md:w-2/3 bg-white border rounded-lg shadow-md p-6 space-y-6">
+          <div className="w-full md:w-2/3 bg-white border rounded-lg shadow-md p-6 space-y-6 transition-all duration-300">
             {/* 1) Delivery / Address Info */}
             <div>
-              <h2 className="text-lg font-semibold text-gray-700 mb-4">
-                1) Delivery
+              <h2 className="text-lg font-bold text-gray-700 mb-4 flex items-center gap-2">
+                <FaRegAddressBook />
+                Delivery Address
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -329,7 +369,7 @@ export default function BorderfreeStyleCheckout() {
                     name="email"
                     value={receiver.email}
                     onChange={handleInputChange}
-                    className="border rounded w-full px-3 py-2"
+                    className="border rounded w-full px-3 py-2 focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div className="flex gap-2">
@@ -342,7 +382,7 @@ export default function BorderfreeStyleCheckout() {
                       name="firstName"
                       value={receiver.firstName}
                       onChange={handleInputChange}
-                      className="border rounded w-full px-3 py-2"
+                      className="border rounded w-full px-3 py-2 focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                   <div className="flex-1">
@@ -354,7 +394,7 @@ export default function BorderfreeStyleCheckout() {
                       name="lastName"
                       value={receiver.lastName}
                       onChange={handleInputChange}
-                      className="border rounded w-full px-3 py-2"
+                      className="border rounded w-full px-3 py-2 focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                 </div>
@@ -373,16 +413,16 @@ export default function BorderfreeStyleCheckout() {
                     name="address"
                     value={receiver.address}
                     onChange={handleAddressChangeAndSuggest}
-                    className="border rounded w-full px-3 py-2"
+                    className="border rounded w-full px-3 py-2 focus:ring-2 focus:ring-blue-500"
                     autoComplete="off"
                   />
                   {/* If fetching suggestions, show them */}
                   {showSuggestions && addressSuggestions.length > 0 && (
-                    <ul className="absolute z-10 bg-white border border-gray-200 w-full mt-1">
+                    <ul className="absolute z-10 bg-white border border-gray-200 w-full mt-1 shadow-lg">
                       {addressSuggestions.map((suggest, idx) => (
                         <li
                           key={idx}
-                          className="p-2 cursor-pointer hover:bg-gray-100 text-sm"
+                          className="p-2 cursor-pointer hover:bg-gray-50 text-sm"
                           onClick={() => handleSelectSuggestedAddress(suggest)}
                         >
                           {suggest.complete_address
@@ -402,7 +442,7 @@ export default function BorderfreeStyleCheckout() {
                     name="address2"
                     value={receiver.address2}
                     onChange={handleInputChange}
-                    className="border rounded w-full px-3 py-2"
+                    className="border rounded w-full px-3 py-2 focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
@@ -417,7 +457,7 @@ export default function BorderfreeStyleCheckout() {
                     name="postalCode"
                     value={receiver.postalCode}
                     onChange={handleInputChange}
-                    className="border rounded w-full px-3 py-2"
+                    className="border rounded w-full px-3 py-2 focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
@@ -429,7 +469,7 @@ export default function BorderfreeStyleCheckout() {
                     name="city"
                     value={receiver.city}
                     onChange={handleInputChange}
-                    className="border rounded w-full px-3 py-2"
+                    className="border rounded w-full px-3 py-2 focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
@@ -441,7 +481,7 @@ export default function BorderfreeStyleCheckout() {
                     name="region"
                     value={receiver.region}
                     onChange={handleInputChange}
-                    className="border rounded w-full px-3 py-2"
+                    className="border rounded w-full px-3 py-2 focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
@@ -455,7 +495,7 @@ export default function BorderfreeStyleCheckout() {
                     name="phone"
                     value={receiver.phone}
                     onChange={handleInputChange}
-                    className="border rounded w-full px-3 py-2"
+                    className="border rounded w-full px-3 py-2 focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
@@ -467,7 +507,7 @@ export default function BorderfreeStyleCheckout() {
                     name="location"
                     value={receiver.location}
                     onChange={handleInputChange}
-                    className="border rounded w-full px-3 py-2"
+                    className="border rounded w-full px-3 py-2 focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
@@ -475,43 +515,40 @@ export default function BorderfreeStyleCheckout() {
 
             {/* 2) Delivery Method (rates) */}
             <div>
-              <h2 className="text-lg font-semibold text-gray-700 mb-4">
-                2) Delivery Method
+              <h2 className="text-lg font-bold text-gray-700 mb-4 flex items-center gap-2">
+                <MdOutlineLocalShipping />
+                Delivery Method
               </h2>
 
-              {/* If we're currently fetching shipping rates, show a "loading" card */}
-              {isFetchingRates && !shipment && (
-                <div className="flex items-center justify-center bg-gray-50 border border-gray-200 p-4 rounded-md mb-4">
+              <p className="text-sm text-gray-500 mb-2">
+                Click “Get Shipping Rates” to see available delivery options.
+              </p>
+
+              {/* Button: "Get Shipping Rates" */}
+              <button
+                onClick={fetchRates}
+                disabled={isFetchingRates}
+                className={`bg-green-600 hover:bg-green-700 text-white font-medium px-5 py-2 rounded-md flex items-center gap-2 transition-colors duration-200 ${
+                  isFetchingRates ? "opacity-75 cursor-not-allowed" : ""
+                }`}
+              >
+                {isFetchingRates && (
                   <svg
-                    className="animate-spin h-5 w-5 mr-3 text-blue-600"
+                    className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"
                     viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.383 0 0 5.383 0 12h4z"
-                    ></path>
-                  </svg>
-                  <span className="text-gray-700">Fetching shipping rates. Please wait...</span>
-                </div>
-              )}
+                  />
+                )}
+                <FaShippingFast />
+                {isFetchingRates ? "Fetching Rates..." : "Get Shipping Rates"}
+              </button>
 
-              {!shipment && !isFetchingRates && (
-                <p className="text-sm text-gray-500 mb-2">
-                  Enter a valid address to see available delivery methods.
-                </p>
-              )}
-
+              {/* If shipping rates have been fetched, show them */}
               {shipment && shipment.rates && shipment.rates.length > 0 && (
-                <div className="overflow-x-auto">
+                <div
+                  className="overflow-x-auto mt-4 animate-fadeIn"
+                  // example Tailwind-based fade-in
+                  style={{ animationDuration: "0.7s" }}
+                >
                   <table className="w-full border-collapse">
                     <thead>
                       <tr className="border-b bg-gray-100">
@@ -531,8 +568,8 @@ export default function BorderfreeStyleCheckout() {
                           <tr
                             key={rate.object_id}
                             onClick={() => setSelectedRate(rate)}
-                            className={`border-b cursor-pointer ${
-                              isSelected ? "bg-blue-50" : ""
+                            className={`border-b cursor-pointer transition-colors duration-150 ${
+                              isSelected ? "bg-blue-50" : "hover:bg-gray-50"
                             }`}
                           >
                             <td className="py-3 px-3">
@@ -550,7 +587,7 @@ export default function BorderfreeStyleCheckout() {
                                       rate.servicelevel?.name ||
                                       rate.servicelevel?.token}
                                   </div>
-                                  <div className="text-sm text-gray-600">
+                                  <div className="text-xs text-gray-600">
                                     {rate.servicelevel?.token?.includes("EXPRESS")
                                       ? "No additional import charges at delivery"
                                       : "Import charges collected upon delivery"}
@@ -578,19 +615,19 @@ export default function BorderfreeStyleCheckout() {
               )}
             </div>
 
-            {/* Buttons */}
-            <div className="pt-4 flex flex-col md:flex-row gap-3">
+            {/* Button to proceed to payment */}
+            <div className="pt-4 flex flex-col md:flex-row gap-3 justify-end">
               <button
                 onClick={handleProceedToPayment}
                 disabled={!selectedRate || isCreatingShipment}
-                className={`bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2 rounded-md flex items-center justify-center ${
+                className={`bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2 rounded-md flex items-center justify-center gap-2 transition-colors duration-200 ${
                   (!selectedRate || isCreatingShipment)
                     ? "opacity-80 cursor-not-allowed"
                     : ""
                 }`}
               >
                 {isCreatingShipment && (
-                  <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full mr-2"></span>
+                  <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
                 )}
                 {isCreatingShipment ? "Please wait..." : "Proceed to Pay"}
               </button>
@@ -600,9 +637,10 @@ export default function BorderfreeStyleCheckout() {
           {/* =========================================== */}
           {/* RIGHT: Order Summary */}
           {/* =========================================== */}
-          <div className="w-full md:w-1/3 space-y-6">
+          <div className="w-full md:w-1/3 space-y-6 transition-all duration-300">
             <div className="bg-white border rounded-lg shadow-md p-6">
-              <h2 className="text-lg font-semibold mb-4 text-gray-700">
+              <h2 className="text-lg font-bold mb-4 text-gray-700 flex items-center gap-2">
+                <FaShoppingCart />
                 Your Order
               </h2>
               {cartItems.length === 0 ? (
@@ -612,7 +650,7 @@ export default function BorderfreeStyleCheckout() {
                   {cartItems.map((item, idx) => (
                     <div
                       key={idx}
-                      className="flex items-center gap-3 border-b pb-4"
+                      className="flex items-center gap-3 border-b pb-4 animate-fadeIn"
                     >
                       {/* Product Image */}
                       <div className="w-16 h-16 flex-shrink-0 border border-gray-200">
@@ -642,7 +680,8 @@ export default function BorderfreeStyleCheckout() {
                       {/* Price */}
                       <div>
                         <p className="font-semibold text-gray-700">
-                          ${(parseFloat(item.price) * item.quantity).toFixed(2)}
+                          $
+                          {(parseFloat(item.price) * item.quantity).toFixed(2)}
                         </p>
                       </div>
                     </div>
@@ -651,7 +690,7 @@ export default function BorderfreeStyleCheckout() {
               )}
             </div>
 
-            {/* Totals (Items, Shipping, Tax placeholder, Grand Total) */}
+            {/* Totals (Items, Shipping, etc.) */}
             <div className="bg-white border rounded-lg shadow-md p-6">
               {/* Items */}
               <div className="flex justify-between mb-2">
@@ -675,14 +714,14 @@ export default function BorderfreeStyleCheckout() {
               <div className="flex justify-between mb-2">
                 <p className="text-gray-700">Taxes</p>
                 <p className="font-medium text-gray-700 text-sm italic">
-                  Yet to be calculated while payment
+                  Yet to be calculated
                 </p>
               </div>
 
               <hr className="my-2" />
 
               {/* Grand Total */}
-              <div className="flex justify-between mb-4">
+              <div className="flex justify-between mb-2">
                 <p className="text-lg font-semibold text-gray-800">Total</p>
                 <p className="text-lg font-semibold text-gray-800">
                   ${grandTotal.toFixed(2)}
@@ -692,6 +731,23 @@ export default function BorderfreeStyleCheckout() {
           </div>
         </div>
       </div>
+
+      {/* Add any extra animations or transitions you like! */}
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(5px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.5s ease-in-out forwards;
+        }
+      `}</style>
     </>
   );
 }

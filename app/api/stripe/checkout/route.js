@@ -33,8 +33,6 @@ export const POST = async (req) => {
       },
       line_items,
     };
-
-
     if (selectedRate) {
       // Convert the shipping rate amount to cents (Stripe requires amounts in cents)
       const shippingAmount = Math.round(parseFloat(selectedRate.amount) * 100);
@@ -66,12 +64,10 @@ export const POST = async (req) => {
     if (metadata) {
       sessionObj.metadata = metadata;
     }
-
     // Add customer email if provided
     if (email) {
       sessionObj.customer_email = email;
     }
-
     // Create the Stripe Checkout Session
     const session = await stripe.checkout.sessions.create(sessionObj);
 

@@ -25,11 +25,6 @@ function PrescriptionModal({ cart, isModalOpen, setIsModalOpen, email }) {
     const full =
       fileInputRefs.current.length > 0 &&
       fileInputRefs.current.every((file) => file && file.value !== "");
-    // If user has uploaded all prescription files,
-    // or is using a single file for all,
-    // or has chosen "upload later" (meaning no files needed right now),
-    // or there are no prescription items at all,
-    // then button is enabled.
     if (full || file || later || prescriptionItems.length === 0) {
       setIsCheckoutDisabled(false);
     } else {
