@@ -40,35 +40,29 @@ const staticTrackingData = {
     },
   ],
 };
-
 function OrderHistory({ orders, email }) {
   // Sort orders from newest to oldest
   const sortedOrders = [...orders].sort(
     (a, b) => new Date(b.order_date) - new Date(a.order_date)
   );
-
   const [searchTerm, setSearchTerm] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [currentOrders, setCurrentOrders] = useState(sortedOrders);
   const [errMsg, setErrMsg] = useState(null);
-
   // Modal states
   const [showTrackingModal, setShowTrackingModal] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
-
   // Pagination
   const ordersPerPage = 4;
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
   const orderList = currentOrders.slice(indexOfFirstOrder, indexOfLastOrder);
   const totalPages = Math.ceil(currentOrders.length / ordersPerPage);
-
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-
   function formatDate(date) {
     const options = {
       year: "numeric",
@@ -81,7 +75,6 @@ function OrderHistory({ orders, email }) {
     };
     return new Intl.DateTimeFormat("en-US", options).format(date);
   }
-
   const handleResetDate = async () => {
     setFromDate("");
     setToDate("");
@@ -97,7 +90,6 @@ function OrderHistory({ orders, email }) {
       setTimeout(() => setErrMsg(null), 3000);
     }
   };
-
   const searchByID = async (value) => {
     setSearchTerm(value);
     try {
@@ -117,7 +109,6 @@ function OrderHistory({ orders, email }) {
       setTimeout(() => setErrMsg(null), 3000);
     }
   };
-
   const searchByDate = async () => {
     try {
       if (fromDate === "" || toDate === "") {
@@ -130,7 +121,6 @@ function OrderHistory({ orders, email }) {
         setTimeout(() => setErrMsg(null), 3000);
         return;
       }
-
       const from = formatDate(new Date(fromDate));
       const to = formatDate(new Date(toDate));
       const res = await fetch(`/api/order/${email}?from=${from}&to=${to}`);
@@ -143,13 +133,11 @@ function OrderHistory({ orders, email }) {
       setTimeout(() => setErrMsg(null), 3000);
     }
   };
-
   // When user clicks "Track Shipment," store that order's ID & show the modal
   const handleTrackShipment = (orderId) => {
     setSelectedOrderId(orderId);
     setShowTrackingModal(true);
   };
-
   return (
     <div className="container mx-auto p-6 border-2 border-gray-200/80 mt-32 mb-10 w-[70%] font-montserrat">
       {errMsg && <Alert message={errMsg} closeHandler={() => setErrMsg(null)} />}
@@ -169,7 +157,6 @@ function OrderHistory({ orders, email }) {
           />
           <span className="absolute right-2 top-3 text-gray-500">🔍</span>
         </div>
-
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-4">
             <div>
@@ -207,11 +194,9 @@ function OrderHistory({ orders, email }) {
           </div>
         </div>
       </div>
-
       <p className="mb-6 font-semibold border-b-2 border-gray-300 pb-2">
         Showing {currentOrders.length} orders
       </p>
-
       {/* Orders List */}
       {orderList.length > 0 ? (
         orderList.map((order, index) => (
@@ -224,7 +209,6 @@ function OrderHistory({ orders, email }) {
               <p className="text-sm text-gray-600">
                 <strong>ORDER PLACED</strong> <br /> {order.order_date}
               </p>
-
               <div className="flex items-center space-x-4">
                 <p className="text-sm text-gray-600">
                   <strong>ORDER ID #</strong> <br /> {order._id}
@@ -258,7 +242,7 @@ function OrderHistory({ orders, email }) {
                       <td className="py-2">{idx + 1}</td>
                       <td className="py-2">
                         <Link href={`/product/${product.product_id}`}>
-                          <Image
+                          <img
                             src={product.image}
                             alt={product.product_name}
                             width={80}

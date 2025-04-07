@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['www.cpapmiami.com', 'res.cloudinary.com' , 'www.directhomemedical.com'],
+    domains: ['www.cpapmiami.com', 'res.cloudinary.com' , 'www.directhomemedical.com' , 'www.reacthealth.com' , 'th.bing.com'],
     remotePatterns: [
       {
         protocol: 'https', // or 'http' if needed
