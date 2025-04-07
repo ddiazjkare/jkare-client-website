@@ -23,7 +23,7 @@ export default async function handler(req, res) {
     const shippoResponse = await fetch(url.toString(), {
       method: "GET",
       headers: {
-        Authorization: "ShippoToken shippo_test_525d0eadb185a2d9a69d3656dee2bbe4472a7476",
+        Authorization: `ShippoToken ${process.env.SHIPPO_API_KEY}`,
         "Content-Type": "application/json",
       },
     });
