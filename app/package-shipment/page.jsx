@@ -4,28 +4,26 @@ import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// Some React Icons (install via `npm i react-icons` if needed)
+// Lightweight confetti effect using canvas-confetti
+// Install via: npm install canvas-confetti
+import Confetti from "react-confetti";
+
 import { FaShippingFast, FaShoppingCart, FaRegAddressBook } from "react-icons/fa";
 import { MdOutlineLocalShipping } from "react-icons/md";
 
-const SHIPPO_API_KEY = process.env.NEXT_PUBLIC_SHIPPO_API_KEY;
-
 export default function BorderfreeStyleCheckout() {
+  const [showConfetti, setShowConfetti] = useState(false);
   const router = useRouter();
 
   // =========================================================
   // 1) State
   // =========================================================
   const [receiver, setReceiver] = useState({
-    email: "",
-    firstName: "John",
-    lastName: "Doe",
-    address: "123 Main St",
-    address2: "Apt 4B",
+    address: "731 Market Street",
+    address2: "#200",
     postalCode: "94103",
     city: "San Francisco",
     region: "CA",
-    phone: "5551234567",
     location: "US",
   });
   const [parcels, setParcels] = useState([]);
@@ -37,23 +35,27 @@ export default function BorderfreeStyleCheckout() {
   const [isFetchingRates, setIsFetchingRates] = useState(false);
   const [isCreatingShipment, setIsCreatingShipment] = useState(false);
 
-  // For address suggestions (Shippo’s recommended addresses)
+  // For address suggestions
   const [addressSuggestions, setAddressSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [isFetchingAddress, setIsFetchingAddress] = useState(false);
   const suggestionsRef = useRef(null);
 
-  // The “from” address & carrier, fetched from /api/ship-env
+  // Env data (from /api/ship-env)
   const [envData, setEnvData] = useState(null);
 
+  // For free shipping
+  const [isFreeShipping, setIsFreeShipping] = useState(false);
+
   // =========================================================
-  // 2) Load cart & parcels from localStorage on mount
+  // 2) Load cart & fetch env data on mount
   // =========================================================
   useEffect(() => {
-    // 2a) Load Cart
+    // Load cart
     const medCart = JSON.parse(localStorage.getItem("medCart")) || [];
     setCartItems(medCart);
 
-    // 2b) Convert each cart item to a Shippo parcel
+    // Convert cart items -> Shippo parcels
     const formattedParcels = medCart.map((item) => {
       const length = item.parcel_info?.length ?? 10;
       const width = item.parcel_info?.width ?? 5;
@@ -72,17 +74,14 @@ export default function BorderfreeStyleCheckout() {
     });
     setParcels(formattedParcels);
 
-    // 2c) Fetch environment data (FROM address, carrier, etc.)
+    // Fetch environment data
     fetchEnvData();
   }, []);
 
-  // Close the suggestions dropdown if the user clicks outside
+  // Close suggestions dropdown if user clicks outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        suggestionsRef.current &&
-        !suggestionsRef.current.contains(event.target)
-      ) {
+      if (suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
         setShowSuggestions(false);
       }
     };
@@ -92,9 +91,7 @@ export default function BorderfreeStyleCheckout() {
     };
   }, []);
 
-  // =========================================================
-  // 2c) Fetch environment data (/api/ship-env) for “from” address
-  // =========================================================
+  // 2a) Fetch environment data
   const fetchEnvData = async () => {
     try {
       const response = await fetch("/api/ship-env");
@@ -102,7 +99,6 @@ export default function BorderfreeStyleCheckout() {
         throw new Error("Failed to fetch environment data (/api/ship-env).");
       }
       const data = await response.json();
-      // e.g. { name, street1, city, state, zip, country, email, phone, carrier, offer_price }
       setEnvData(data);
     } catch (error) {
       console.error("Error fetching /api/ship-env:", error);
@@ -111,13 +107,18 @@ export default function BorderfreeStyleCheckout() {
   };
 
   // =========================================================
-  // 3) Fetch shipping rates when user clicks “Get Shipping Rates”
+  // 3) Automatic shipping-rate fetch (once envData & cart are ready)
   // =========================================================
-  const fetchRates = async () => {
-    if (!envData) {
-      toast.error("No environment data available to fetch shipping rates.");
-      return;
+  useEffect(() => {
+    // If we have both envData and the cart loaded, fetch shipping rates automatically
+    if (envData && cartItems.length > 0) {
+      fetchRates();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [envData, cartItems]);
+
+  const fetchRates = async () => {
+    if (!envData) return;
 
     try {
       setIsFetchingRates(true);
@@ -135,7 +136,7 @@ export default function BorderfreeStyleCheckout() {
           phone: envData.phone,
         },
         address_to: {
-          name: receiver.firstName + " " + receiver.lastName,
+          name: (receiver.firstName ?? "") + " " + (receiver.lastName ?? ""),
           street1: receiver.address,
           street2: receiver.address2,
           city: receiver.city,
@@ -145,7 +146,7 @@ export default function BorderfreeStyleCheckout() {
           email: receiver.email,
           phone: receiver.phone,
         },
-        parcels: parcels,
+        parcels,
         carrier_accounts: null,
         shipment_date: new Date().toISOString().replace("Z", "+00:00"),
       };
@@ -156,14 +157,13 @@ export default function BorderfreeStyleCheckout() {
         body: JSON.stringify(shipmentData),
       });
       const data = await response.json();
+
       if (data.error) {
         toast.error(`Failed to fetch rates: ${data.error}`);
         setShipment(null);
         return;
       }
-
       setShipment(data);
-      toast.success("Shipping rates fetched!");
     } catch (error) {
       toast.error("Error fetching rates: " + error.message);
       console.error("Error fetching rates:", error);
@@ -181,31 +181,28 @@ export default function BorderfreeStyleCheckout() {
       toast.warn("Please select a delivery option before proceeding.");
       return;
     }
-
     try {
       setIsCreatingShipment(true);
 
       let checkoutObj = JSON.parse(localStorage.getItem("checkoutStorage")) || {};
 
-      // If checkoutObj has no email, fill it from receiver
+      // If no email in checkoutObj, fill from receiver
       if (!checkoutObj.email) checkoutObj.email = receiver.email;
 
       // Attach shipping rate
       checkoutObj.selectedRate = selectedRate;
 
-      // Build final payload for Stripe
       const response = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...checkoutObj,
-          threshold : envData.offer_price,
+          threshold: parseFloat(envData?.offer_price ?? 0),
           metadata: {
-
             ...checkoutObj.metadata,
             shipping_rate: selectedRate.object_id,
           },
-          name: receiver.firstName.trim() + " " + receiver.lastName.trim(),
+          name: (receiver.firstName ?? "").trim() + " " + (receiver.lastName ?? "").trim(),
           address: {
             line1: receiver.address,
             line2: receiver.address2,
@@ -232,59 +229,60 @@ export default function BorderfreeStyleCheckout() {
   };
 
   // =========================================================
-  // 5) Address Handlers (with recommended_address for “To” address)
+  // 5) Address Handlers
   // =========================================================
-  const handleInputChange = (e) => {
+  const handleAddressInput = async (e) => {
     const { name, value } = e.target;
-    setReceiver((prev) => ({ ...prev, [name]: value }));
-  };
+    const updatedReceiver = { ...receiver, [name]: value };
+    setReceiver(updatedReceiver);
 
-  const handleAddressChangeAndSuggest = async (e) => {
-    handleInputChange(e);
+    // Show suggestions
+    setShowSuggestions(true);
 
-    // Use “Shippo recommended address” if we want suggestions
-    const updatedValue = e.target.value;
-    if (updatedValue.length < 5) {
+    const totalChars =
+      updatedReceiver.address.length +
+      updatedReceiver.address2.length +
+      updatedReceiver.city.length +
+      updatedReceiver.region.length +
+      updatedReceiver.postalCode.length;
+
+    if (totalChars < 3) {
       setAddressSuggestions([]);
-      setShowSuggestions(false);
+      setIsFetchingAddress(false);
       return;
     }
 
+    setIsFetchingAddress(true);
     try {
-      const url = new URL("https://api.goshippo.com/v2/addresses/validate");
-      url.searchParams.set("name", `${receiver.firstName} ${receiver.lastName}`);
-      url.searchParams.set("organization", "Shippo");
-      url.searchParams.set("address_line_1", receiver.address ?? "");
-      url.searchParams.set("address_line_2", receiver.address2 ?? "");
-      url.searchParams.set("city_locality", receiver.city ?? "");
-      url.searchParams.set("state_province", receiver.region ?? "");
-      url.searchParams.set("postal_code", receiver.postalCode ?? "");
-      url.searchParams.set("country_code", receiver.location ?? "US");
+      // Our own server route
+      const apiUrl = `/api/shippo-validate?address_line_1=${encodeURIComponent(
+        updatedReceiver.address
+      )}&address_line_2=${encodeURIComponent(
+        updatedReceiver.address2
+      )}&city_locality=${encodeURIComponent(
+        updatedReceiver.city
+      )}&state_province=${encodeURIComponent(
+        updatedReceiver.region
+      )}&postal_code=${encodeURIComponent(
+        updatedReceiver.postalCode
+      )}&country_code=${encodeURIComponent(updatedReceiver.location ?? "US")}`;
 
-      const response = await fetch(url.toString(), {
-        method: "GET",
-        headers: {
-          Authorization: `ShippoToken ${SHIPPO_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-      });
-
+      const response = await fetch(apiUrl, { method: "GET" });
       if (!response.ok) {
-        throw new Error("Failed to fetch recommended address from Shippo.");
+        throw new Error("Failed to validate address via /api/shippo-validate.");
       }
-
       const data = await response.json();
+
       if (data.recommended_address) {
         setAddressSuggestions([data.recommended_address]);
-        setShowSuggestions(true);
       } else {
         setAddressSuggestions([]);
-        setShowSuggestions(false);
       }
     } catch (error) {
-      console.error("Error fetching recommended address:", error);
+      console.error("Error validating address:", error);
       setAddressSuggestions([]);
-      setShowSuggestions(false);
+    } finally {
+      setIsFetchingAddress(false);
     }
   };
 
@@ -299,31 +297,80 @@ export default function BorderfreeStyleCheckout() {
       location: suggestion.country_code || prev.location,
     }));
     setShowSuggestions(false);
+
+    // Refetch shipping rates with updated address
+    fetchRates();
   };
 
   // =========================================================
-  // 6) Compute item subtotal, shipping, tax placeholder, etc.
+  // 6) Compute itemSubtotal, free shipping logic, confetti, etc.
   // =========================================================
   const itemSubtotal = cartItems.reduce((sum, item) => {
     const itemPrice = parseFloat(item.price) || 0;
     return sum + itemPrice * item.quantity;
   }, 0);
 
+  // Check if user qualifies for free shipping:
+  useEffect(() => {
+    if (!envData) return;
+    const threshold = parseFloat(envData.offer_price || 0);
+    const qualifies = itemSubtotal >= threshold;
+  
+    if (qualifies && !isFreeShipping) {
+      setIsFreeShipping(true);
+      toast.success("Hurray! You got free shipping!");
+      setShowConfetti(true);
+      // Optionally, hide confetti after a short delay
+      setTimeout(() => setShowConfetti(false), 6000);
+    } else if (!qualifies && isFreeShipping) {
+      setIsFreeShipping(false);
+    }
+  }, [envData, itemSubtotal, isFreeShipping]);
+
+  // Automatic free shipping row
+  let displayedRates = shipment?.rates || [];
+  if (isFreeShipping) {
+    const freeRow = {
+      object_id: "jkare_free_shipping",
+      servicelevel: { display_name: "JKARE Shipment" },
+      estimated_days: 7, // "1 week approx~"
+      amount: "0.00",
+    };
+    displayedRates = [freeRow, ...displayedRates];
+  }
+
+  // If we have free shipping, default-select it if not already chosen
+  useEffect(() => {
+    if (isFreeShipping && (!selectedRate || selectedRate.object_id !== "jkare_free_shipping")) {
+      setSelectedRate({
+        object_id: "jkare_free_shipping",
+        servicelevel: { display_name: "JKARE Shipment" },
+        estimated_days: 7,
+        amount: "0.00",
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFreeShipping]);
+
+  // Calculate shipping cost
   const shippingCost = selectedRate ? parseFloat(selectedRate.amount) : 0;
   const grandTotal = itemSubtotal + shippingCost;
 
-  // For “cheapest” or “fastest” tags
+  // For cheapest/fastest tags
   let minCost = Infinity;
   let minDays = Infinity;
   if (shipment?.rates?.length) {
-    shipment.rates.forEach((rate) => {
-      const cost = parseFloat(rate.amount) || Infinity;
-      const days = rate.estimated_days ?? Infinity;
+    shipment.rates.forEach((r) => {
+      const cost = parseFloat(r.amount) || Infinity;
+      const days = r.estimated_days ?? Infinity;
       if (cost < minCost) minCost = cost;
       if (days < minDays) minDays = days;
     });
   }
 
+  // =========================================================
+  // 7) Render
+  // =========================================================
   return (
     <>
       <ToastContainer
@@ -335,6 +382,15 @@ export default function BorderfreeStyleCheckout() {
         pauseOnHover
         theme="colored"
       />
+      {showConfetti && (
+      <Confetti
+        width={window.innerWidth}
+        height={window.innerHeight}
+        numberOfPieces={500}
+        gravity={0.1}
+        recycle={false}
+      />
+    )}
 
       <div className="max-w-7xl mx-auto mt-36 px-4 md:px-0 mb-12">
         <h1 className="text-2xl md:text-3xl font-extrabold text-gray-800 mb-2 flex items-center gap-2">
@@ -343,7 +399,7 @@ export default function BorderfreeStyleCheckout() {
         </h1>
         <p className="text-gray-500 mb-6">
           {envData
-            ? `You're shipping from ${envData.street1}, ${envData.city}, ${envData.country}`
+            ? `You're order will be shipped from ${envData.street1}, ${envData.city}, ${envData.country}`
             : "Loading default warehouse address..."}
         </p>
 
@@ -359,6 +415,7 @@ export default function BorderfreeStyleCheckout() {
                 Delivery Address
               </h2>
 
+              {/* Email / First / Last */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -368,7 +425,9 @@ export default function BorderfreeStyleCheckout() {
                     type="email"
                     name="email"
                     value={receiver.email}
-                    onChange={handleInputChange}
+                    onChange={(e) =>
+                      setReceiver((prev) => ({ ...prev, email: e.target.value }))
+                    }
                     className="border rounded w-full px-3 py-2 focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -381,7 +440,9 @@ export default function BorderfreeStyleCheckout() {
                       type="text"
                       name="firstName"
                       value={receiver.firstName}
-                      onChange={handleInputChange}
+                      onChange={(e) =>
+                        setReceiver((prev) => ({ ...prev, firstName: e.target.value }))
+                      }
                       className="border rounded w-full px-3 py-2 focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
@@ -393,17 +454,17 @@ export default function BorderfreeStyleCheckout() {
                       type="text"
                       name="lastName"
                       value={receiver.lastName}
-                      onChange={handleInputChange}
+                      onChange={(e) =>
+                        setReceiver((prev) => ({ ...prev, lastName: e.target.value }))
+                      }
                       className="border rounded w-full px-3 py-2 focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                 </div>
               </div>
 
-              <div
-                className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4"
-                ref={suggestionsRef}
-              >
+              {/* Address Lines */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4" ref={suggestionsRef}>
                 <div className="relative">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Address
@@ -412,43 +473,52 @@ export default function BorderfreeStyleCheckout() {
                     type="text"
                     name="address"
                     value={receiver.address}
-                    onChange={handleAddressChangeAndSuggest}
+                    onChange={handleAddressInput}
                     className="border rounded w-full px-3 py-2 focus:ring-2 focus:ring-blue-500"
                     autoComplete="off"
                   />
-                  {/* If fetching suggestions, show them */}
-                  {showSuggestions && addressSuggestions.length > 0 && (
-                    <ul className="absolute z-10 bg-white border border-gray-200 w-full mt-1 shadow-lg">
-                      {addressSuggestions.map((suggest, idx) => (
-                        <li
-                          key={idx}
-                          className="p-2 cursor-pointer hover:bg-gray-50 text-sm"
-                          onClick={() => handleSelectSuggestedAddress(suggest)}
-                        >
-                          {suggest.complete_address
-                            ? suggest.complete_address
-                            : `${suggest.address_line_1}, ${suggest.city_locality}, ${suggest.state_province} ${suggest.postal_code}`}
+                  {/* Suggestions */}
+                  {showSuggestions && (
+                    <ul className="absolute z-10 bg-white border border-gray-200 w-full mt-1 shadow-lg text-sm">
+                      {isFetchingAddress ? (
+                        <li className="p-2 text-gray-500 italic">
+                          Fetching address...
                         </li>
-                      ))}
+                      ) : addressSuggestions.length > 0 ? (
+                        addressSuggestions.map((suggest, idx) => (
+                          <li
+                            key={idx}
+                            className="p-2 cursor-pointer hover:bg-gray-50"
+                            onClick={() => handleSelectSuggestedAddress(suggest)}
+                          >
+                            {suggest.complete_address || "Unknown address"}
+                          </li>
+                        ))
+                      ) : (
+                        <li className="p-2 text-gray-500 italic">
+                          No recommended address found.
+                        </li>
+                      )}
                     </ul>
                   )}
                 </div>
-                <div>
+                <div className="relative">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Address 2 (Optional)
+                    Address 2
                   </label>
                   <input
                     type="text"
                     name="address2"
                     value={receiver.address2}
-                    onChange={handleInputChange}
+                    onChange={handleAddressInput}
                     className="border rounded w-full px-3 py-2 focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
 
+              {/* City / Postal / Region */}
               <div className="grid md:grid-cols-3 gap-4 mb-4">
-                <div>
+                <div className="relative">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Postal Code
                   </label>
@@ -456,11 +526,11 @@ export default function BorderfreeStyleCheckout() {
                     type="text"
                     name="postalCode"
                     value={receiver.postalCode}
-                    onChange={handleInputChange}
+                    onChange={handleAddressInput}
                     className="border rounded w-full px-3 py-2 focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
-                <div>
+                <div className="relative">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     City
                   </label>
@@ -468,11 +538,11 @@ export default function BorderfreeStyleCheckout() {
                     type="text"
                     name="city"
                     value={receiver.city}
-                    onChange={handleInputChange}
+                    onChange={handleAddressInput}
                     className="border rounded w-full px-3 py-2 focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
-                <div>
+                <div className="relative">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Region (State/Province)
                   </label>
@@ -480,11 +550,13 @@ export default function BorderfreeStyleCheckout() {
                     type="text"
                     name="region"
                     value={receiver.region}
-                    onChange={handleInputChange}
+                    onChange={handleAddressInput}
                     className="border rounded w-full px-3 py-2 focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
+
+              {/* Phone / Country */}
               <div className="grid md:grid-cols-2 gap-4 mb-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -494,7 +566,9 @@ export default function BorderfreeStyleCheckout() {
                     type="tel"
                     name="phone"
                     value={receiver.phone}
-                    onChange={handleInputChange}
+                    onChange={(e) =>
+                      setReceiver((prev) => ({ ...prev, phone: e.target.value }))
+                    }
                     className="border rounded w-full px-3 py-2 focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -506,7 +580,9 @@ export default function BorderfreeStyleCheckout() {
                     type="text"
                     name="location"
                     value={receiver.location}
-                    onChange={handleInputChange}
+                    onChange={(e) =>
+                      setReceiver((prev) => ({ ...prev, location: e.target.value }))
+                    }
                     className="border rounded w-full px-3 py-2 focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -521,10 +597,10 @@ export default function BorderfreeStyleCheckout() {
               </h2>
 
               <p className="text-sm text-gray-500 mb-2">
-                Click “Get Shipping Rates” to see available delivery options.
+                Shipping rates are automatically fetched. 
               </p>
 
-              {/* Button: "Get Shipping Rates" */}
+              {/* If you still want a "Refresh" button: */}
               <button
                 onClick={fetchRates}
                 disabled={isFetchingRates}
@@ -539,14 +615,12 @@ export default function BorderfreeStyleCheckout() {
                   />
                 )}
                 <FaShippingFast />
-                {isFetchingRates ? "Fetching Rates..." : "Get Shipping Rates"}
+                {isFetchingRates ? "Fetching Rates..." : "Refresh Rates"}
               </button>
 
-              {/* If shipping rates have been fetched, show them */}
-              {shipment && shipment.rates && shipment.rates.length > 0 && (
+              {shipment && displayedRates.length > 0 && (
                 <div
                   className="overflow-x-auto mt-4 animate-fadeIn"
-                  // example Tailwind-based fade-in
                   style={{ animationDuration: "0.7s" }}
                 >
                   <table className="w-full border-collapse">
@@ -558,9 +632,8 @@ export default function BorderfreeStyleCheckout() {
                       </tr>
                     </thead>
                     <tbody>
-                      {shipment.rates.map((rate) => {
-                        const isSelected =
-                          selectedRate?.object_id === rate.object_id;
+                      {displayedRates.map((rate) => {
+                        const isSelected = selectedRate?.object_id === rate.object_id;
                         const cost = parseFloat(rate.amount);
                         const days = rate.estimated_days;
 
@@ -599,11 +672,10 @@ export default function BorderfreeStyleCheckout() {
                               {days ? `${days} business days` : "—"}
                             </td>
                             <td className="py-3 px-3">
-                              {cost ? `$${cost.toFixed(2)}` : "—"}
-                              {/* Show tags */}
+                              {cost ? `$${cost.toFixed(2)}` : "$0.00"}
                               <span className="ml-2 inline-block text-xs font-semibold text-gray-600">
-                                {cost === minCost && "Cheapest "}
-                                {days === minDays && "Fastest"}
+                                {cost === 0 && "Free "}
+                                {/* Mark cheapest/fastest among the real rates */}
                               </span>
                             </td>
                           </tr>
@@ -614,30 +686,12 @@ export default function BorderfreeStyleCheckout() {
                 </div>
               )}
             </div>
-
-            {/* Button to proceed to payment */}
-            <div className="pt-4 flex flex-col md:flex-row gap-3 justify-end">
-              <button
-                onClick={handleProceedToPayment}
-                disabled={!selectedRate || isCreatingShipment}
-                className={`bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2 rounded-md flex items-center justify-center gap-2 transition-colors duration-200 ${
-                  (!selectedRate || isCreatingShipment)
-                    ? "opacity-80 cursor-not-allowed"
-                    : ""
-                }`}
-              >
-                {isCreatingShipment && (
-                  <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
-                )}
-                {isCreatingShipment ? "Please wait..." : "Proceed to Pay"}
-              </button>
-            </div>
           </div>
 
           {/* =========================================== */}
-          {/* RIGHT: Order Summary */}
+          {/* RIGHT: Order Summary (Sticky on Scroll) */}
           {/* =========================================== */}
-          <div className="w-full md:w-1/3 space-y-6 transition-all duration-300">
+          <div className="w-full md:w-1/3 space-y-6 transition-all duration-300 md:sticky md:top-20 h-fit">
             <div className="bg-white border rounded-lg shadow-md p-6">
               <h2 className="text-lg font-bold mb-4 text-gray-700 flex items-center gap-2">
                 <FaShoppingCart />
@@ -652,7 +706,6 @@ export default function BorderfreeStyleCheckout() {
                       key={idx}
                       className="flex items-center gap-3 border-b pb-4 animate-fadeIn"
                     >
-                      {/* Product Image */}
                       <div className="w-16 h-16 flex-shrink-0 border border-gray-200">
                         {item.images && item.images[0] ? (
                           <img
@@ -662,26 +715,17 @@ export default function BorderfreeStyleCheckout() {
                           />
                         ) : (
                           <div className="flex items-center justify-center w-full h-full bg-gray-100">
-                            <span className="text-xs text-gray-500">
-                              No Image
-                            </span>
+                            <span className="text-xs text-gray-500">No Image</span>
                           </div>
                         )}
                       </div>
-                      {/* Product Info */}
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-800">
-                          {item.title}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          Quantity: {item.quantity}
-                        </p>
+                        <p className="text-sm font-medium text-gray-800">{item.title}</p>
+                        <p className="text-xs text-gray-500">Quantity: {item.quantity}</p>
                       </div>
-                      {/* Price */}
                       <div>
                         <p className="font-semibold text-gray-700">
-                          $
-                          {(parseFloat(item.price) * item.quantity).toFixed(2)}
+                          ${(parseFloat(item.price) * item.quantity).toFixed(2)}
                         </p>
                       </div>
                     </div>
@@ -690,49 +734,55 @@ export default function BorderfreeStyleCheckout() {
               )}
             </div>
 
-            {/* Totals (Items, Shipping, etc.) */}
+            {/* Totals */}
             <div className="bg-white border rounded-lg shadow-md p-6">
-              {/* Items */}
               <div className="flex justify-between mb-2">
                 <p className="text-gray-700">Items</p>
-                <p className="font-medium text-gray-700">
-                  ${itemSubtotal.toFixed(2)}
-                </p>
+                <p className="font-medium text-gray-700">${itemSubtotal.toFixed(2)}</p>
               </div>
-
-              {/* Shipping */}
               <div className="flex justify-between mb-2">
                 <p className="text-gray-700">Shipping</p>
-                <p className="font-medium text-gray-700">
-                  {selectedRate
-                    ? `$${shippingCost.toFixed(2)}`
-                    : "—"}
-                </p>
+                {isFreeShipping ? (
+                  <p className="font-medium text-gray-700">Free Shipping</p>
+                ) : selectedRate ? (
+                  <p className="font-medium text-gray-700">${shippingCost.toFixed(2)}</p>
+                ) : (
+                  <p className="font-medium text-gray-700">—</p>
+                )}
               </div>
-
-              {/* Taxes */}
               <div className="flex justify-between mb-2">
                 <p className="text-gray-700">Taxes</p>
-                <p className="font-medium text-gray-700 text-sm italic">
-                  Yet to be calculated
-                </p>
+                <p className="font-medium text-gray-700 text-sm italic">Yet to be calculated</p>
               </div>
-
               <hr className="my-2" />
-
-              {/* Grand Total */}
               <div className="flex justify-between mb-2">
                 <p className="text-lg font-semibold text-gray-800">Total</p>
                 <p className="text-lg font-semibold text-gray-800">
-                  ${grandTotal.toFixed(2)}
+                  ${(itemSubtotal + shippingCost).toFixed(2)}
                 </p>
               </div>
+            </div>
+
+            {/* Move the Proceed to Pay button below the summary */}
+            <div className="flex justify-end">
+              <button
+                onClick={handleProceedToPayment}
+                disabled={!selectedRate || isCreatingShipment}
+                className={`bg-blue-600 hover:bg-blue-700 text-white text-xl font-medium px-5 py-4 rounded-md flex items-center justify-center w-full gap-2 transition-colors duration-200 ${
+                  (!selectedRate || isCreatingShipment) ? "opacity-80 cursor-not-allowed" : ""
+                }`}
+              >
+                {isCreatingShipment && (
+                  <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full " />
+                )}
+                {isCreatingShipment ? "Please wait..." : "Proceed to Pay"}
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Add any extra animations or transitions you like! */}
+      {/* A simple fadeIn animation */}
       <style jsx>{`
         @keyframes fadeIn {
           from {

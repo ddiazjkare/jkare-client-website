@@ -125,14 +125,6 @@ const Navbar = () => {
             className="h-10"
             />
           </Link>
-          {/* <button
-            ref={menuRef}
-            onClick={toggleSecondaryNav}
-            className="lg:block md: hidden relative px-6 py-3 text-white font-semibold bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-lg hover:from-purple-600 hover:to-blue-500 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50 transition-all duration-300 transform hover:scale-105 active:scale-95"
-          >
-            <span className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-700 blur-md rounded-lg opacity-70 animate-pulse"></span>
-            <span className="relative z-10">Menu</span>
-          </button>  */}
         </div>
 
         {/* Center Section */}
@@ -464,7 +456,7 @@ const Navbar = () => {
                       item="Services"
                     />
                   </Link>
-                  <Link href="/">
+                  <Link href="/patient-resources">
                     <MenuItem
                       setActive={setActive}
                       active={active}
