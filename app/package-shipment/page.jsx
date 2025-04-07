@@ -3,18 +3,12 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-// Lightweight confetti effect using canvas-confetti
-// Install via: npm install canvas-confetti
 import Confetti from "react-confetti";
-
 import { FaShippingFast, FaShoppingCart, FaRegAddressBook } from "react-icons/fa";
 import { MdOutlineLocalShipping } from "react-icons/md";
-
 export default function BorderfreeStyleCheckout() {
   const [showConfetti, setShowConfetti] = useState(false);
   const router = useRouter();
-
   // =========================================================
   // 1) State
   // =========================================================
@@ -30,23 +24,18 @@ export default function BorderfreeStyleCheckout() {
   const [shipment, setShipment] = useState(null);
   const [selectedRate, setSelectedRate] = useState(null);
   const [cartItems, setCartItems] = useState([]);
-
   // Tracks whether we’re busy fetching rates or finalizing checkout
   const [isFetchingRates, setIsFetchingRates] = useState(false);
   const [isCreatingShipment, setIsCreatingShipment] = useState(false);
-
   // For address suggestions
   const [addressSuggestions, setAddressSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isFetchingAddress, setIsFetchingAddress] = useState(false);
   const suggestionsRef = useRef(null);
-
   // Env data (from /api/ship-env)
   const [envData, setEnvData] = useState(null);
-
   // For free shipping
   const [isFreeShipping, setIsFreeShipping] = useState(false);
-
   // =========================================================
   // 2) Load cart & fetch env data on mount
   // =========================================================
@@ -54,7 +43,6 @@ export default function BorderfreeStyleCheckout() {
     // Load cart
     const medCart = JSON.parse(localStorage.getItem("medCart")) || [];
     setCartItems(medCart);
-
     // Convert cart items -> Shippo parcels
     const formattedParcels = medCart.map((item) => {
       const length = item.parcel_info?.length ?? 10;
@@ -77,7 +65,6 @@ export default function BorderfreeStyleCheckout() {
     // Fetch environment data
     fetchEnvData();
   }, []);
-
   // Close suggestions dropdown if user clicks outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -105,7 +92,6 @@ export default function BorderfreeStyleCheckout() {
       toast.error("Error fetching environment data.");
     }
   };
-
   // =========================================================
   // 3) Automatic shipping-rate fetch (once envData & cart are ready)
   // =========================================================
