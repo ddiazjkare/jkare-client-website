@@ -33,5 +33,4 @@ function SessionProVider({ children, session }) {
     </CartContext.Provider>
   );
 }
-
 export default SessionProVider;
