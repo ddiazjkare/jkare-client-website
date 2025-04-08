@@ -25,6 +25,7 @@ function Page() {
       setConfettiVisible(false);
     }, 150000);
   }, []);
+  console.log("session : " , session);
 
   // Check if "nextUser" exists in localStorage
   useEffect(() => {
