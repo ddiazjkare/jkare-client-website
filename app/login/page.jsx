@@ -1,8 +1,7 @@
-// Add this directive at the top
 "use client"
 import { useContext, useEffect, useState } from "react"
 import Link from "next/link"
-import { FaGoogle, FaFacebook, FaXTwitter } from "react-icons/fa6"
+import { FaGoogle, FaFacebook, FaXTwitter, FaEye, FaEyeSlash, FaSpinner } from "react-icons/fa6"
 import { useRouter } from "next/navigation"
 import { signIn } from 'next-auth/react'
 import Alert from "../../components/ui/Alert"
@@ -12,6 +11,8 @@ const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [errMsg, setErrMsg] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const [, setCartItems] = useContext(CartContext)
   const router = useRouter()
 
@@ -23,6 +24,7 @@ const Login = () => {
 
   const submitHandler = async e => {
     e.preventDefault()
+    setLoading(true)
     const result = await signIn("credentials", {
       redirect: false,
       username,
@@ -32,12 +34,12 @@ const Login = () => {
     if (!result?.error) {
       const res = await fetch(`/api/user/info/${username}`)
       const dbUser = await res.json()
-      window.localStorage.setItem("nextUser", JSON.stringify(dbUser))
-      const resp = await fetch(`/api/cart/${dbUser.email}`)
-      const myCart = await resp.json()
-      setCartItems(myCart.length)
-      window.localStorage.removeItem("medCart");
-      window.localStorage.setItem("medCart", JSON.stringify(myCart))
+      // window.localStorage.setItem("nextUser", JSON.stringify(dbUser))
+      // const resp = await fetch(`/api/cart/${dbUser.email}`)
+      // const myCart = await resp.json()
+      // setCartItems(myCart.length)
+      // window.localStorage.removeItem("medCart");
+      // window.localStorage.setItem("medCart", JSON.stringify(myCart))
       // Successfully signed in
       router.push("/"); // Redirect to the home page (or any other page)
       return
@@ -49,6 +51,7 @@ const Login = () => {
         setErrMsg(null)
       }, 3000)
     }
+    setLoading(false)
   }
 
   return (
@@ -62,7 +65,7 @@ const Login = () => {
         className="lg:hidden absolute inset-0 z-0 bg-cover bg-center"
         style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/medicom.hexerve/login.png')" }}
       ></div>
-      <div className="relative p-8 mx-8 rounded-lg max-w-md w-full z-10 lg:mr-32 border-2 border-white shadow-xl  onject-center">
+      <div className="relative p-8 mx-8 rounded-lg max-w-md w-full z-10 lg:mr-32 border-2 border-white shadow-2xl bg-black/50 backdrop-blur-sm transition-transform duration-500 ease-out transform hover:scale-105">
         <h2 className="text-4xl font-bold mb-6 text-center text-white">
           Log in
         </h2>
@@ -79,17 +82,23 @@ const Login = () => {
               placeholder="Enter your Username"
             />
           </div>
-          <div className="flex flex-col mb-4">
+          <div className="flex flex-col mb-4 relative">
             <label className="text-white text-sm font-bold" htmlFor="password">
               Password
             </label>
             <input
-              className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded py-2 px-3 pr-10 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               onChange={({ target }) => setPassword(target.value)}
               placeholder="Enter your Password"
             />
+            <div
+              className="absolute inset-y-0 right-0 pr-3 mt-6 flex items-center cursor-pointer text-gray-600"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+            </div>
           </div>
           <div className="flex items-center justify-between mb-4">
             <label
@@ -105,13 +114,22 @@ const Login = () => {
             </label>
           </div>
           <div>
-            <input
-              className="bg-transparent hover:bg-customBlue text-white hover:text-white font-bold py-2 px-4 rounded border border-white hover:border-transparent focus:outline-none focus:shadow-outline w-full"
+            <button
               type="submit"
-              value="Log in"
-            />
+              disabled={loading}
+              className="bg-transparent hover:bg-customBlue text-white font-bold py-2 px-4 rounded border border-white hover:border-transparent focus:outline-none focus:shadow-outline w-full flex items-center justify-center"
+            >
+              {loading ? (
+                <>
+                  <FaSpinner className="animate-spin mr-2" size={20} />
+                  Logging in...
+                </>
+              ) : (
+                "Log in"
+              )}
+            </button>
             <Link
-              className="inline-block align-baseline font-bold text-sm text-white hover:text-customBlue"
+              className="inline-block align-baseline font-bold text-sm text-white hover:text-customBlue mt-2 block"
               href="/password-forget"
             >
               Forgot Password?
@@ -164,4 +182,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default Login;

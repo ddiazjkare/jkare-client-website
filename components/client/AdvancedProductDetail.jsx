@@ -9,6 +9,8 @@ import Link from "next/link";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+
+
 const AdvancedProductDetail = ({ data }) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -16,6 +18,22 @@ const AdvancedProductDetail = ({ data }) => {
   const [thumbnailIndex, setThumbnailIndex] = useState(0);
   const [, setCartItems] = useContext(CartContext);
   const { data: session } = useSession();
+  const [shippingOffer, setShippingOffer] = useState(null);
+
+  
+useEffect(() => {
+  async function fetchShippingOffer() {
+    try {
+      const response = await fetch("/api/ship-env");
+      const data = await response.json();
+      setShippingOffer(data.offer_price);
+    } catch (error) {
+      console.error("Failed to fetch shipping offer:", error);
+    }
+  }
+  fetchShippingOffer();
+}, []);
+
 
   const handleImageClick = () => {
     setIsModalOpen(true);
@@ -180,8 +198,8 @@ const AdvancedProductDetail = ({ data }) => {
                     src={image}
                     alt={`Thumbnail ${index + 1}`}
                     className={`w-20 h-20 rounded-lg cursor-pointer object-contain ${selectedImage === thumbnailIndex + index
-                        ? "border-2 border-customBlue"
-                        : ""
+                      ? "border-2 border-customBlue"
+                      : ""
                       }`}
                     onClick={() => handleThumbnailClick(thumbnailIndex + index)}
                   />
@@ -279,9 +297,10 @@ const AdvancedProductDetail = ({ data }) => {
                   src="https://www.thecpapshop.com/media/catalog/badges/CPAP-icons-56x56-04.png"
                   alt="Free Shipping Over $99"
                 />
-                <div className="badge-title lg:text-sm sm: text-xs text-center">
-                  Free Shipping Over $99
+                <div className="badge-title lg:text-sm sm:text-xs text-center">
+                  Free Shipping Over  ${shippingOffer !== null ? shippingOffer : "Loading..."}
                 </div>
+
               </div>
             )}
             {data.product.key_features["pay_over_time"] && (
@@ -319,8 +338,8 @@ const AdvancedProductDetail = ({ data }) => {
             <button
               onClick={cartHandler}
               className={`flex items-center px-4 py-2 rounded-lg ${isOutOfStock
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-customPink text-white hover:bg-customBlue"
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-customPink text-white hover:bg-customBlue"
                 }`}
               disabled={isOutOfStock}
             >
