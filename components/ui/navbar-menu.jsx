@@ -19,7 +19,7 @@ export const MenuItem = ({ setActive, active, item, children }) => {
       <motion.p
         transition={{ duration: 0.3 }}
         // Navbar styling Properties
-        className='cursor-pointer text-black hover:text-customPink lg:text-lg lg:font-normal md:font-light'
+        className='cursor-pointer text-black hover:text-customPink lg:text-lg lg:font-normal md:font-light '
       >
         {item}
       </motion.p>
@@ -52,14 +52,13 @@ export const MenuItem = ({ setActive, active, item, children }) => {
     </div>
   )
 }
-
 export const Menu = ({ setActive, children }) => {
   return (
     <nav
       // resets the state
       onMouseLeave={() => setActive(null)}
       className='relative w-full
-      shadow-input flex justify-center space-x-8 px-8 py-2  '
+      shadow-input flex justify-center space-x-4 px-8 py-2 '
     >
       {children}
     </nav>
@@ -90,7 +89,7 @@ export const ProductItem = ({ title, description, href, src }) => {
 
 export const HoveredLink = ({ children, ...rest }) => {
   return (
-    <Link {...rest} className='text-black  hover:text-customPink'>
+    <Link {...rest} className='text-black  hover:text-customPink py-2'>
       {children}
     </Link>
   )

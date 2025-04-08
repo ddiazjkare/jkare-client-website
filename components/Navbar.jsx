@@ -169,7 +169,7 @@ const Navbar = () => {
               </Link>
               <MenuItem setActive={setActive} active={active} item="Products">
                 {/* Submenu for 'Products' (unchanged) */}
-                <div className="flex flex-col space-y-3 text-sm bg-white shadow-md p-4 rounded-md">
+                <div className="flex flex-col text-sm bg-white  px-2 rounded-md">
                   {data.map((d) => (
                     <HoveredLink key={d.name} href={`/category/${d.name}`}>
                       {d.name}

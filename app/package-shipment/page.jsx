@@ -648,8 +648,10 @@ export default function BorderfreeStyleCheckout() {
                                   </div>
                                   <div className="text-xs text-gray-600">
                                     {rate.servicelevel?.token?.includes("EXPRESS")
-                                      ? "No additional import charges at delivery"
-                                      : "No additional import charges at delivery"}
+                                      ? ""
+                                      : ""}
+                                      {/* ? "No additional import charges at delivery"
+                                      : "No additional import charges at delivery"} */}
                                   </div>
                                 </div>
                               </div>
