@@ -140,9 +140,9 @@ export default function Contact() {
                     Address
                   </h4>
                   <p className="text-gray-700">
-                    SPEC MEDICAL, INC
+                  4101 SW 73rd
                     <br />
-                    4710 SW 74 AVE Miami, FL 33155
+                     Ave, Miami, FL 33155, United States
                   </p>
                 </div>
                 <div>
@@ -150,13 +150,13 @@ export default function Contact() {
                     Contact Details
                   </h4>
                   <p className="text-gray-700">
-                    Email: info@cpapmiami.com
+                    Email: www.jkare.org
                     <br />
-                    Toll Free: 855.717.7378
+                    {/* Toll Free: 855.717.7378 */}
                     <br />
-                    Phone: 305.266.6701
+                    Phone: 1-800-567-000
                     <br />
-                    Fax: 305.266.9943
+                    {/* Fax: 305.266.9943 */}
                   </p>
                 </div>
               </div>
