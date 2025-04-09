@@ -152,11 +152,8 @@ export default function Contact() {
                   <p className="text-gray-700">
                     Email: www.jkare.org
                     <br />
-                    {/* Toll Free: 855.717.7378 */}
-                    <br />
                     Phone: 1-800-567-000
                     <br />
-                    {/* Fax: 305.266.9943 */}
                   </p>
                 </div>
               </div>
