@@ -213,10 +213,10 @@ const Navbar = () => {
                     </h4>
                     <hr className="border-gray-300 mb-2" />
                     <div className="flex flex-col space-y-1 text-sm">
-                      <HoveredLink href="#">
+                      <HoveredLink href="/Safety&Emergency">
                         Emergency Planning for the Home Care Patient
                       </HoveredLink>
-                      <HoveredLink href="#">
+                      <HoveredLink href="/Safety&Emergency">
                         How to Make Your Home Safe for Medical Care
                       </HoveredLink>
                     </div>
@@ -228,14 +228,14 @@ const Navbar = () => {
                     </h4>
                     <hr className="border-gray-300 mb-2" />
                     <div className="flex flex-col space-y-1 text-sm">
-                      <HoveredLink href="#">HIPAA Privacy Notice</HoveredLink>
-                      <HoveredLink href="#">
+                      <HoveredLink href="/PatientRights">HIPAA Privacy Notice</HoveredLink>
+                      <HoveredLink href="/PatientRights">
                         Patient&apos;s Bill of Rights and Responsibilities
                       </HoveredLink>
-                      <HoveredLink href="#">
+                      <HoveredLink href="/PatientRights">
                         Patient Grievance and Complaint Procedure
                       </HoveredLink>
-                      <HoveredLink href="#">
+                      <HoveredLink href="/PatientRights">
                         Making Decisions About Your Health Care
                       </HoveredLink>
                     </div>
@@ -247,13 +247,13 @@ const Navbar = () => {
                     </h4>
                     <hr className="border-gray-300 mb-2" />
                     <div className="flex flex-col space-y-1 text-sm">
-                      <HoveredLink href="#">
+                      <HoveredLink href="/SupportPolicies">
                         Medicare DMEPOS Supplier Standards
                       </HoveredLink>
-                      <HoveredLink href="#">Warranty Information</HoveredLink>
-                      <HoveredLink href="#">Insurance Information</HoveredLink>
-                      <HoveredLink href="#">Prescription Requirements</HoveredLink>
-                      <HoveredLink href="#">Medicare Support</HoveredLink>
+                      <HoveredLink href="/SupportPolicies">Warranty Information</HoveredLink>
+                      <HoveredLink href="/SupportPolicies">Insurance Information</HoveredLink>
+                      <HoveredLink href="/SupportPolicies">Prescription Requirements</HoveredLink>
+                      <HoveredLink href="/SupportPolicies">Medicare Support</HoveredLink>
                     </div>
                   </div>
                   {/* 4th Column */}
@@ -263,10 +263,10 @@ const Navbar = () => {
                     </h4>
                     <hr className="border-gray-300 mb-2" />
                     <div className="flex flex-col space-y-1 text-sm">
-                      <HoveredLink href="#">
+                      <HoveredLink href="/EquipmentGuide">
                         Customer Instruction Guide for CPAP & BiPAP
                       </HoveredLink>
-                      <HoveredLink href="#">
+                      <HoveredLink href="/EquipmentGuide">
                         Nebulizer/Compressor Therapy & Cleaning Instructions
                       </HoveredLink>
                     </div>
@@ -278,18 +278,33 @@ const Navbar = () => {
                     </h4>
                     <hr className="border-gray-300 mb-2" />
                     <div className="flex flex-col space-y-1 text-sm">
-                      <HoveredLink href="#">Afflovest (English)</HoveredLink>
-                      <HoveredLink href="#">
-                        Biwaze Airway Clearance System
+                      <HoveredLink href="/ProductBrochers">Afflovest (English)</HoveredLink>
+                      <HoveredLink href="/ProductBrochers">
+                        Biwaze Airway Clearance System User Manual
+                      </HoveredLink>
+                      <HoveredLink href="/ProductBrochers">
+                        Biwaze Clear Quick Hits
+                      </HoveredLink>
+                      <HoveredLink href="/ProductBrochers">
+                        Biwaze Cough User Manual (English)
+                      </HoveredLink>
+                      <HoveredLink href="/ProductBrochers">
+                        Biwaze Cough User Manual (Spanish)
+                      </HoveredLink>
+                      <HoveredLink href="/ProductBrochers">
+                        Oxlife Liberty User Manual
+                      </HoveredLink>
+                      <HoveredLink href="/ProductBrochers">
+                        MyAirvo Use and Care Guide
                       </HoveredLink>
                     </div>
                   </div>
                 </div>
               </MenuItem>
 
-              <Link href="/">
+              {/* <Link href="/">
                 <MenuItem setActive={setActive} active={active} item="Why JKare" />
-              </Link>
+              </Link> */}
               <Link href="/blog">
                 <MenuItem setActive={setActive} active={active} item="Blog" />
               </Link>

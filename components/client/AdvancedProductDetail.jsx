@@ -418,5 +418,4 @@ useEffect(() => {
     </div>
   );
 };
-
 export default AdvancedProductDetail;
