@@ -109,7 +109,7 @@ export default function ShopByCategoryAndBrand() {
             {brands.map(({ name, logo }) => (
               <Link
                 key={name}
-                href={{ pathname: '/brands', query: { brand: name }}}
+                href={{ pathname: '/brands', query: { brand: btoa(name) }}}
                 className="flex flex-col items-center justify-center shrink-0 cursor-pointer"
               >
                 <img
