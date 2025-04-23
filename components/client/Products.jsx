@@ -31,11 +31,11 @@ const Products = ({ productList, brands }) => {
       params[name] = value;
     } else {
       if (checked) {
-        setFilters({ ...filters, [name]: filters[name].concat(value) });
-        params[name] = filters[name].concat(value);
+        setFilters({ ...filters, [name]: filters[name].concat(btoa(value)) });
+        params[name] = filters[name].concat(btoa(value));
       } else {
         const temp = [...filters[name]];
-        temp.splice(temp.indexOf(value), 1);
+        temp.splice(temp.indexOf(btoa(value)), 1);
         setFilters({ ...filters, [name]: temp });
         params[name] = temp;
       }
@@ -130,7 +130,7 @@ const Products = ({ productList, brands }) => {
                     id={`brand-${brand}`}
                     value={brand}
                     className='border-2 border-gray-300 accent-customBaseBlue h-4 w-4'
-                    checked={filters.brand.includes(brand)}
+                    checked={filters.brand.includes(btoa(brand))}
                     onChange={(e) => handleFilterChange(e)}
                   />
                   <label htmlFor={`brand-${brand}`} className='ml-4 text-md font-light'>{brand}</label>
