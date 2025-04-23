@@ -21,7 +21,8 @@ const testimonials = [
   },
   {
     rating: 5,
-    name: 'Queen Isa',
+    name: 'Queen Isa', 
+    
     text:
       'My mother has been with JKare for a year and they have assisted in so many ways. Joel offers excellent customer service and always helps me get supplies or answers for my mom. A big help!',
   },
