@@ -93,7 +93,7 @@ const Navbar = () => {
   return (
     <div className="fixed top-0 inset-x-0 z-50">
       {/* Top Bar: only visible on md+ */}
-      <div className="hidden md:flex bg-blue-500 py-2 justify-center items-center">
+      <div className="hidden md:flex bg-customBlue py-2 justify-center items-center">
         <p className="text-white text-sm md:text-base font-medium">
           Questions? Call Us Toll-Free <span className="font-bold">1-800-567-000</span>
         </p>

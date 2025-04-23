@@ -72,7 +72,7 @@ export default function HeroSection() {
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white via-white/40 to-transparent" />
 
       {/* main content */}
-      <div className="relative z-10 mx-auto mt-12 max-w-3xl px-6 sm:mx-0 sm:px-10 lg:px-32 font-montserrat">
+      <div className="relative z-10 mx-auto lg:mt-60 sm:mt-0 max-w-3xl px-6 sm:mx-0 sm:px-10 lg:px-32 font-montserrat">
         {/* welcome */}
         <h1 className="text-xl sm:text-2xl md:text-4xl font-semibold">
           Welcome&nbsp;to&nbsp;

@@ -9,46 +9,47 @@ import { FaStar, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 const testimonials = [
   {
     rating: 4.5,
-    text: 'This website made buying medical equipment effortless. The process was incredibly smooth, with a fast and simple checkout. Excellent service and high‑quality.',
+    text: 'Navigating the website was a breeze, and the checkout process was seamless. I appreciated the swift delivery and the top-notch quality of the equipment.',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/testimonials/shivamchokha.jpg',
-    name: 'SHIVAM AWASTHI',
+    name: 'SHIVAM AWASTHI',
     role: 'Front‑end Developer',
   },
   {
     rating: 4.9,
-    text: 'Shopping for medical equipment here was fantastic! The site is easy to navigate, the checkout process was quick, and I received my order in no time. The quality of the products is exceptional.',
+    text: 'The platform is user-friendly, making it easy to find what I needed. My order arrived promptly, and the quality exceeded my expectations.',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/testimonials/akash.jpg',
-    name: 'AKASH SHARMA',
+    name: 'AKASH SHARMA',
     role: 'Lead Developer',
   },
   {
     rating: 4.8,
-    text: 'I had a fantastic experience with this website. The user‑friendly design ensured a hassle‑free shopping experience, and the quick delivery exceeded my expectations.',
+    text: 'I was impressed by the intuitive design of the site. The entire shopping experience was smooth, and the delivery was faster than anticipated.',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/WhatsApp+Image+2024-10-25+at+10.38.41_488a5962.jpg',
-    name: 'KASHISH SAINI',
+    name: 'KASHISH SAINI',
     role: 'WordPress Developer',
   },
   {
     rating: 4.1,
-    text: 'Everything arrived on time and the product quality is superb. Highly recommended for anyone needing dependable medical supplies.',
+    text: 'The products were delivered on schedule, and the quality is outstanding. It\'s reassuring to have a reliable source for medical supplies.',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/testimonials/akshay.jpg',
-    name: 'AKSHAY BAIRWA',
+    name: 'AKSHAY BAIRWA',
     role: 'UI/UX Designer',
   },
   {
     rating: 4.1,
-    text: 'Everything arrived on time and the product quality is superb. Highly recommended for anyone needing dependable medical supplies.',
+    text: 'Timely delivery and exceptional product quality. This platform has become my go-to for dependable medical equipment.',
     imgSrc: 'https://hexerve.com/wp-content/uploads/2024/09/Untitled-design-25.png',
     name: 'Ajay Verma',
     role: 'Hexerve CEO',
   },
   {
     rating: 4.1,
-    text: 'Everything arrived on time and the product quality is superb. Highly recommended for anyone needing dependable medical supplies.',
+    text: 'Received my order promptly, and the items were of high quality. Highly recommend this site for anyone in need of medical supplies.',
     imgSrc: 'https://hexerve.com/wp-content/uploads/2024/09/7.png',
     name: 'Atul Verma',
     role: 'Branch Manager',
   },
+  
 ];
 
 /* ------------------------------------------------------------------ */
@@ -105,7 +106,7 @@ export default function Testimonials() {
           <ArrowBtn onClick={prev} icon={<FaChevronLeft size={26} />} />
 
           {/* rail */}
-          <div className="relative h-[420px] sm:h-[460px] w-[1100px] max-w-full overflow-hidden ">
+          <div className="relative h-[420px] sm:h-[460px] w-[1100px] max-w-full overflow-hidden z-10">
             {testimonials.map((t, idx) => {
               const d      = offset(idx);           
               const xShift = d * (CARD_W + GAP);     

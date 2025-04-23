@@ -71,12 +71,11 @@ export default function ShopByCategoryAndBrand() {
   /* ------------------- component markup ----------------------- */
   return (
     <section className="font-montserrat bg-gradient-to-t from-white via-[#F3F9FF] to-white py-16">
-
       {/* ========== SHOP BY CATEGOR ========== */}
       <div className="mx-auto max-w-7xl px-6 lg:px-8 grid lg:grid-cols-[300px_1fr] gap-8">
         {/* purple sidebar */}
         <aside className="hidden lg:flex flex-col rounded-xl overflow-hidden shadow-lg">
-          <div className="flex-1 bg-gradient-to-b from-[#7e3bf3] via-[#b255e6] to-[#e4d6ff] p-8">
+          <div className="flex-1 bg-gradient-to-b from-customBlue via-customBaseBlue to-white p-8">
             <h2 className="text-white text-3xl font-extrabold leading-snug mb-6">
               SHOP BY<br />CATEGORY
             </h2>
@@ -111,7 +110,7 @@ export default function ShopByCategoryAndBrand() {
         {/* purple label bar */}
         <div className="hidden lg:block">
           <div className="rounded-xl overflow-hidden shadow-lg">
-            <div className="bg-gradient-to-b from-[#7e3bf3] via-[#b255e6] to-[#e4d6ff] p-6">
+            <div className="bg-gradient-to-b from-customBlue to-customBaseBlue  p-6">
               <h3 className="text-white text-3xl font-extrabold leading-tight">
                 SHOP BY<br />BRAND
               </h3>
