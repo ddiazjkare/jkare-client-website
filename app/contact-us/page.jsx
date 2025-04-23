@@ -39,7 +39,7 @@ export default function Contact() {
       {/* -------------------------------------------------- */}
       {/* HERO – same layout as About page */}
       {/* -------------------------------------------------- */}
-      <div className="relative h-[450px] w-full">
+      <div className="relative h-[450px] w-full font-montserrat">
         <Image
           src="https://s3.ap-south-1.amazonaws.com/medicom.hexerve/Shutterstock%2B350925269.jpg"
           alt="JKARE Hero"
@@ -49,19 +49,19 @@ export default function Contact() {
           priority
         />
         <div className="absolute bottom-10 left-10 bg-white/90 backdrop-blur-md px-10 py-5 shadow-lg rounded-r-2xl">
-          <h1 className="text-customBlue text-4xl font-black tracking-wide">Contact&nbsp;Us</h1>
+          <h1 className="text-customBlue text-4xl font-medium tracking-wide">Contact&nbsp;Us</h1>
         </div>
       </div>
 
       {/* -------------------------------------------------- */}
       {/* FORM + MAP */}
       {/* -------------------------------------------------- */}
-      <section className="bg-gray-100 py-20 px-6 md:px-10 lg:px-16 xl:px-20">
+      <section className="bg-gray-100 py-20 px-6 md:px-10 lg:px-16 xl:px-20 font-montserrat">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 place-items-stretch">
           {/* FORM CARD */}
           <div className="order-2 lg:order-1 flex flex-col justify-center bg-white border-l-8 border-customPink rounded-2xl shadow-xl p-8 sm:p-10 space-y-8">
             <div>
-              <h2 className="text-customPink text-3xl font-extrabold mb-2">Send a Message</h2>
+              <h2 className="text-customPink text-3xl font-medium mb-2">Send a Message</h2>
               <p className="text-gray-600">
                 We’d love to hear from you! Fill out the form below or use the info alongside.
               </p>
@@ -130,7 +130,7 @@ export default function Contact() {
       {/* -------------------------------------------------- */}
       {/* INFO STRIP */}
       {/* -------------------------------------------------- */}
-      <section className="bg-white py-12 px-6 md:px-10 lg:px-16 xl:px-20">
+      <section className="bg-white py-12 px-6 md:px-10 lg:px-16 xl:px-20 font-montserrat">
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
           <div className="flex md:flex-col md:items-start items-center gap-4">
             <MapPin className="h-10 w-10 text-customBlue flex-shrink-0" />

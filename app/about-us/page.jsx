@@ -10,7 +10,7 @@ const AboutPage = () => {
   ];
 
   return (
-    <div className="bg-white">
+    <div className="bg-white font-montserrat">
       {/* -------------------------------------------------- */}
       {/* Hero Section */}
       {/* -------------------------------------------------- */}
@@ -25,7 +25,7 @@ const AboutPage = () => {
         />
         {/* Overlay title */}
         <div className="absolute bottom-10 left-10 bg-white/90 backdrop-blur-md px-10 py-5 shadow-lg rounded-r-2xl">
-          <h1 className="text-customBlue text-4xl font-black tracking-wide">About JKARE</h1>
+          <h1 className="text-customBlue text-4xl font-semibold tracking-wide ">About JKARE</h1>
         </div>
       </div>
 

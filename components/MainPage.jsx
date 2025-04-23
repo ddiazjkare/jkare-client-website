@@ -11,7 +11,7 @@ function MainPage() {
   return (
     <>
       <HeroSection />
-      <div className="">
+      <div className=" font-montserrat">
       <NewArrivals />
       <HomeProduct />
       </div>
