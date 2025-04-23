@@ -4,52 +4,33 @@ import React, { useState, useEffect } from 'react';
 import { FaStar, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 /* ------------------------------------------------------------------ */
-/*  DATA                                                               */
+/*  DATA (new sample reviews, no photos)                              */
 /* ------------------------------------------------------------------ */
 const testimonials = [
   {
-    rating: 4.5,
-    text: 'Navigating the website was a breeze, and the checkout process was seamless. I appreciated the swift delivery and the top-notch quality of the equipment.',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/testimonials/shivamchokha.jpg',
-    name: 'SHIVAM AWASTHI',
-    role: 'Front‑end Developer',
+    rating: 5,
+    name: 'ANDREA HOLZMANN',
+    text:
+      'Jkare is helping me on my journey with the CPAP machine for almost 6 months now. I am very happy with their service. Joel is very efficient and kind. He solves all my problems and doubts related to the machine and its accessories.',
   },
   {
-    rating: 4.9,
-    text: 'The platform is user-friendly, making it easy to find what I needed. My order arrived promptly, and the quality exceeded my expectations.',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/testimonials/akash.jpg',
-    name: 'AKASH SHARMA',
-    role: 'Lead Developer',
+    rating: 4,
+    name: 'Estefani',
+    text:
+      'Joel provided exceptional service by being attentive to my daughter’s needs, responding promptly to our inquiries and going the extra mile to ensure our satisfaction. Thank you!',
   },
   {
-    rating: 4.8,
-    text: 'I was impressed by the intuitive design of the site. The entire shopping experience was smooth, and the delivery was faster than anticipated.',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/WhatsApp+Image+2024-10-25+at+10.38.41_488a5962.jpg',
-    name: 'KASHISH SAINI',
-    role: 'WordPress Developer',
+    rating: 5,
+    name: 'Queen Isa',
+    text:
+      'My mother has been with JKare for a year and they have assisted in so many ways. Joel offers excellent customer service and always helps me get supplies or answers for my mom. A big help!',
   },
   {
-    rating: 4.1,
-    text: 'The products were delivered on schedule, and the quality is outstanding. It\'s reassuring to have a reliable source for medical supplies.',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/testimonials/akshay.jpg',
-    name: 'AKSHAY BAIRWA',
-    role: 'UI/UX Designer',
+    rating: 5,
+    name: 'Kim Decius',
+    text:
+      'Outstanding experience from start to finish. The staff made sure I understood my new CPAP equipment and followed up after delivery. Highly recommend JKare.',
   },
-  {
-    rating: 4.1,
-    text: 'Timely delivery and exceptional product quality. This platform has become my go-to for dependable medical equipment.',
-    imgSrc: 'https://hexerve.com/wp-content/uploads/2024/09/Untitled-design-25.png',
-    name: 'Ajay Verma',
-    role: 'Hexerve CEO',
-  },
-  {
-    rating: 4.1,
-    text: 'Received my order promptly, and the items were of high quality. Highly recommend this site for anyone in need of medical supplies.',
-    imgSrc: 'https://hexerve.com/wp-content/uploads/2024/09/7.png',
-    name: 'Atul Verma',
-    role: 'Branch Manager',
-  },
-  
 ];
 
 /* ------------------------------------------------------------------ */
@@ -81,22 +62,20 @@ export default function Testimonials() {
   };
 
   /* constants for transform math */
-  const CARD_W = isMobile ? 320 : 350;           // width incl. gap
-  const GAP    = isMobile ? 0   : 30;            // visual gap (px)
+  const CARD_W = isMobile ? 320 : 350; // width incl. gap
+  const GAP = isMobile ? 0 : 30; // visual gap (px)
 
   return (
     <section className="py-20 font-montserrat bg-white overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-
         {/* -------------- heading -------------- */}
         <header className="mb-16 text-center">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900">
             TESTIMONIALS
           </h2>
           <p className="mt-4 max-w-3xl mx-auto text-gray-600 text-sm sm:text-base lg:text-lg">
-            Discover how our top‑quality medical equipment has transformed lives. Hear
-            firsthand experiences from our satisfied customers who trust us for their
-            healthcare needs and unparalleled support.
+            Hear firsthand experiences from our customers who trust JKare for
+            their respiratory care and CPAP needs.
           </p>
         </header>
 
@@ -108,11 +87,18 @@ export default function Testimonials() {
           {/* rail */}
           <div className="relative h-[420px] sm:h-[460px] w-[1100px] max-w-full overflow-hidden z-10">
             {testimonials.map((t, idx) => {
-              const d      = offset(idx);           
-              const xShift = d * (CARD_W + GAP);     
-              const scale  = d === 0 ? 1.1 : 0.85;     
-              const z      = 50 - Math.abs(d);        
-              const hide   = Math.abs(d) > 2 && !isMobile;
+              const d = offset(idx);
+              const xShift = d * (CARD_W + GAP);
+              const scale = d === 0 ? 1.1 : 0.85;
+              const z = 50 - Math.abs(d);
+              const hide = Math.abs(d) > 2 && !isMobile;
+
+              /* initials if no photo */
+              const initials = t.name
+                .split(' ')
+                .map((w) => w[0])
+                .join('')
+                .toUpperCase();
 
               return (
                 <article
@@ -126,28 +112,31 @@ export default function Testimonials() {
                   className="absolute inset-y-0 left-1/2 top-1/4  w-[320px] sm:w-[350px] h-[300px]
                              bg-[#F7F9FB] rounded-xl shadow-md flex flex-col "
                 >
-                  {/* avatar */}
-                  <img
-                    src={t.imgSrc}
-                    alt={t.name}
+                  {/* avatar (initials) */}
+                  <div
                     className="absolute -top-12 left-1/2 -translate-x-1/2
-                               h-24 w-24 rounded-full ring-4 ring-white object-cover
-                               shadow-lg"
-                  />
+                               h-24 w-24 rounded-full ring-4 ring-white
+                               grid place-items-center bg-customPink
+                               text-white text-3xl font-bold shadow-lg"
+                  >
+                    {initials}
+                  </div>
 
                   {/* body */}
                   <div className="pt-16 pb-10 px-8 text-center overflow-hidden">
                     {/* stars */}
                     <div className="flex justify-center gap-0.5 text-amber-500 mb-6">
                       {Array.from({ length: 5 }).map((_, i) => (
-                        <FaStar key={i} size={14} />
+                        <FaStar
+                          key={i}
+                          size={14}
+                          className={i + 1 <= Math.round(t.rating) ? '' : 'opacity-30'}
+                        />
                       ))}
                     </div>
 
                     <h4 className="text-lg font-bold mb-4">{t.name}</h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">
-                      {t.text}
-                    </p>
+                    <p className="text-sm text-gray-600 leading-relaxed">{t.text}</p>
                   </div>
                 </article>
               );

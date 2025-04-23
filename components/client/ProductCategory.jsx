@@ -28,10 +28,11 @@ const categories = [
 
 const brands = [
   { name: 'ReactHealth', logo: 'https://www.reacthealth.com/images/logo.jpg' },
-  { name: 'ResMed',      logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/ResMed_logo.svg/800px-ResMed_logo.svg.png' },
-  { name: 'Rhythm',      logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT07F7mfZp98yQZi4NpX7TJemK2oHVos7wPxg&s' },
-  { name: 'F&P',         logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRm7A27QJxK1JAXhvJq7e_0Q_-vIjOvk6dxg&s' },
-  { name: 'Sentec',      logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5kRz6HKcS3W6GHg0_9h2FpUVtGNNPJjZOTw&s' },
+  // { name: 'ResMed',      logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/ResMed_logo.svg/800px-ResMed_logo.svg.png' },
+  // { name: 'Rhythm',      logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT07F7mfZp98yQZi4NpX7TJemK2oHVos7wPxg&s' },
+  { name: 'ABM Respiratory Care',         logo: 'https://abmrc.com/wp-content/uploads/2021/02/ABM-Logo-08.png' },
+  { name: 'Percussionaire', logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5kRz6HKcS3W6GHg0_9h2FpUVtGNNPJjZOTw&s' },
+  // { name: 'AffloVest', logo: 'https://afflovest.com/wp-content/uploads/sites/2/AFFLOVEST-logo_WHITE-2048x222.png' },
 ];
 
 export default function ShopByCategoryAndBrand() {
@@ -104,15 +105,23 @@ export default function ShopByCategoryAndBrand() {
             className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
             aria-hidden
           />
-
           <div className="flex gap-10 justify-center flex-wrap">
             {brands.map(({ name, logo }) => (
-              <div key={name} className="flex flex-col items-center justify-center shrink-0">
-                <img src={logo} alt={name} className="h-8 w-auto object-contain" />
+              <Link
+                key={name}
+                href={{ pathname: '/brands', query: { brand: name }}}
+                className="flex flex-col items-center justify-center shrink-0 cursor-pointer"
+              >
+                <img
+                  src={logo}
+                  alt={name}
+                  className="h-8 w-auto object-contain hover:scale-105 transition-transform"
+                />
                 <span className="text-xs text-gray-700 mt-2">{name}</span>
-              </div>
+              </Link>
             ))}
           </div>
+
         </div>
       </div>
     </section>
