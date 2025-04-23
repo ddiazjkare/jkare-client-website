@@ -1,159 +1,153 @@
-"use client";
-import React, { useState, useContext } from "react";
-import { Button } from "../ui/moving-border";
-import Link from "next/link";
-import { fetcher } from "../../lib/helperFunction";
-import { DataContext } from "./DataContextProvider";
+'use client';
 
-const ProductCategory = ({ prod }) => {
-  const [products, setProducts] = useState(prod);
-  const [category, setCategory] = useState("Pap Devices");
-  const data = useContext(DataContext);
+import { useRef, useEffect } from 'react';
+import Link from 'next/link';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+const categories = [
+  {
+    title: 'Respiratory Therapy Devices',
+    img: 'https://www.sentec.com/fileadmin/2023/07/Untitled-1.png',
+    href: '/category/Respiratory%20Therapy%20Devices',
+  },
+  {
+    title: 'Oxygen Concentrators',
+    img: 'https://cdn.shopify.com/s/files/1/1840/5479/files/Oxlife_LIBERTY-portable-oxygen-concentrator_1200x.png?v=1684362278',
+    href: '/category/Oxygen%20Concentrators',
+  },
+  {
+    title: 'PAP Devices',
+    img: 'https://www.directhomemedical.com/cart/graphics/00000001/3/luna-travelpap-auto-cpap-machine.jpg',
+    href: '/category/Pap%20Devices',
+  },
+  {
+    title: 'CPAP Masks',
+    img: 'https://resources.fphcare.com/content/evora-full-mask-front.png',
+    href: '/category/CPAP%20Masks',
+  },
+];
+const brands = [
+  { name: 'ReactHealth', logo: 'https://www.reacthealth.com/images/logo.jpg' },
+  { name: 'ResMed',      logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/ResMed_logo.svg/800px-ResMed_logo.svg.png' },
+  { name: 'Rhythm',      logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT07F7mfZp98yQZi4NpX7TJemK2oHVos7wPxg&s' },
+  { name: 'F&P',         logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRm7A27QJxK1JAXhvJq7e_0Q_-vIjOvk6dxg&s' },
+  { name: 'Sentec',      logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5kRz6HKcS3W6GHg0_9h2FpUVtGNNPJjZOTw&s' },
+];
 
-  // Track the active category
-  const [activeCategory, setActiveCategory] = useState(category);
+export default function ShopByCategoryAndBrand() {
+  const railRef = useRef(null);
+  const looped = [...brands, ...brands];
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+    requestAnimationFrame(() => {
+      rail.scrollLeft = rail.scrollWidth / 2 - rail.clientWidth;
+    });
+  }, []);
+  const scrollByOne = () => {
+    const rail = railRef.current;
+    if (!rail) return 0;
+    const firstCard = rail.querySelector('[data-card]');
+    return firstCard ? firstCard.offsetWidth + 40 /* gap-10 */ : 200;
+  };
 
-  const handleCategoryChange = async (cat) => {
-    try {
-      const res = await fetcher(`/api/product?category=${cat}&num=2`);
-      setCategory(cat);
-      setActiveCategory(cat); // Set the active category
-      setProducts(res);
-    } catch (err) {
-      console.log(err);
+  const handleScroll = (dir) => {
+    const rail = railRef.current;
+    if (!rail) return;
+
+    rail.scrollBy({ left: dir * scrollByOne(), behavior: 'smooth' });
+  };
+
+  const reCenterIfNeeded = () => {
+    const rail = railRef.current;
+    if (!rail) return;
+    const half = rail.scrollWidth / 2;
+    if (rail.scrollLeft < half * 0.25) {
+      rail.scrollLeft += half;
+    } else if (rail.scrollLeft > half * 1.75) {
+      rail.scrollLeft -= half;
     }
   };
 
-  const brands = [
-    { name: "ReactHealth", logo: "https://www.reacthealth.com/images/logo.jpg" },
-    { name: "ResMed", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/ResMed_logo.svg/800px-ResMed_logo.svg.png" },
-    { name: "Rhythm Healthcare", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT07F7mfZp98yQZi4NpX7TJemK2oHVos7wPxg&s" },
-    { name: "Fisher & Paykel Healthcare", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRm7A27QJxK1JAXhvJq7e_0Q_-vIjOvk6dxg&s" },
-    { name: "Sentec", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5kRz6HKcS3W6GHg0_9h2FpUVtGNNPJjZOTw&s" },
-  ];
-
+  /* ------------------- component markup ----------------------- */
   return (
-    <div>
-      <section className="text-black body-font md:flex md:justify-center font-montserrat">
-        <div className="container px-5 lg:py-12 lg:pb-0 sm:py-4 lg:mx-auto md:mx-0 flex flex-col items-center justify-center">
-          {/* Title Section */}
-          <div className="lg:w-3/4 sm:w-full product-title flex flex-col justify-center items-center mb-5">
-            <h1 className="text-center lg:text-5xl sm:text-3xl font-bold mb-3 font-montserrat tracking-tighter">
-              Shop By Category
-            </h1>
-            <p className="text-center lg:text-xl sm:text-md my-2 font-montserrat">
+    <section className="font-montserrat bg-gradient-to-t from-white via-[#F3F9FF] to-white py-16">
+
+      {/* ========== SHOP BY CATEGOR ========== */}
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 grid lg:grid-cols-[300px_1fr] gap-8">
+        {/* purple sidebar */}
+        <aside className="hidden lg:flex flex-col rounded-xl overflow-hidden shadow-lg">
+          <div className="flex-1 bg-gradient-to-b from-[#7e3bf3] via-[#b255e6] to-[#e4d6ff] p-8">
+            <h2 className="text-white text-3xl font-extrabold leading-snug mb-6">
+              SHOP BY<br />CATEGORY
+            </h2>
+            <p className="text-white text-base">
               Explore our advanced medical equipment collection, designed for
-              precision and reliability. From diagnostic tools to surgical
-              instruments, ensure optimal patient care with our state-of-art
-              solutions. Quality you can trust.
+              precision and reliability. From diagnostic tools to ensure optimal
+              patient care with our state‑of‑the‑art solutions. Quality you can
+              trust.
             </p>
           </div>
+        </aside>
 
-          {/* Products Section */}
-          <section className="text-gray-600 body-font lg:w-[90%]">
-            <div className="flex flex-wrap lg:justify-around md: justify-center items-center w-full bg-gray-100 p-2 rounded-lg shadow-md">
-              {data?.map((d) => (
-                <div key={d.name} className="m-1"> {/* Small margin for reduced spacing */}
-                  <button
-                    className={`px-4 py-2 text-base md:text-lg font-medium rounded-lg transition-all duration-200 
-          ${activeCategory === d.name
-                        ? "bg-customPink text-white"
-                        : "bg-white text-black hover:bg-gray-200"
-                      }`}
-                    onClick={() => handleCategoryChange(d.name)}
-                  >
-                    {d.name}
-                  </button>
-                </div>
-              ))}
+        {/* 2×2 cards */}
+        <div className="grid sm:grid-cols-2 gap-6">
+          {categories.map(({ title, img, href }) => (
+            <div key={title} className="flex flex-col items-center text-center bg-[#EEF7FD] rounded-xl shadow-md px-6 py-4">
+              <img src={img} alt={title} className="h-36 w-auto object-contain mb-4" />
+              <h3 className="text-md font-semibold uppercase tracking-wide text-gray-900 mb-4">
+                {title}
+              </h3>
+              <Link href={href} className="inline-block rounded-full bg-[#DDF2FF] px-8 py-3 font-semibold text-gray-900 hover:bg-[#c9e8ff] transition-colors">
+                Shop&nbsp;All
+              </Link>
             </div>
-            <div className="container px-5 py-12 mx-auto">
-              <div className="flex flex-wrap -m-4">
-                {products?.map((prod) => (
-                  <Link
-                    href={`/product/${prod._id}`}
-                    className="p-4 lg:w-1/3 sm:w-1/2 transition-transform duration-200 transform hover:scale-105"
-                    key={prod._id}
-                  >
-                    <div className="bg-white h-full border shadow-xl hover:shadow-customPink/20 hover:border-customPink rounded-lg overflow-hidden">
-                      <img
-                        className="lg:h-56 md:h-36 lg:w-full object-contain object-center p-4 border-b border-black"
-                        src={prod.prod_images[0]}
-                        alt={prod.prod_name}
-                      />
-                      <div className="p-6">
-                        <h1 className="title-font text-lg font-medium text-gray-900 mb-3 line-clamp-1">
-                          {prod.prod_name}
-                        </h1>
-                        <div className="flex items-center flex-wrap">
-                          <div className="text-customBlue inline-flex items-center md:mb-2 lg:mb-0">
-                            View Product
-                            <svg
-                              className="w-4 h-4 ml-2"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              fill="none"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <path d="M5 12h14"></path>
-                              <path d="M12 5l7 7-7 7"></path>
-                            </svg>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* Shop All Button */}
-          <div className="button">
-            <Link href={`/product`}>
-              <Button
-                borderRadius="1rem"
-                className="text-white bg-black-800/30 font-semibold text-lg"
-              >
-                Shop All
-              </Button>
-            </Link>
-          </div>
-
-          {/* Shop By Brand Section */}
-          <section>
-            <div className="bg-white py-8 px-4 rounded-2xl my-12">
-              <h2 className="text-center text-xl md:text-2xl font-bold text-black mb-6">
-                SHOP BY BRAND
-              </h2>
-              <div className="flex flex-wrap justify-center gap-8 items-center">
-                {brands.map((brand, index) => (
-                  <div key={index} className="flex flex-col items-center">
-                    <img
-                      src={brand.logo}
-                      alt={brand.name}
-                      className="h-12 md:h-16 object-contain"
-                    />
-                    <p className="text-sm text-gray-700 mt-2">{brand.name}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-6 text-center">
-                <a
-                  href="#"
-                  className="text-blue-600 hover:underline font-medium lg:text-2xl"
-                >
-                  View All
-                </a>
-              </div>
-            </div>
-          </section>
+          ))}
         </div>
-      </section>
-    </div>
-  );
-};
+      </div>
 
-export default ProductCategory;
+      {/* ========== SHOP BY BRAND ========== */}
+      <div className="mt-20 mx-auto max-w-7xl px-6 lg:px-8 grid lg:grid-cols-[300px_1fr] gap-8 items-start">
+
+        {/* purple label bar */}
+        <div className="hidden lg:block">
+          <div className="rounded-xl overflow-hidden shadow-lg">
+            <div className="bg-gradient-to-b from-[#7e3bf3] via-[#b255e6] to-[#e4d6ff] p-6">
+              <h3 className="text-white text-3xl font-extrabold leading-tight">
+                SHOP BY<br />BRAND
+              </h3>
+            </div>
+          </div>
+        </div>
+
+        {/* carousel rail */}
+        <div className="relative bg-white rounded-xl shadow-md px-16 py-10 overflow-hidden overflow-x-hidden">
+          {/* chevrons */}
+          <button onClick={() => handleScroll(-1)} aria-label="left" className="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full border hover:bg-gray-100">
+            <FiChevronLeft size={22} />
+          </button>
+          <button onClick={() => handleScroll(1)} aria-label="right" className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full border hover:bg-gray-100">
+            <FiChevronRight size={22} />
+          </button>
+
+          {/* logo strip */}
+          <div
+            ref={railRef}
+            onScroll={reCenterIfNeeded}
+            className="flex gap-10 overflow-x-scroll no-scrollbar scroll-smooth"
+          >
+            {looped.map((b, idx) => (
+              <div key={`${b.name}-${idx}`} data-card className="flex flex-col items-center shrink-0">
+                <img src={b.logo} alt={b.name} className="h-12 w-auto object-contain" />
+                <span className="text-xs text-gray-700 mt-2">{b.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
+
+

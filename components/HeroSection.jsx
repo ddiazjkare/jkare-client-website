@@ -1,63 +1,184 @@
-"use client";
-import React from "react";
-import { Button } from "./ui/moving-border";
-import Link from "next/link";
+/* ------------------------------------------------------------------
+   HeroSection.jsx  – rotating tag‑line *inside* text block
+------------------------------------------------------------------- */
 
-function HeroSection() {
+'use client';
+
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+
+const TAGLINES = [
+  'JKARE: Delivering personalized home respiratory therapy and innovative medical equipment for better breathing.',
+  'JKARE delivers high‑quality respiratory therapy, advanced equipment, and essential medical supplies, bringing care and comfort to your home.',
+  'JKARE provides specialized respiratory therapy, advanced equipment, and reliable medical supplies, enhancing lives one breath at a time.',
+  'Empowering patients through exceptional home respiratory care, equipment, and medical supplies; ',
+  'JKARE is your partner in health.'
+];
+
+const WORDS = ['BREATH', 'MOMENT', 'HEARTBEAT', 'PATIENT'];
+export default function HeroSection() {
+  /* tag‑line state */
+  const [idx, setIdx] = useState(0);
+  const [prevIdx, setPrevIdx] = useState(null);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setPrevIdx(idx);
+      setIdx((i) => (i + 1) % TAGLINES.length);
+      setTimeout(() => setPrevIdx(null), 800);
+    }, 5000);
+    return () => clearInterval(id);
+  }, [idx]);
+
+  /* typing word logic */
+  const [wIdx, setWIdx] = useState(0);
+  const [cIdx, setCIdx] = useState(0);
+  const [del, setDel] = useState(false);
+
+  useEffect(() => {
+    const word = WORDS[wIdx];
+    const TYPE = 180,
+      ERASE = 110,
+      HOLD = 1200;
+    let delay = del ? ERASE : TYPE;
+    if (!del && cIdx === word.length) delay = HOLD;
+
+    const t = setTimeout(() => {
+      if (!del) {
+        if (cIdx < word.length) setCIdx((c) => c + 1);
+        else setDel(true);
+      } else {
+        if (cIdx > 0) setCIdx((c) => c - 1);
+        else {
+          setDel(false);
+          setWIdx((w) => (w + 1) % WORDS.length);
+        }
+      }
+    }, delay);
+    return () => clearTimeout(t);
+  }, [cIdx, del, wIdx]);
+
+  const typed = WORDS[wIdx].slice(0, cIdx);
+
   return (
     <div
-      className="relative w-full h-screen flex items-center justify-center sm:justify-start bg-cover bg-center bg-no-repeat"
-      // style={{
-      //   backgroundImage:
-      //     "url('https://s3.ap-south-1.amazonaws.com/medicom.hexerve/hero+section+background.jpg')",
-      // }}
+      className="relative flex h-[90vh] w-full items-center justify-center sm:justify-start bg-cover bg-center"
+      style={{
+        backgroundImage:
+          "url('https://s3.ap-south-1.amazonaws.com/medical.jkare.files/8349198.jpg')",
+      }}
     >
-         <div className="absolute inset-0 w-full h-full">
-        <video
-          className="w-full h-full object-cover"
-          controls={false}
-          autoPlay
-          loop
-          muted
-          src="https://s3.ap-south-1.amazonaws.com/medicom.hexerve/hero+section+video.mp4"
-        ></video>
-      </div>
-      {/* Content */}
-      <div className="relative z-20 text-center sm:text-left px-6 sm:px-10 lg:px-20 font-montserrat max-w-3xl mt-12">
-        <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-customPink font-semibold">
-          Welcome to JKARE!
+      {/* bottom fade */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white via-white/40 to-transparent" />
+
+      {/* main content */}
+      <div className="relative z-10 mx-auto mt-12 max-w-3xl px-6 sm:mx-0 sm:px-10 lg:px-32 font-montserrat">
+        {/* welcome */}
+        <h1 className="text-xl sm:text-2xl md:text-4xl font-semibold">
+          Welcome&nbsp;to&nbsp;
+          <span className="text-customBlue">J</span>
+          <span className="text-customPink">KARE!</span>
         </h1>
-        <h2 className="text-4xl text-gray-900 sm:text-5xl md:text-6xl lg:text-7xl font-bold text-gray mt-4 leading-snug relative">
-          IN-HOME CARE <br /> FOR EVERY{" "}
-          <span className="inline-block relative">
-            BREATH
-            {/* Pink Curve Image */}
-            <img
-              src="https://s3.ap-south-1.amazonaws.com/medicom.hexerve/curve+line.png"
-              alt="Pink Curve"
-              className="absolute w-full -bottom-4 left-0"
-              style={{ maxWidth: "1200px" }}
-            />
+
+        {/* headline with typing */}
+        <h2 className="mt-4 leading-[1.05] text-[36px] sm:text-[48px] md:text-[62px] lg:text-[68px] font-normal text-gray-900 tracking-tight">
+          IN‑HOME&nbsp;CARE <br />
+          FOR&nbsp;EVERY
+          <span className="block">
+            <span className="text-customPink font-extrabold lg:text-[110px] border-r-2 border-customPink animate-cursor">
+              {typed}
+            </span>
           </span>
         </h2>
-        <p className="mt-6 sm:mt-8 text-sm sm:text-base md:text-lg lg:text-xl text-white bg-black/50 px-4 sm:px-5 py-3 rounded max-w-lg mx-auto sm:mx-0">
-          We are a Licensed and Certified One-stop Home Solution for your Respiratory Care Needs
-        </p>
-        <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center sm:justify-start">
-          <Link href={"/contact-us"}>
-            <button className="text-white bg-customPink hover:bg-customBlue font-semibold text-base sm:text-lg md:text-xl px-6 sm:px-8 py-3 sm:py-4 rounded-full">
-              Contact Us
-            </button>
-          </Link>
-          <Link href={"/product"}>
-            <button className="text-white bg-customPink hover:bg-customBlue font-semibold text-base sm:text-lg md:text-xl px-6 sm:px-8 py-3 sm:py-4 rounded-full">
-              Shop Now
-            </button>
-          </Link>
+
+        {/* ✨ rotating tag‑lines (replacing old static paragraph) */}
+        <div className="relative h-[72px] mt-6 overflow-hidden">
+          {prevIdx !== null && (
+            <p className="tagline animate-slideUp">{TAGLINES[prevIdx]}</p>
+          )}
+          <p key={idx} className="tagline animate-slideIn italic">
+            {/* {TAGLINES[idx]} */}
+            {`"${TAGLINES[idx]}"`}
+          </p>
+        </div>
+
+        {/* CTA buttons */}
+        <div className="mt-8 flex flex-col sm:flex-row gap-4 sm:gap-6">
+          <HeroBtn href="/contact-us">Contact&nbsp;Us</HeroBtn>
+          <HeroBtn href="/product">Shop&nbsp;Now</HeroBtn>
         </div>
       </div>
+
+      {/* local styles & keyframes */}
+      <style jsx>{`
+        .tagline {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.875rem;
+          line-height: 1.4;
+          font-weight: 500;
+          color: #1f2937;
+          text-align: left;
+        }
+        @media (min-width: 768px) {
+          .tagline {
+            font-size: 1rem;
+          }
+        }
+        .animate-slideIn {
+          animation: slideIn 0.8s ease forwards;
+        }
+        .animate-slideUp {
+          animation: slideUp 0.8s ease forwards;
+        }
+        @keyframes slideIn {
+          0% {
+            opacity: 0;
+            transform: translateY(40px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        @keyframes slideUp {
+          0% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+          100% {
+            opacity: 0;
+            transform: translateY(-40px);
+          }
+        }
+        .animate-cursor {
+          animation: blink 0.9s steps(1) infinite;
+        }
+        @keyframes blink {
+          0%,
+          100% {
+            border-color: transparent;
+          }
+          50% {
+            border-color: var(--customPink);
+          }
+        }
+      `}</style>
     </div>
   );
 }
 
-export default HeroSection;
+/* pill‑style CTA */
+function HeroBtn({ href, children }) {
+  return (
+    <Link
+      href={href}
+      className="inline-block rounded-full bg-customLightBlue px-10 py-3 sm:px-12 sm:py-4 text-lg md:text-xl font-semibold text-gray-900 bg-customBlue/20 hover:bg-customBlue/40 transition-colors"
+    >
+      {children}
+    </Link>
+  );
+}
