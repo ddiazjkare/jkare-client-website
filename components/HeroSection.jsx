@@ -8,11 +8,11 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 const TAGLINES = [
-  'JKARE: Delivering personalized home respiratory therapy and innovative medical equipment for better breathing.',
-  'JKARE delivers high‑quality respiratory therapy, advanced equipment, and essential medical supplies, bringing care and comfort to your home.',
-  'JKARE provides specialized respiratory therapy, advanced equipment, and reliable medical supplies, enhancing lives one breath at a time.',
+  'Our Delivering personalized home respiratory therapy and innovative medical equipment for better breathing.',
+  'We delivers high‑quality respiratory therapy, advanced equipment, and essential medical supplies, bringing care and comfort to your home.',
+  'We provides specialized respiratory therapy, advanced equipment, and reliable medical supplies, enhancing lives one breath at a time.',
   'Empowering patients through exceptional home respiratory care, equipment, and medical supplies; ',
-  'JKARE is your partner in health.'
+  'We are your partner in health.'
 ];
 
 const WORDS = ['BREATH', 'MOMENT', 'HEARTBEAT', 'PATIENT'];
@@ -81,24 +81,25 @@ export default function HeroSection() {
         </h1>
 
         {/* headline with typing */}
-        <h2 className="mt-4 leading-[1.05] text-[36px] sm:text-[48px] md:text-[62px] lg:text-[68px] font-normal text-gray-900 tracking-tight">
+        <h2 className="mt-4 leading-[1.05] text-[36px] sm:text-[48px] md:text-[58px] lg:text-[62px] font-normal text-gray-900 tracking-tight">
+
           IN‑HOME&nbsp;CARE <br />
           FOR&nbsp;EVERY
-          <span className="block">
-            <span className="text-customPink font-extrabold lg:text-[110px] border-r-2 border-customPink animate-cursor">
+     
+          <span className="block mt-4">
+            <span className="text-customPink font-bold lg:text-[105px] border-r-2 border-customPink animate-cursor">
               {typed}
             </span>
           </span>
         </h2>
 
         {/* ✨ rotating tag‑lines (replacing old static paragraph) */}
-        <div className="relative h-[72px] mt-6 overflow-hidden">
+        <div className="relative h-[80px] mt-4 overflow-hidden">
           {prevIdx !== null && (
             <p className="tagline animate-slideUp">{TAGLINES[prevIdx]}</p>
           )}
           <p key={idx} className="tagline animate-slideIn italic">
-            {/* {TAGLINES[idx]} */}
-            {`"${TAGLINES[idx]}"`}
+            {`${TAGLINES[idx]}`}
           </p>
         </div>
 
@@ -115,8 +116,8 @@ export default function HeroSection() {
           position: absolute;
           inset: 0;
           display: flex;
-          align-items: center;
-          justify-content: center;
+          align-items: start;
+          justify-content: start;
           font-size: 0.875rem;
           line-height: 1.4;
           font-weight: 500;

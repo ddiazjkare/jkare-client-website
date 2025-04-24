@@ -73,7 +73,7 @@ export default function FaqSection() {
   };
 
   return (
-    <section className="font-montserrat bg-[#F8FCFF] py-20">
+    <section className="font-montserrat bg-gradient-to-t from-white via-[#fdf5ff] to-white py-20">
       <div className="mx-auto max-w-5xl px-6 text-center">
 
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900">
@@ -128,7 +128,7 @@ export default function FaqSection() {
                   style={{ maxHeight: open ? '200px' : '0px' }}
                   className="overflow-hidden transition-all duration-500 px-6"
                 >
-                  <p className="pb-6 text-sm sm:text-base text-gray-600">
+                  <p className="pb-6 text-sm sm:text-base text-gray-600 text-left">
                     {a}
                   </p>
                 </div>

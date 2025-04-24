@@ -15,6 +15,7 @@ const Navbar = () => {
   const [active, setActive] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
+  const [isPatientDropdownOpen, setIsPatientDropdownOpen] = useState(false);
   const [isUserCardOpen, setIsUserCardOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -93,11 +94,13 @@ const Navbar = () => {
   return (
     <div className="fixed top-0 inset-x-0 z-50">
       {/* Top Bar: only visible on md+ */}
-      <div className="hidden md:flex bg-customBlue py-2 justify-center items-center">
-        <p className="text-white text-sm md:text-base font-medium">
-          Questions? Call Us Toll-Free <span className="font-bold">1-800-567-000</span>
-        </p>
-      </div>
+      <div className="hidden md:flex bg-customBlue py-2 overflow-hidden">
+  <div className="marquee">
+    <p className="inline-block text-white text-sm md:text-base font-medium">
+      Questions? Call Us Toll-Free <span className="font-bold">1-800-567-000</span>
+    </p>
+  </div>
+</div>
 
       {/* Main Navbar */}
       <div className="bg-white shadow-lg px-4 lg:px-8 py-2 flex items-center justify-between">
@@ -126,8 +129,9 @@ const Navbar = () => {
             </span>
 
             {/* Search dropdown (mobile) */}
+
             {isSearchDropdownVisible && (
-              <div className="absolute top-full mt-2 left-0 w-full bg-white shadow-lg rounded-lg p-4 z-50">
+              <div className="absolute  top-full  mt-2  w-72 bg-white shadow-lg rounded-lg p-4 z-50 left-1/2 -translate-x-1/2">
                 <div className="max-h-60 overflow-y-auto">
                   {searchResults.length > 0 ? (
                     <ul className="list-none p-0">
@@ -157,12 +161,13 @@ const Navbar = () => {
                 </div>
               </div>
             )}
+
           </div>
         </div>
 
         {/* Center: Secondary Nav (desktop) */}
         <div className="hidden lg:flex">
-          <div className="flex items-center space-x-6 font-semibold text-sm px-5 rounded-3xl">
+          <div className="flex items-center space-x-6 font-semibold text-sm px-5 rounded-3xl font-montserrat">
             <Menu setActive={setActive}>
               <Link href="/">
                 <MenuItem setActive={setActive} active={active} item="Home" />
@@ -195,7 +200,7 @@ const Navbar = () => {
                   item="About Us"
                 />
               </Link>
-              <Link href="/">
+              <Link href="/our-services">
                 <MenuItem setActive={setActive} active={active} item="Services" />
               </Link>
               {/* Patient Resources with multi-column submenu */}
@@ -301,10 +306,6 @@ const Navbar = () => {
                   </div>
                 </div>
               </MenuItem>
-
-              {/* <Link href="/">
-                <MenuItem setActive={setActive} active={active} item="Why JKare" />
-              </Link> */}
               <Link href="/blog">
                 <MenuItem setActive={setActive} active={active} item="Blog" />
               </Link>
@@ -458,12 +459,12 @@ const Navbar = () => {
             <span className="font-semibold text-gray-700">Menu</span>
             <button
               onClick={() => setIsMobileMenuOpen(false)}
-              className="text-gray-600 hover:text-gray-800"
+              className="text-gray-600 hover:text-gray-800 "
             >
               Close
             </button>
           </div>
-          <div className="space-y-2 px-4 pb-4">
+          <div className=" space-y-2 px-4 pb-4 overflow-y-auto max-h-[calc(100dvh-96px)]">
             <Link
               href="/"
               className="block text-gray-700 hover:bg-gray-100 px-3 py-2 rounded"
@@ -512,11 +513,119 @@ const Navbar = () => {
                 </div>
               </div>
             )}
+            <button
+              onClick={() => setIsPatientDropdownOpen(!isPatientDropdownOpen)}
+              className="flex items-center justify-between w-full text-left px-3 py-2 rounded text-gray-700 hover:bg-gray-100"
+            >
+              <span>Patient Resources</span>
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d={
+                    isProductsDropdownOpen ? "M19 9l-7 7-7-7" : "M9 5l7 7-7 7"
+                  }
+                />
+              </svg>
+            </button>
+            {isPatientDropdownOpen && (
+              <div className="ml-6 space-y-1 text-sm">
+
+                {/* ——— 1. Safety & Emergency Planning ——— */}
+                <span className="block font-semibold mt-2">Safety & Emergency Planning</span>
+                <Link href="/Safety&Emergency" className="block px-3 py-1 rounded hover:bg-gray-100">
+                  Emergency Planning for the Home Care Patient
+                </Link>
+                <Link href="/Safety&Emergency" className="block px-3 py-1 rounded hover:bg-gray-100">
+                  How to Make Your Home Safe for Medical Care
+                </Link>
+
+                {/* ——— 2. Patient Rights & Advocacy ——— */}
+                <span className="block font-semibold mt-3">Patient Rights & Advocacy</span>
+                <Link href="/PatientRights" className="block px-3 py-1 rounded hover:bg-gray-100">
+                  HIPAA Privacy Notice
+                </Link>
+                <Link href="/PatientRights" className="block px-3 py-1 rounded hover:bg-gray-100">
+                  Patient’s Bill of Rights and Responsibilities
+                </Link>
+                <Link href="/PatientRights" className="block px-3 py-1 rounded hover:bg-gray-100">
+                  Patient Grievance and Complaint Procedure
+                </Link>
+                <Link href="/PatientRights" className="block px-3 py-1 rounded hover:bg-gray-100">
+                  Making Decisions About Your Health Care
+                </Link>
+
+                {/* ——— 3. Support Policies & Information ——— */}
+                <span className="block font-semibold mt-3">Support Policies & Information</span>
+                <Link href="/SupportPolicies" className="block px-3 py-1 rounded hover:bg-gray-100">
+                  Medicare DMEPOS Supplier Standards
+                </Link>
+                <Link href="/SupportPolicies" className="block px-3 py-1 rounded hover:bg-gray-100">
+                  Warranty Information
+                </Link>
+                <Link href="/SupportPolicies" className="block px-3 py-1 rounded hover:bg-gray-100">
+                  Insurance Information
+                </Link>
+                <Link href="/SupportPolicies" className="block px-3 py-1 rounded hover:bg-gray-100">
+                  Prescription Requirements
+                </Link>
+                <Link href="/SupportPolicies" className="block px-3 py-1 rounded hover:bg-gray-100">
+                  Medicare Support
+                </Link>
+
+                {/* ——— 4. Equipment Guides & Instructions ——— */}
+                <span className="block font-semibold mt-3">Equipment Guides & Instructions</span>
+                <Link href="/EquipmentGuide" className="block px-3 py-1 rounded hover:bg-gray-100">
+                  Customer Instruction Guide for CPAP & BiPAP
+                </Link>
+                <Link href="/EquipmentGuide" className="block px-3 py-1 rounded hover:bg-gray-100">
+                  Nebulizer/Compressor Therapy & Cleaning Instructions
+                </Link>
+
+                {/* ——— 5. Product Brochures ——— */}
+                <span className="block font-semibold mt-3">Product Brochures</span>
+                <Link href="/ProductBrochers" className="block px-3 py-1 rounded hover:bg-gray-100">
+                  Afflovest (English)
+                </Link>
+                <Link href="/ProductBrochers" className="block px-3 py-1 rounded hover:bg-gray-100">
+                  Biwaze Airway Clearance System User Manual
+                </Link>
+                <Link href="/ProductBrochers" className="block px-3 py-1 rounded hover:bg-gray-100">
+                  Biwaze Clear Quick Hits
+                </Link>
+                <Link href="/ProductBrochers" className="block px-3 py-1 rounded hover:bg-gray-100">
+                  Biwaze Cough User Manual (English)
+                </Link>
+                <Link href="/ProductBrochers" className="block px-3 py-1 rounded hover:bg-gray-100">
+                  Biwaze Cough User Manual (Spanish)
+                </Link>
+                <Link href="/ProductBrochers" className="block px-3 py-1 rounded hover:bg-gray-100">
+                  Oxlife Liberty User Manual
+                </Link>
+                <Link href="/ProductBrochers" className="block px-3 py-1 rounded hover:bg-gray-100">
+                  MyAirvo Use and Care Guide
+                </Link>
+
+              </div>
+            )}
+
             <Link
               href="/about-us"
               className="block text-gray-700 hover:bg-gray-100 px-3 py-2 rounded"
             >
               About Us
+            </Link>
+            <Link
+              href="/our-services"
+              className="block text-gray-700 hover:bg-gray-100 px-3 py-2 rounded"
+            >
+              Our Services
             </Link>
             <Link
               href="/blog"

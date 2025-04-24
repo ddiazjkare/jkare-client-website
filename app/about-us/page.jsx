@@ -36,7 +36,7 @@ const AboutPage = () => {
         <div className="relative z-10 max-w-6xl mx-auto space-y-20">
           {/* WHY JKARE */}
           <div className="bg-gradient-to-r from-[#E0F7FF] to-[#F3FBFF] border-l-8 border-customBlue rounded-2xl shadow-xl p-10 md:p-14">
-            <h2 className="text-customBlue text-4xl md:text-5xl font-extrabold mb-6 drop-shadow-sm">Why&nbsp;JKARE</h2>
+            <h2 className="text-customBlue text-4xl md:text-5xl font-bold mb-6 drop-shadow-sm">Why&nbsp;JKARE</h2>
 
             <p className="text-gray-700 text-lg leading-relaxed mb-6">
               At JKARE, we understand that choosing the right home respiratory therapy and medical equipment company is crucial for your health and quality of life. Our unwavering commitment to clinical excellence, personalized patient care, and innovative respiratory solutions sets us apart.
@@ -63,7 +63,7 @@ const AboutPage = () => {
             <span className="hidden md:block md:col-span-1 h-full w-1 bg-customPink rounded-full"></span>
 
             <div className="md:col-span-11 bg-white border border-customPink rounded-2xl shadow-xl p-10 md:p-14">
-              <h2 className="text-customPink text-4xl md:text-5xl font-extrabold mb-6 drop-shadow-sm">Our&nbsp;Story</h2>
+              <h2 className="text-customPink text-4xl md:text-5xl font-bold mb-6 drop-shadow-sm">Our&nbsp;Story</h2>
 
               <blockquote className="italic text-customPink/90 text-xl leading-relaxed mb-6">
                 “Our family’s journey with chronic respiratory illness revealed a need—and sparked a mission.”

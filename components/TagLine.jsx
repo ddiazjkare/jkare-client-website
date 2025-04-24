@@ -24,22 +24,22 @@ export default function TagLine() {
           {/* Card 1 */}
           <ServiceCard
             title="In‑home & Clinical Respiratory Services"
-            desc="Our respiratory team provides a range of equipment, from basic nasal cannulas to advanced mechanical ventilation and urological supplies, specializing in sales."
-            href="/"
+            desc="Our respiratory team provides a range of equipment, from basic nasal cannulas to advanced mechanical ventilation and urological supplies, specializing in global sales."
+            href="/our-services"
           />
 
           {/* Card 2 */}
           <ServiceCard
             title="The Agency for Healthcare Administration (AHCA)"
             desc="Certified by the AHCA as a Healthcare Service Pool, we provide licensed respiratory therapists for in‑home care and as temporary staff for residential facilities."
-            href="/"
+            href="/our-services"
           />
 
           {/* Card 3 */}
           <ServiceCard
             title="Medical Equipments and Supplies"
             desc="Our skilled respiratory therapists oversee patients' medical equipment, ensuring high‑quality respiratory health through regular check‑ins and dependable on‑call service."
-            href="/"
+            href="/our-services"
           />
         </div>
       </div>
@@ -51,7 +51,7 @@ function ServiceCard({ title, desc, href }) {
   return (
     <Link
       href={href}
-      className="group relative flex flex-col items-center text-center
+      className="group relative flex flex-col items-center justify-between text-center
                  overflow-hidden rounded-2xl bg-white shadow-md
                  transition-all duration-300 ease-out
                  hover:-translate-y-2 hover:shadow-xl"
@@ -67,7 +67,7 @@ function ServiceCard({ title, desc, href }) {
 
       {/* card body */}
       <div className="relative z-10 px-8 py-10">
-        <h4 className="text-customPurple text-lg sm:text-xl font-extrabold mb-4">
+        <h4 className="text-customPurple text-lg sm:text-xl font-semibold mb-4">
           {title}
         </h4>
 

@@ -24,19 +24,17 @@ export default function AboutUs() {
             JKARE&nbsp;Miami. We aim to stand out for excellence in respiratory
             care services and products.
           </p>
-
           <Link
             href="/about-us"
-            className="mt-10 inline-block rounded-full bg-customPink px-10 py-3
-                       font-semibold text-white transition-colors duration-200
-                       hover:bg-customBlue focus-visible:outline-none
+            className="mt-10 inline-block rounded-full bg-customButton px-10 py-3
+                       font-semibold text-black transition-colors duration-200
+                       hover:bg-customButtonHover focus-visible:outline-none
                        focus-visible:ring-2 focus-visible:ring-offset-2
                        focus-visible:ring-customPink"
           >
             Learn&nbsp;More
           </Link>
         </div>
-
         {/* ──────────── IMAGE CARD (right) ──────────── */}
         <div className="w-full lg:w-1/2 flex justify-center">
           <div className="relative rounded-3xl overflow-hidden shadow-lg">
@@ -48,7 +46,7 @@ export default function AboutUs() {
             />
             {/* foreground photo */}
             <img
-              src="https://images.unsplash.com/photo-1554469384-e58fac16e23a?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8YnVpbGRpbmd8ZW58MHx8MHx8fDA%3D"
+              src="https://s3.ap-south-1.amazonaws.com/medical.jkare.files/image.jpeg"
               alt="JKARE facility exterior"
               className="relative z-10 h-[340px] w-[440px] object-cover"
             />

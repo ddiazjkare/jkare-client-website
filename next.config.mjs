@@ -4,46 +4,52 @@ const nextConfig = {
     domains: ['www.cpapmiami.com', 'res.cloudinary.com' , 'www.directhomemedical.com' , 'www.reacthealth.com' , 'th.bing.com'],
     remotePatterns: [
       {
-        protocol: 'https', // or 'http' if needed
-        hostname: 'www.cpapmiami.com', // Replace with your domain
-        port: '', // Optional, specify port if needed
-        pathname: '/**', // Optional, filter specific paths
+        protocol: 'https', 
+        hostname: 'www.cpapmiami.com', 
+        port: '', 
+        pathname: '/**', 
       },
       {
-        protocol: 'https', // or 'http' if needed
-        hostname: 'res.cloudinary.com', // Replace with your domain
-        port: '', // Optional, specify port if needed
-        pathname: '/**', // Optional, filter specific paths
-      },        // Add more patterns for other domains if necessary
+        protocol: 'https', 
+        hostname: 'res.cloudinary.com', 
+        port: '', 
+        pathname: '/**', 
+      },   
       {
-        protocol: 'https', // or 'http' if needed
-        hostname: 'www.directhomemedical.com', // Replace with your domain
-        port: '', // Optional, specify port if needed
-        pathname: '/**', // Optional, filter specific paths
-      },        // Add more patterns for other domains if necessary
+        protocol: 'https',
+        hostname: 'www.directhomemedical.com',
+        port: '', 
+        pathname: '/**', 
+      },       
       {
-        protocol: 'https', // or 'http' if needed
-        hostname: 'checkout.stripe.com', // Replace with your domain
-        port: '', // Optional, specify port if needed
-        pathname: '/**', // Optional, filter specific paths
+        protocol: 'https', 
+        hostname: 'checkout.stripe.com', 
+        port: '', 
+        pathname: '/**',
       }, 
       {
-        protocol: 'https', // or 'http' if needed
-        hostname: 'files.stripe.com', // Replace with your domain
-        port: '', // Optional, specify port if needed
-        pathname: '/**', // Optional, filter specific paths
+        protocol: 'https', 
+        hostname: 'files.stripe.com', 
+        port: '',
+        pathname: '/**',
       }, 
       {
-        protocol: 'https', // or 'http' if needed
-        hostname: 'medicom.hexerve.s3.ap-south-1.amazonaws.com', // Replace with your domain
-        port: '', // Optional, specify port if needed
-        pathname: '/**', // Optional, filter specific paths
+        protocol: 'https', 
+        hostname: 'medicom.hexerve.s3.ap-south-1.amazonaws.com',
+        port: '', 
+        pathname: '/**', 
       }, 
       {
-        protocol: 'https', // or 'http' if needed
-        hostname: 's3.ap-south-1.amazonaws.com', // Replace with your domain
-        port: '', // Optional, specify port if needed
-        pathname: '/**', // Optional, filter specific paths
+        protocol: 'https', 
+        hostname: 's3.ap-south-1.amazonaws.com', 
+        port: '', 
+        pathname: '/**', 
+      }, 
+      {
+        protocol: 'https',
+        hostname: 'images.pexels.com', 
+        // port: '',
+        pathname: '/**',
       }, 
     ],
   },

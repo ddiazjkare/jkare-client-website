@@ -7,15 +7,15 @@ import Link from 'next/link';
 /* ------------------------------------------------------------------ */
 export default function GuidesSection({ heroTitle, heroImage, guides }) {
   return (
-    <div className="bg-white text-gray-800">
+    <div className="bg-white text-gray-800 font-montserrat">
 
       {/* HERO ---------------------------------------------------------- */}
       <div className="relative h-[420px] w-full">
         <Image src={heroImage} alt={heroTitle} fill priority className="object-cover" />
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-black/40 font-montserrat" />
         <div className="absolute inset-0 grid place-items-center text-center">
           <h1 className="mx-4 max-w-6xl text-3xl sm:text-4xl md:text-5xl
-                         font-extrabold tracking-wide text-white">
+                         font-bold tracking-wide text-white">
             {heroTitle}
           </h1>
         </div>
@@ -49,14 +49,14 @@ export default function GuidesSection({ heroTitle, heroImage, guides }) {
               </div>
 
               {/* TEXT + BUTTON */}
-              <div className="w-full md:w-1/2 space-y-4">
-                <h2 className="text-customPink text-2xl sm:text-3xl font-extrabold">
+              <div className="w-full md:w-1/2 space-y-4 font-montserrat">
+                <h2 className="text-customPink text-2xl sm:text-3xl font-medium ">
                   {g.title}
                 </h2>
                 <p className="text-base sm:text-lg">{g.blurb}</p>
                 <Link
                   href={g.link}
-                  className="inline-block rounded-full bg-customPink/90 px-6 py-2
+                  className="inline-block rounded-full bg-customBlue/90 px-6 py-2
                              text-sm sm:text-base font-semibold text-white
                              hover:bg-customPink focus-visible:ring
                              focus-visible:ring-offset-2 focus-visible:ring-customPink"

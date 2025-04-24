@@ -20,7 +20,7 @@
         "clsx": "^2.1.1",
         "dotenv": "^16.4.7",
         "express": "^4.21.1",
-        "framer-motion": "^11.3.2",
+        "framer-motion": "^11.18.2",
         "http": "^0.0.1-security",
         "https": "^1.0.0",
         "jsonwebtoken": "^9.0.2",

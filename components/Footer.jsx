@@ -1,18 +1,18 @@
 'use client';
 
 import Link from 'next/link';
-import { FaInstagram, FaFacebook, FaTwitter } from 'react-icons/fa';
+import { FaInstagram, FaFacebook, FaLinkedin } from 'react-icons/fa';
 
 /* ---------------- small column helper ---------------- */
 function Col({ title, links }) {
   return (
     <ul className="space-y-1">
-      <li className="font-extraBold mb-1 text-customLightBlue">{title}</li>
+      <li className="font-extraBold text-lg mb-1 text-white">{title}</li>
       {links.map(([label, href]) => (
         <li key={label}>
           <Link
             href={href}
-            className="hover:text-customPink text-customLightBlue font-normal"
+            className="hover:text-customBlue text-white font-normal"
           >
             {label}
           </Link>
@@ -25,7 +25,7 @@ function Col({ title, links }) {
 export default function Footer() {
   return (
     <footer
-      className="relative isolate text-white font-montserrat mt-12"
+      className="relative isolate text-white font-montserrat "
       style={{
         backgroundImage:
           "url('https://s3.ap-south-1.amazonaws.com/medicom.hexerve/footer+base+image+1.png')",
@@ -41,7 +41,7 @@ export default function Footer() {
       />
 
       {/* purple veil over the background image */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#9f3bb0] via-[#9f3bb0]/80 to-white mix-blend-multiply" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#8c409a] via-black/50 to-white " />
 
       <div className="relative z-30 mx-auto max-w-7xl px-6 py-10 space-y-10">
         {/* ---------- TOP STRIP ---------- */}
@@ -65,7 +65,7 @@ export default function Footer() {
 
           {/* newsletter */}
           <div className="w-full lg:w-[380px]">
-            <h4 className="text-sm sm:text-base font-semibold mb-2 text-center lg:text-left">
+            <h4 className="text-sm sm:text-base font-semibold mb-2 text-center lg:text-left text-customBlue ">
               SIGN UP FOR NEWSLETTER
             </h4>
             <form onSubmit={(e) => e.preventDefault()} className="flex gap-3">
@@ -110,8 +110,8 @@ export default function Footer() {
               ['Online Partnership', '/'],
               ['Return Policy', '/'],
               ['Submit Prescription', '/'],
-              ['Blogs', '/'],
-              ['Patient Resources', '/'],
+              ['Blogs', '/blog'],
+              ['Patient Resources', '/Safety&Emergency'],
             ]}
           />
 
@@ -120,10 +120,10 @@ export default function Footer() {
             <Col
               title="Services"
               links={[
-                ['In-home Clinical Respiratory Services', '#'],
-                ['Medical Equipment & Supplies', '#'],
-                ['Medical Oxygen & Supplies', '#'],
-                ['Healthcare Recruitment Staffing', '#'],
+                ['In-home Clinical Respiratory Services', '/our-services'],
+                ['Medical Equipment & Supplies', '/our-services'],
+                ['Medical Oxygen & Supplies', '/our-services'],
+                ['Healthcare Recruitment Staffing', '/our-services'],
               ]}
             />
 
@@ -133,9 +133,9 @@ export default function Footer() {
               </p>
               <div className="flex gap-3">
                 {[
-                  ['https://instagram.com', <FaInstagram size={18} />],
-                  ['https://facebook.com',  <FaFacebook  size={18} />],
-                  ['https://twitter.com',   <FaTwitter   size={18} />],
+                  ['https://www.instagram.com/jkaremiami/', <FaInstagram size={18} />],
+                  ['https://www.facebook.com/JKAREMiami',  <FaFacebook  size={18} />],
+                  ['https://www.linkedin.com/company/jkaremiami/',   <FaLinkedin   size={18} />],
                 ].map(([href, icon]) => (
                   <a
                     key={href}
@@ -157,15 +157,19 @@ export default function Footer() {
         <hr className="border-white/20" />
 
         {/* ---------- BOTTOM LINE ---------- */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-3 pt-4 text-[10px] sm:text-xs text-white/80">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-3 pt-4 text-[12px] sm:text-xs text-white/80">
           <span>© 2024 JKARE. All Rights Reserved.</span>
           <span className="space-x-2">
             <Link href="/privacy-policy" className="hover:text-white">
               Privacy Policy
             </Link>
-            <span aria-hidden>·</span>
+            <span aria-hidden> | </span>
             <Link href="/cookie-policy" className="hover:text-white">
               Cookie Policy
+            </Link>
+            <span aria-hidden> | </span>
+            <Link href="https://hexerve.com/" className="hover:text-white">
+              Design and Developed by : Hexerve Solutions
             </Link>
           </span>
         </div>

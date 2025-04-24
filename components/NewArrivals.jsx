@@ -21,7 +21,7 @@ const NewArrivals = async () => {
 
   /* --------------------------------------------------------------- */
   return (
-    <section className="font-montserrat bg-gradient-to-b from-white via-customBaseBlue/30 to-white">
+    <section className="font-montserrat bg-gradient-to-b from-white via-customLightBlue/60 to-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-20 text-center">
         {/* --------------------------- heading ---------------------- */}
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-gray-900">
@@ -61,7 +61,7 @@ const NewArrivals = async () => {
                   />
 
                   {/* eye + count */}
-                  <span className="absolute bottom-4 right-4 flex items-center gap-1">
+                  {/* <span className="absolute bottom-4 right-4 flex items-center gap-1">
                     <span className="h-9 w-9 rounded-full bg-customPink flex
                                      items-center justify-center">
                       <FiEye className="text-white" size={18} />
@@ -69,7 +69,7 @@ const NewArrivals = async () => {
                     <span className="text-xs font-medium text-gray-800">
                       1.2k
                     </span>
-                  </span>
+                  </span> */}
                 </div>
 
                 {/* ------------ details --------------------------- */}

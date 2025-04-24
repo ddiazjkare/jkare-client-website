@@ -33,10 +33,6 @@ const testimonials = [
       'Outstanding experience from start to finish. The staff made sure I understood my new CPAP equipment and followed up after delivery. Highly recommend JKare.',
   },
 ];
-
-/* ------------------------------------------------------------------ */
-/*  COMPONENT                                                          */
-/* ------------------------------------------------------------------ */
 export default function Testimonials() {
   const total = testimonials.length;
   const [current, setCurrent] = useState(0);
@@ -67,7 +63,7 @@ export default function Testimonials() {
   const GAP = isMobile ? 0 : 30; // visual gap (px)
 
   return (
-    <section className="py-20 font-montserrat bg-white overflow-hidden">
+    <section className="py-20 font-montserrat bg-gradient-to-t from-white via-customLightBlue/50 to-white overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* -------------- heading -------------- */}
         <header className="mb-16 text-center">

@@ -31,6 +31,8 @@ module.exports = {
         customDarkGray: '#343637',
         customLightBlue: '#DDF2FF',
         customPurple: '#5B22B8',
+        customButton :'#DDF2FF',
+        customButtonHover:'#c9e8ff',
       },
 
       /* ---------- background presets ---------- */
@@ -50,6 +52,7 @@ module.exports = {
       animation: {
         'fade-in': 'fade-in 0.5s ease forwards',
       },
+      
     },
   },
   plugins: [addVariablesForColors],
