@@ -20,13 +20,13 @@ async function fetchJSON(url) {
 export default async function BrandProductsPage({ searchParams }) {
   const selectedBrand = searchParams?.brand || '';
   const productURL = selectedBrand
-    ? `http://13.201.63.178/api/product?brand=${encodeURIComponent(selectedBrand)}`
-    : 'http://13.201.63.178/api/product';
+    ? `/api/product?brand=${encodeURIComponent(selectedBrand)}`
+    : '/api/product';
 
   /* grab products & brands in parallel */
   const [productList, brandList] = await Promise.all([
     fetchJSON(productURL),
-    fetchJSON('http://13.201.63.178/api/brand'),
+    fetchJSON('/api/brand'),
   ]);
 
   return (
