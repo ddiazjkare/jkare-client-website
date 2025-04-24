@@ -49,6 +49,7 @@ export default function AboutUs() {
               src="https://s3.ap-south-1.amazonaws.com/medical.jkare.files/image.jpeg"
               alt="JKARE facility exterior"
               className="relative z-10 h-[340px] w-[440px] object-cover"
+              
             />
           </div>
         </div>
