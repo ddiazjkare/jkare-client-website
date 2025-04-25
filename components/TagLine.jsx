@@ -24,21 +24,20 @@ export default function TagLine() {
           {/* Card 1 */}
           <ServiceCard
             title="In‑home & Clinical Respiratory Services"
-            desc="Our respiratory team provides a range of equipment, from basic nasal cannulas to advanced mechanical ventilation and urological supplies, specializing in global sales."
+            desc="Our Respiratory Therapy team delivers specialized, high-quality in-home care to patients of all ages with complex pulmonary conditions. We provide clinical expertise in managing and optimizing respiratory function through advanced therapeutic techniques, state-of-the-art equipment, and a compassionate, patient-centered approach. Our licensed therapists work collaboratively with physicians and families to ensure safety, comfort, and improved quality of life for every patient we serve."
             href="/our-services"
           />
-
           {/* Card 2 */}
           <ServiceCard
             title="The Agency for Healthcare Administration (AHCA)"
-            desc="Certified by the AHCA as a Healthcare Service Pool, we provide licensed respiratory therapists for in‑home care and as temporary staff for residential facilities."
+            desc="Certified by the Agency for Healthcare Administration (AHCA) as a Healthcare Service Pool, we provide licensed respiratory therapists for in-home care and as temporary staff for residential facilities."
             href="/our-services"
           />
 
           {/* Card 3 */}
           <ServiceCard
             title="Medical Equipments and Supplies"
-            desc="Our skilled respiratory therapists oversee patients' medical equipment, ensuring high‑quality respiratory health through regular check‑ins and dependable on‑call service."
+            desc="JKARE provides a comprehensive range of high-quality medical equipment, respiratory devices, and healthcare consumables designed to support patient care at home. We specialize in advanced respiratory solutions and durable medical equipment (DME) tailored to meet the unique needs of each patient. Our team ensures timely delivery, personalized setup, and ongoing support to promote safety, independence, and better health outcomes."
             href="/our-services"
           />
         </div>
