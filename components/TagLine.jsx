@@ -70,7 +70,7 @@ function ServiceCard({ title, desc, href }) {
           {title}
         </h4>
 
-        <p className="text-gray-700 text-sm sm:text-base leading-relaxed mb-10">
+        <p className="text-gray-700 text-sm sm:text-base leading-relaxed mb-10 line-clamp-6">
           {desc}
         </p>
 
@@ -80,7 +80,7 @@ function ServiceCard({ title, desc, href }) {
                      transition-colors duration-200
                      group-hover:bg-customLightBlue"
         >
-          Explore
+          Know More
         </span>
       </div>
     </Link>
