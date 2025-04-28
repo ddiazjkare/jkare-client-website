@@ -1,5 +1,6 @@
 /* ------------------------------------------------------------------
-   HeroSection.jsx  – rotating tag‑line *inside* text block
+   HeroSection.jsx  –  dual render: desktop untouched,
+   mobile mirrors the provided UI but keeps animations
 ------------------------------------------------------------------- */
 
 'use client';
@@ -7,17 +8,20 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
+/* ───────────────────────── data ────────────────────────── */
 const TAGLINES = [
   'Our Delivering personalized home respiratory therapy and innovative medical equipment for better breathing.',
-  'We delivers high‑quality respiratory therapy, advanced equipment, and essential medical supplies, bringing care and comfort to your home.',
+  'We delivers high-quality respiratory therapy, advanced equipment, and essential medical supplies, bringing care and comfort to your home.',
   'We provides specialized respiratory therapy, advanced equipment, and reliable medical supplies, enhancing lives one breath at a time.',
   'Empowering patients through exceptional home respiratory care, equipment, and medical supplies; ',
-  'We are your partner in health.'
+  'We are your partner in health.',
 ];
 
 const WORDS = ['BREATH', 'MOMENT', 'HEARTBEAT', 'PATIENT'];
+
+/* ───────────────────────── component ───────────────────── */
 export default function HeroSection() {
-  /* tag‑line state */
+  /* ---------- rotating tag-line state ---------- */
   const [idx, setIdx] = useState(0);
   const [prevIdx, setPrevIdx] = useState(null);
 
@@ -30,7 +34,7 @@ export default function HeroSection() {
     return () => clearInterval(id);
   }, [idx]);
 
-  /* typing word logic */
+  /* ---------- typing word logic ---------- */
   const [wIdx, setWIdx] = useState(0);
   const [cIdx, setCIdx] = useState(0);
   const [del, setDel] = useState(false);
@@ -60,57 +64,114 @@ export default function HeroSection() {
 
   const typed = WORDS[wIdx].slice(0, cIdx);
 
+  /* ============ RENDER ============ */
   return (
-    <div
-      className="relative flex h-[90vh] w-full items-center justify-center sm:justify-start bg-cover bg-center"
-      style={{
-        backgroundImage:
-          "url('https://s3.ap-south-1.amazonaws.com/medical.jkare.files/8349198.jpg')",
-      }}
-    >
-      {/* bottom fade */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white via-white/40 to-transparent" />
-
-      {/* main content */}
-      <div className="relative z-10 mx-auto lg:mt-60 sm:mt-0 max-w-3xl px-6 sm:mx-0 sm:px-10 lg:px-32 font-montserrat">
-        {/* welcome */}
-        <h1 className="text-xl sm:text-2xl md:text-4xl font-semibold">
-          Welcome&nbsp;to&nbsp;
-          <span className="text-customBlue">J</span>
-          <span className="text-customPink">KARE!</span>
-        </h1>
-
-        {/* headline with typing */}
-        <h2 className="mt-4 leading-[1.05] text-[36px] sm:text-[48px] md:text-[58px] lg:text-[62px] font-normal text-gray-900 tracking-tight">
-
-          IN‑HOME&nbsp;CARE <br />
-          FOR&nbsp;EVERY
-     
-          <span className="block mt-4">
-            <span className="text-customPink font-bold lg:text-[105px] border-r-2 border-customPink animate-cursor">
-              {typed}
-            </span>
-          </span>
-        </h2>
-
-        {/* ✨ rotating tag‑lines (replacing old static paragraph) */}
-        <div className="relative h-[80px] mt-4 overflow-hidden">
-          {prevIdx !== null && (
-            <p className="tagline animate-slideUp">{TAGLINES[prevIdx]}</p>
-          )}
-          <p key={idx} className="tagline animate-slideIn italic">
-            {`${TAGLINES[idx]}`}
-          </p>
+    <>
+      {/* ──────────────  MOBILE (<640 px) ────────────── */}
+      <div className="sm:hidden font-montserrat">
+        {/* hero image with bottom fade */}
+        <div
+          className="relative h-[32vh] mt-20 w-full bg-cover bg-center"
+          style={{
+            backgroundImage:
+              "url('https://s3.ap-south-1.amazonaws.com/medical.jkare.files/mobile+view+hero+sectionbackground+image.png')",
+          }}
+        >
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-white via-white/60 to-transparent" />
         </div>
 
-        {/* CTA buttons */}
-        <div className="mt-8 flex flex-col sm:flex-row gap-4 sm:gap-6">
-          <HeroBtn href="/contact-us">Contact&nbsp;Us</HeroBtn>
-          <HeroBtn href="/product">Shop&nbsp;Now</HeroBtn>
+        {/* text block */}
+        <div className="px-6 py-8 text-center">
+          {/* welcome */}
+          <h1 className="text-2xl font-semibold">
+            Welcome&nbsp;to&nbsp;
+            <span className="text-customBlue">J</span>
+            <span className="text-customPink">KARE!</span>
+          </h1>
+
+          {/* headline */}
+          <h2 className="mt-4 text-[36px] font-extrabold leading-tight tracking-tight uppercase text-gray-900">
+            IN-HOME&nbsp;CARE
+            <br />
+            <p className='text-[48px]'>FOR&nbsp;EVERY</p>
+          </h2>
+
+          {/* dynamically-typed word */}
+          <p className="mt-3 text-[64px] sm:text-[64px] font-extrabold leading-none text-customPink uppercase  ">
+            {/* {typed} */}
+            BREATH
+          </p>
+
+          {/* rotating tag-lines */} 
+          <div className="relative h-[72px] mt-4 overflow-hidden text-center">
+            {prevIdx !== null && (
+              <p className="tagline animate-slideUp text-center">{TAGLINES[prevIdx]}</p>
+            )}
+            <p key={idx} className="tagline animate-slideIn italic">
+              {TAGLINES[idx]}
+            </p>
+          </div>
+
+          {/* CTAs side-by-side */}
+          <div className="mt-8 flex flex-row justify-center gap-4">
+            <HeroBtn href="/contact-us">Contact&nbsp;Us</HeroBtn>
+            <HeroBtn href="/product">Shop&nbsp;Now</HeroBtn>
+          </div>
         </div>
       </div>
 
-      {/* local styles & keyframes */}
+      {/* ──────────────  DESKTOP / TABLET (≥640 px) ────────────── */}
+      <div className="hidden sm:block">
+        <div
+          className="relative flex h-[90vh] w-full items-center justify-center sm:justify-start bg-cover bg-center"
+          style={{
+            backgroundImage:
+              "url('https://s3.ap-south-1.amazonaws.com/medical.jkare.files/8349198.jpg')",
+          }}
+        >
+          {/* bottom fade */}
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white via-white/40 to-transparent" />
+
+          {/* main content (unchanged) */}
+          <div className="relative z-10 mx-auto lg:mt-60 sm:mt-0 max-w-3xl px-6 sm:mx-0 sm:px-10 lg:px-32 font-montserrat">
+            {/* welcome */}
+            <h1 className="text-xl sm:text-2xl md:text-4xl font-semibold">
+              Welcome&nbsp;to&nbsp;
+              <span className="text-customBlue">J</span>
+              <span className="text-customPink">KARE!</span>
+            </h1>
+
+            {/* headline with typing */}
+            <h2 className="mt-4 leading-[1.05] text-[36px] sm:text-[48px] md:text-[58px] lg:text-[62px] font-normal text-gray-900 tracking-tight">
+              IN-HOME&nbsp;CARE <br />
+              FOR&nbsp;EVERY
+              <span className="block mt-4">
+                <span className="text-customPink font-bold lg:text-[105px] border-r-2 border-customPink animate-cursor">
+                  {typed}
+                </span>
+              </span>
+            </h2>
+
+            {/* rotating tag-lines */}
+            <div className="relative h-[80px] mt-4 overflow-hidden">
+              {prevIdx !== null && (
+                <p className="tagline animate-slideUp">{TAGLINES[prevIdx]}</p>
+              )}
+              <p key={idx} className="tagline animate-slideIn italic">
+                {TAGLINES[idx]}
+              </p>
+            </div>
+
+            {/* CTA buttons */}
+            <div className="mt-8 flex flex-col sm:flex-row gap-4 sm:gap-6">
+              <HeroBtn href="/contact-us">Contact&nbsp;Us</HeroBtn>
+              <HeroBtn href="/product">Shop&nbsp;Now</HeroBtn>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ──────────────  shared animation styles ────────────── */}
       <style jsx>{`
         .tagline {
           position: absolute;
@@ -168,11 +229,11 @@ export default function HeroSection() {
           }
         }
       `}</style>
-    </div>
+    </>
   );
 }
 
-/* pill‑style CTA */
+/* ───────────────────────── helper CTA ───────────────────── */
 function HeroBtn({ href, children }) {
   return (
     <Link
