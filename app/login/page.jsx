@@ -34,17 +34,10 @@ const Login = () => {
     if (!result?.error) {
       const res = await fetch(`/api/user/info/${username}`)
       const dbUser = await res.json()
-      // window.localStorage.setItem("nextUser", JSON.stringify(dbUser))
-      // const resp = await fetch(`/api/cart/${dbUser.email}`)
-      // const myCart = await resp.json()
-      // setCartItems(myCart.length)
-      // window.localStorage.removeItem("medCart");
-      // window.localStorage.setItem("medCart", JSON.stringify(myCart))
-      // Successfully signed in
-      router.push("/"); // Redirect to the home page (or any other page)
+
+      router.push("/"); 
       return
     }
-    // Handle errors, e.g., display an error message to the user
     if (result?.error) {
       setErrMsg(result.error)
       setTimeout(() => {
@@ -99,19 +92,6 @@ const Login = () => {
             >
               {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
             </div>
-          </div>
-          <div className="flex items-center justify-between mb-4">
-            <label
-              className="flex items-center text-white text-sm font-bold"
-              htmlFor="remember"
-            >
-              <input
-                className="mr-2 h-8 w-6 leading-tight"
-                type="checkbox"
-                id="remember"
-              />
-              <span className="text-white text-sm">Remember me?</span>
-            </label>
           </div>
           <div>
             <button
