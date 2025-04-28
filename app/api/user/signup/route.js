@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import sendMail from "../../../../lib/sendMail";
-import { getBaseURL } from "../../utils";
+// import { getBaseURL } from "../../utils";
 import bcrypt from "bcrypt";
 import Users from "../../../../models/Users";
 
@@ -36,7 +36,8 @@ export const POST = async (req) => {
       process.env.SECRET_KEY,
       { expiresIn: "1h" }
     );
-    const baseURL = getBaseURL(req);
+    // const baseURL = getBaseURL(req);
+    const baseURL = process.env.NEXTAUTH_URL;
     const html = `<!DOCTYPE html>
 <html>
 <head>
