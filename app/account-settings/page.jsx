@@ -163,8 +163,8 @@ const EditProfile = () => {
       formData.append("fullName", name);
       formData.append("address", JSON.stringify(address));
       formData.append("phone", phone);
-      formData.append("updatedAt", new Date().toLocaleString());
-      formData.append("createdAt", localUser.createdAt);
+      // formData.append("updatedAt", new Date().toLocaleString());
+      // formData.append("createdAt", localUser.createdAt);
 
       const res = await fetch(`/api/user/update/${localUser.username}`, {
         method: "PUT",
@@ -331,7 +331,7 @@ const EditProfile = () => {
                 <div className="flex justify-end">
                   <button
                     type="submit"
-                    onClick={handleSubmit}
+                    onChange={handleSubmit}
                     className="bg-customPink text-white font-medium py-3 px-8 rounded-lg shadow-md hover:bg-customPink-dark transition duration-200"
                   >
                     Save Changes

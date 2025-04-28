@@ -8,9 +8,6 @@ import { CartContext } from "../SessionProVider";
 import Link from "next/link";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-
-
 const AdvancedProductDetail = ({ data }) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -19,8 +16,6 @@ const AdvancedProductDetail = ({ data }) => {
   const [, setCartItems] = useContext(CartContext);
   const { data: session } = useSession();
   const [shippingOffer, setShippingOffer] = useState(null);
-
-  
 useEffect(() => {
   async function fetchShippingOffer() {
     try {
@@ -223,7 +218,7 @@ useEffect(() => {
             >
               {isOutOfStock ? "Out of Stock" : "In Stock"}
             </span>
-            <p className="text-gray-600">PUI# : {data.product._id}</p>
+            <p className="text-gray-600">PUI# : {data.product.prod_id}</p>
           </div>
           <div className="border-y-2 border-gray-200 mt-2 py-2">
             <ul className="list-disc px-4 text-md">
@@ -300,7 +295,6 @@ useEffect(() => {
                 <div className="badge-title lg:text-sm sm:text-xs text-center">
                   Free Shipping Over  ${shippingOffer !== null ? shippingOffer : "Loading..."}
                 </div>
-
               </div>
             )}
             {data.product.key_features["pay_over_time"] && (
