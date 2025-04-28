@@ -12,17 +12,13 @@ const SignUpForm = () => {
   });
   const [error, setError] = useState(null)
   const router = useRouter()
-
   const pageTitle = 'SignUp';
-
   useEffect(() => {
     document.title = pageTitle;
   }, [pageTitle]);
-
   const formHandler = ({ target }) => {
     setFormData({ ...formData, [target.name]: target.value })
   }
-
   const submitHandler = async e => {
     try {
       e.preventDefault()
@@ -33,23 +29,18 @@ const SignUpForm = () => {
           "Content-type": "application/json"
         }
       })
-
       const data = await res.json()
       if (data.error) {
-        // const validationResult = parseErrorString(data.message);
-        // setError(validationResult)
         setError(data.error)
         setTimeout(() => setError(null), 3000)
         return
       }
-
       setFormData({
         username: '',
         phone: '',
         email: '',
         password: ''
       })
-
       router.push("/verify/user_created")
     } catch (err) {
       setError("username must be unique!")
