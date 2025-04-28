@@ -331,6 +331,7 @@ const EditProfile = () => {
                 <div className="flex justify-end">
                   <button
                     type="submit"
+                    onClick={handleSubmit}
                     className="bg-customPink text-white font-medium py-3 px-8 rounded-lg shadow-md hover:bg-customPink-dark transition duration-200"
                   >
                     Save Changes
@@ -339,8 +340,6 @@ const EditProfile = () => {
               </form>
             </div>
           </div>
-        
-
       </div>
   );
 };
