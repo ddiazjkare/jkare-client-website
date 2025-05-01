@@ -12,26 +12,20 @@ function Cart({ isCartOpen, authSession, cartRef}) {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
+      if (isModalOpen) return;
       if (
         cartContainerRef.current &&
         !cartContainerRef.current.contains(event.target)
       ) {
-        // Call a passed prop or handle closure here
-        if (typeof window !== 'undefined') {
-          const event = new CustomEvent('closeCart');
-          window.dispatchEvent(event);
-        }
+        window.dispatchEvent(new CustomEvent('closeCart'));
       }
     };
-  
+
     document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [isModalOpen]);
   
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, []);
-  
-  // Parse cart
+  // Cart Parser
   let cart = myCart ? JSON.parse(myCart) : []
 
   // Remove item from cart / DB
