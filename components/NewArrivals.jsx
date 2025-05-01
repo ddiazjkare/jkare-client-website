@@ -59,17 +59,6 @@ const NewArrivals = async () => {
                     alt={p.prod_name}
                     className="h-48 w-full object-contain mx-auto"
                   />
-
-                  {/* eye + count */}
-                  {/* <span className="absolute bottom-4 right-4 flex items-center gap-1">
-                    <span className="h-9 w-9 rounded-full bg-customPink flex
-                                     items-center justify-center">
-                      <FiEye className="text-white" size={18} />
-                    </span>
-                    <span className="text-xs font-medium text-gray-800">
-                      1.2k
-                    </span>
-                  </span> */}
                 </div>
 
                 {/* ------------ details --------------------------- */}

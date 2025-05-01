@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 export default function TagLine() {
   return (
-    <section className="font-montserrat bg-gradient-to-t from-white via-[#fdf5ff] to-white py-20">
+    <section className="font-montserrat bg-gradient-to-t from-white via-[#fdf5ff] to-white lg:py-20 py-0">
       <div className="mx-auto max-w-7xl px-6 text-center">
 
         {/* -------------- headings ---------------- */}

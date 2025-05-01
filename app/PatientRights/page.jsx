@@ -4,7 +4,7 @@ const guides = [
     id: 1,
     title: 'HIPAA Privacy Notice',
     blurb:
-      'THIS NOTICE DESCRIBES HOW MEDICAL INFORMATION ABOUT YOU MAY BE USED AND DISCLOSED AND HOWYOU CAN GET ACCESS TO THIS INFORMATION. PLEASE REVIEW IT CAREFULLY.',
+      'This Notice Describes How Medical Information About You May Be Used and Disclosed and How You Can Get Access to This Information. Please Review It Carefully.',
     imgAlt: 'Man pointing to CPAP screen',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/support+policies/doctor-talking-to-elderly-patient-man-at-the-hospi-2025-03-24-11-26-32-utc.jpg',
     link: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/HIPAA+PRIVACY+NOTICE.pdf',

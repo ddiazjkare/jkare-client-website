@@ -56,8 +56,8 @@ export default function GuidesSection({ heroTitle, heroImage, guides }) {
                 <p className="text-base sm:text-lg">{g.blurb}</p>
                 <Link
                   href={g.link}
-                  className="inline-block rounded-full bg-customBlue/90 px-6 py-2
-                             text-sm sm:text-base font-semibold text-white
+                  className="inline-block rounded-full bg-customButtonHover px-6 py-2
+                             text-sm sm:text-base font-semibold text-black hover:text-white
                              hover:bg-customPink focus-visible:ring
                              focus-visible:ring-offset-2 focus-visible:ring-customPink"
                 >

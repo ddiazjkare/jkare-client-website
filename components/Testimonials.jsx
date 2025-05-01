@@ -37,6 +37,8 @@ export default function Testimonials() {
   const total = testimonials.length;
   const [current, setCurrent] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [touchStartX, setTouchStartX] = useState(null);
+
 
   /* ---------- handle screen size ---------- */
   useEffect(() => {
@@ -57,13 +59,33 @@ export default function Testimonials() {
     if (d < -total / 2) d += total;
     return d;
   };
+  const handleTouchStart = (e) => {
+    const touchDown = e.touches[0].clientX;
+    setTouchStartX(touchDown);
+  };
+  
+  const handleTouchMove = (e) => {
+    if (!touchStartX) return;
+    const touchUp = e.touches[0].clientX;
+    const deltaX = touchStartX - touchUp;
+  
+    if (Math.abs(deltaX) > 50) {
+      if (deltaX > 0) {
+        next(); // Swipe left
+      } else {
+        prev(); // Swipe right
+      }
+      setTouchStartX(null); // Reset touch start position
+    }
+  };
+  
 
   /* constants for transform math */
   const CARD_W = isMobile ? 320 : 350; // width incl. gap
   const GAP = isMobile ? 0 : 30; // visual gap (px)
 
   return (
-    <section className="py-20 font-montserrat bg-gradient-to-t from-white via-customLightBlue/50 to-white overflow-hidden">
+    <section className=" lg:py-20 py-0  font-montserrat bg-gradient-to-t from-white via-customLightBlue/50 to-white overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* -------------- heading -------------- */}
         <header className="mb-16 text-center">
@@ -79,10 +101,12 @@ export default function Testimonials() {
         {/* -------------- carousel -------------- */}
         <div className="flex items-center justify-center gap-4">
           {/* left arrow */}
-          <ArrowBtn onClick={prev} icon={<FaChevronLeft size={26} />} />
+          {!isMobile && <ArrowBtn onClick={prev} icon={<FaChevronLeft size={26} />} />}
 
           {/* rail */}
-          <div className="relative h-[420px] sm:h-[460px] w-[1100px] max-w-full overflow-hidden z-10">
+          <div className="relative h-[420px] sm:h-[460px] w-[1100px] max-w-full overflow-hidden z-10"  
+          onTouchStart={isMobile ? handleTouchStart : null}
+          onTouchMove={isMobile ? handleTouchMove : null}>
             {testimonials.map((t, idx) => {
               const d = offset(idx);
               const xShift = d * (CARD_W + GAP);
@@ -141,7 +165,7 @@ export default function Testimonials() {
           </div>
 
           {/* right arrow */}
-          <ArrowBtn onClick={next} icon={<FaChevronRight size={26} />} />
+          {!isMobile && <ArrowBtn onClick={next} icon={<FaChevronRight size={26} />} />}
         </div>
       </div>
     </section>

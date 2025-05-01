@@ -7,7 +7,7 @@ import { FaInstagram, FaFacebook, FaLinkedin } from 'react-icons/fa';
 function Col({ title, links }) {
   return (
     <ul className="space-y-1 text-center sm:text-left">
-      <li className="font-extraBold text-[22px] md:text-lg mb-1 text-customBlue sm:text-white">
+      <li className="font-medium text-[22px] md:text-lg mb-1 text-cyan-300 sm:text-white">
         {title}
       </li>
 
@@ -56,7 +56,7 @@ export default function Footer() {
               alt="JKARE logo"
               className="w-36 sm:w-36 mx-auto lg:mx-0 mb-2"
             />
-            <h3 className="text-customBlue sm:text-white/95  sm:text-lg text-2xl font-semibold">
+            <h3 className="text-purple-700 sm:text-white/95  sm:text-lg text-2xl font-semibold">
               “Oxygen for Life,&nbsp;Care for&nbsp;You”
             </h3>
             <p className="mt-2 text-[16px] sm:text-sm italic sm:not-italic text-black sm:text-white/90 leading-relaxed">
@@ -67,28 +67,29 @@ export default function Footer() {
 
           {/* newsletter */}
           <div className="w-full max-w-[420px] mx-auto lg:mx-0">
-            <h4 className="text-[14px] sm:text-base font-semibold mb-2 text-center lg:text-left text-customBlue">
-              SIGNUP FOR NEWSLETTER
-            </h4>
+  <h4 className="text-[14px] sm:text-base font-semibold mb-2 text-center lg:text-left text-black">
+    SIGNUP FOR NEWSLETTER
+  </h4>
 
-            <form onSubmit={(e) => e.preventDefault()} className="flex gap-2 sm:gap-3">
-              <input
-                type="email"
-                required
-                placeholder="Enter Your Email ID"
-                className="flex-1 rounded-lg px-3 py-2 text-gray-900 placeholder-gray-500
-                           text-[13px] sm:text-sm focus:outline-none focus:ring-2 focus:ring-customPink"
-              />
-              <button
-                type="submit"
-                className="rounded-lg bg-customPink px-4 sm:px-5 py-2
-                           text-[13px] sm:text-sm font-semibold
-                           hover:bg-customBlue transition-colors"
-              >
-                Signup
-              </button>
-            </form>
-          </div>
+  <form
+    onSubmit={(e) => e.preventDefault()}
+    className="flex overflow-hidden rounded-full shadow-lg"
+  >
+    <input
+      type="email"
+      required
+      placeholder="Enter Your Email ID"
+      className="flex-1 px-4 py-2 text-gray-900 placeholder-gray-400 text-sm focus:outline-none"
+    />
+    <button
+      type="submit"
+      className="bg-pink-500 text-white px-6 py-2 text-sm font-semibold hover:bg-pink-600 transition-colors"
+    >
+      Signup
+    </button>
+  </form>
+</div>
+
         </div>
 
         <hr className="border-white/20" />
@@ -102,7 +103,7 @@ export default function Footer() {
           <Col
             title="Quick Links"
             links={[
-              ['Home', '/'],
+              // ['Home', '/'],
               ['About Us', '/about-us'],
               ['Services', '/services'],
               ['Contact', '/contact'],
@@ -115,11 +116,11 @@ export default function Footer() {
             title="Shop & Resources"
             links={[
               ['Shop All Products', '/product'],
-              ['Online Partnership', '/'],
+              ['News & Media', '/'],
               ['Return Policy', '/'],
-              ['Submit Prescription', '/'],
-              ['Blogs', '/blog'],
+              // ['Submit Prescription', '/'],
               ['Patient Resources', '/Safety&Emergency'],
+              ['Blogs', '/blog'],
             ]}
           />
 
@@ -175,7 +176,7 @@ export default function Footer() {
             </Link>
             <span aria-hidden> | </span>
             <Link href="https://hexerve.com/" className="hover:text-white">
-              Design and Developed by Hexerve Solutions
+              Designed and Developed by Hexerve Solutions
             </Link>
           </span>
         </div>

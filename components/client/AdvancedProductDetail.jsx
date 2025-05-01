@@ -16,18 +16,29 @@ const AdvancedProductDetail = ({ data }) => {
   const [, setCartItems] = useContext(CartContext);
   const { data: session } = useSession();
   const [shippingOffer, setShippingOffer] = useState(null);
-useEffect(() => {
-  async function fetchShippingOffer() {
-    try {
-      const response = await fetch("/api/ship-env");
-      const data = await response.json();
-      setShippingOffer(data.offer_price);
-    } catch (error) {
-      console.error("Failed to fetch shipping offer:", error);
+  useEffect(() => {
+    async function fetchShippingOffer() {
+      try {
+        const response = await fetch("/api/ship-env");
+        const data = await response.json();
+        setShippingOffer(data.offer_price);
+      } catch (error) {
+        console.error("Failed to fetch shipping offer:", error);
+      }
     }
-  }
-  fetchShippingOffer();
-}, []);
+    fetchShippingOffer();
+  }, []);
+
+  /* -------------------------------------------------------------
+   Find warranty key like “2_years_warranty” (if any) and pull
+   out just the number (“2”).  Returns null when there is none.
+------------------------------------------------------------- */
+  const warrantyYears = (() => {
+    const key = Object.keys(data.product.key_features)
+      .find(k => /^\d+_year(s)?_warranty$/.test(k) && data.product.key_features[k]);
+    return key ? key.split('_')[0] : null;   // "2_years_warranty" → "2"
+  })();
+
 
 
   const handleImageClick = () => {
@@ -251,19 +262,19 @@ useEffect(() => {
               </span>
             </div>
           )}
-          <p className="my-2 lg:text-xl sm:text-sm font-bold">
+          <p className="my-2 lg:text-xl text-sm font-bold">
             Questions about this product?{" "}
-            <span className="text-customBlue lg:text-xl sm:text-sm">
+            <span className="text-customBlue lg:text-xl text-sm">
               Call 1-866-414-9700.
             </span>
           </p>
-          <div className="product-badges flex mt-4">
+          <div className="product-badges flex mt-4 justify-around ">
             {data.product.key_features.rx_required && (
-              <div className="badge flex items-center flex-col mr-2 lg:w-24 sm: w-20">
+              <div className="badge flex items-center flex-col  sm:w-36 w-16">
                 <img
-                  className="badge-image"
+                  className="badge-image text-gray-50 w-20"
                   loading="lazy"
-                  src="https://www.thecpapshop.com/media/catalog/badges/CPAP-icons-56x56-16.png"
+                  src="https://s3.ap-south-1.amazonaws.com/medicom.hexerve/Icons/Prescription.svg"
                   alt="Prescription Required"
                 />
                 <div className="badge-title lg:text-sm sm: text-xs text-center">
@@ -271,41 +282,42 @@ useEffect(() => {
                 </div>
               </div>
             )}
-            {data.product.key_features["2_years_warranty"] && (
-              <div className="badge flex items-center flex-col mr-2 lg:w-24 sm: w-20">
+            {warrantyYears && (
+              <div className="badge flex flex-col items-center  sm:w-36 w-16">
                 <img
-                  className="badge-image"
                   loading="lazy"
-                  src="https://www.thecpapshop.com/media/catalog/badges/CPAP-icons-56x56-05.png"
-                  alt="2 Year Warranty"
+                  src={`https://s3.ap-south-1.amazonaws.com/medicom.hexerve/Icons/${warrantyYears}.svg`}
+                  alt={`${warrantyYears} Year Warranty`}
+                  className="badge-image w-20"
                 />
-                <div className="badge-title lg:text-sm sm: text-xs text-center">
-                  2 Year Warranty
+                <div className="badge-title lg:text-sm text-xs text-center">
+                  {warrantyYears}&nbsp;Year{warrantyYears === '1' ? '' : 's'} Warranty
                 </div>
               </div>
             )}
+
             {data.product.key_features["free_shipping"] && (
-              <div className="badge flex items-center flex-col mr-2 lg:w-24 sm: w-20">
+              <div className="badge flex items-center flex-col  sm:w-36 w-16">
                 <img
-                  className="badge-image"
+                  className="badge-image w-20"
                   loading="lazy"
-                  src="https://www.thecpapshop.com/media/catalog/badges/CPAP-icons-56x56-04.png"
+                  src="https://s3.ap-south-1.amazonaws.com/medicom.hexerve/Icons/Free+Shipping.svg"
                   alt="Free Shipping Over $99"
                 />
-                <div className="badge-title lg:text-sm sm:text-xs text-center">
+                <div className="badge-title lg:text-sm text-xs text-center ">
                   Free Shipping Over  ${shippingOffer !== null ? shippingOffer : "Loading..."}
                 </div>
               </div>
             )}
             {data.product.key_features["pay_over_time"] && (
-              <div className="badge flex items-center flex-col mr-2 lg:w-24 sm: w-20">
+              <div className="badge flex items-center flex-col  sm:w-36 w-16">
                 <img
-                  className="badge-image"
+                  className="badge-image w-20"
                   loading="lazy"
-                  src="https://www.thecpapshop.com/media/catalog/badges/TCSbuynowpayovertime.jpg"
+                  src="https://s3.ap-south-1.amazonaws.com/medicom.hexerve/Icons/Pay+Overtime.svg"
                   alt="Pay Over Time"
                 />
-                <div className="badge-title lg:text-sm sm: text-xs text-center">
+                <div className="badge-title lg:text-sm text-xs text-center">
                   Pay Over Time
                 </div>
               </div>

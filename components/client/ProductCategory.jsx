@@ -65,14 +65,14 @@ export default function ShopByCategoryAndBrand() {
   }, [index, visibleCount, total]);
 
   return (
-    <section className="font-montserrat bg-gradient-to-t from-white via-[#F3F9FF] to-white py-12 lg:py-16">
+    <section className="font-montserrat bg-gradient-to-t from-white via-[#F3F9FF] to-white  lg:py-16 py-12 pt-0">
       {/* ---------- SHOP BY CATEGORY ---------- */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8
                       grid lg:grid-cols-[300px_1fr] gap-4 lg:gap-6">
 
         {/* gradient sidebar / header */}
         <aside className="rounded-xl overflow-hidden shadow-lg">
-          <div className="h-full bg-gradient-to-b from-[#702D6E] via-[#702D6E] to-purple-100
+          <div className="h-full bg-gradient-to-b from-[#702D6E] via-[#702D6E]/90 to-purple-200/50
                           p-6 sm:p-8 text-center lg:text-left">
             <h2 className="text-white text-xl sm:text-3xl font-light leading-snug mb-4 sm:mb-6">
               SHOP&nbsp;BY<br />CATEGORY
@@ -150,9 +150,9 @@ export default function ShopByCategoryAndBrand() {
                                cursor-pointer max-w-[180px]">
                 <img src={logo}
                      alt={name}
-                     className="h-4 sm:h-6 w-auto object-contain
+                     className="h-10 sm:h-8 w-auto object-contain
                                 hover:scale-105 transition-transform" />
-                <span className="text-[10px] sm:text-xs text-gray-700
+                <span className="text-[12px] sm:text-xs text-gray-700
                                  mt-1 sm:mt-2 text-center leading-tight">
                   {name}
                 </span>
