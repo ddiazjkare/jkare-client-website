@@ -4,7 +4,14 @@ import Order from "../../../models/Order";
 import Stripe from "stripe";
 // import { transaction } from "../../../lib/shippo";
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
-
+function generateOrderString() {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let result = '';
+  for (let i = 0; i < 8; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+}
 export const POST = async (req) => {
   try {
     const body = await req.json();
@@ -36,6 +43,7 @@ export const POST = async (req) => {
     // const trans = await transaction(checkout_session.metadata.shipping_rate);
 
     const orderParams = {
+      order_id: `ORD-${generateOrderString()}`,
       checkout_session: body.sessionID,
       shipping_rate: checkout_session.metadata.shipping_rate,
       // carrier: trans.carrier,
