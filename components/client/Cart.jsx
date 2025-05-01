@@ -1,14 +1,36 @@
 'use client'
-import { useContext, useState } from 'react'
+import { useContext, useState , useRef , useEffect } from 'react'
 import { CartContext } from '../SessionProVider'
 import { RiDeleteBin6Fill } from 'react-icons/ri'
 import PrescriptionModal from './PrescriptionModal'
 
-function Cart({ isCartOpen, authSession }) {
+function Cart({ isCartOpen, authSession, cartRef}) {
   const myCart = typeof window !== 'undefined' && window.localStorage.getItem('medCart')
   const [cartItems, setCartItems] = useContext(CartContext)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const cartContainerRef = useRef();
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        cartContainerRef.current &&
+        !cartContainerRef.current.contains(event.target)
+      ) {
+        // Call a passed prop or handle closure here
+        if (typeof window !== 'undefined') {
+          const event = new CustomEvent('closeCart');
+          window.dispatchEvent(event);
+        }
+      }
+    };
+  
+    document.addEventListener('click', handleClickOutside);
+  
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+  
   // Parse cart
   let cart = myCart ? JSON.parse(myCart) : []
 
@@ -37,16 +59,17 @@ function Cart({ isCartOpen, authSession }) {
     <>
       {/* Cart Drawer */}
       <div
+      ref={cartContainerRef}
         className={`
           fixed z-50
-          top-20 left-1/2 -translate-x-1/2   /* ✨ Center on mobile */
-          w-11/12 max-w-sm                   /* Responsive width */
+          top-20 left-1/2 -translate-x-1/2  
+          w-11/12 max-w-sm                   
           bg-white border-2 border-gray-200 rounded-lg shadow-lg
           transform transition-all duration-300 ease-in-out
           ${isCartOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-8'}
           /* Breakpoints */
-          sm:left-auto sm:right-6 sm:translate-x-0 sm:w-96 sm:top-16   /* ≥640 px */
-          lg:absolute lg:-left-72 lg:top-16                           /* ≥1024 px */
+          sm:left-auto sm:right-6 sm:translate-x-0 sm:w-96 sm:top-16  
+          lg:absolute lg:-left-72 lg:top-16                           
         `}
       >
         <div className='p-4 max-h-72 overflow-auto'>

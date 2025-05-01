@@ -25,14 +25,17 @@ const Navbar = () => {
   const { data: session } = useSession();
   const data = useContext(DataContext);
   const [cartItems, setCartItems] = useContext(CartContext);
-
-  // Refs for closing dropdowns on outside click
   const menuRef = useRef();
   const userCardRef = useRef();
-
-  // We maintain separate refs for desktop vs. mobile search inputs
   const searchRefDesktop = useRef();
   const searchRefMobile = useRef();
+  const cartRef = useRef();
+  const delayedCloseMobileMenu = () => {
+    setTimeout(() => {
+      setIsMobileMenuOpen(false);
+    }, 800);
+  };
+  
 
   // Fetch product search results
   const searchHandler = async (e) => {
@@ -67,6 +70,7 @@ const Navbar = () => {
     ) {
       setIsSearchDropdownVisible(false);
     }
+  
     if (
       userCardRef.current &&
       !userCardRef.current.contains(event.target) &&
@@ -74,11 +78,28 @@ const Navbar = () => {
     ) {
       setIsUserCardOpen(false);
     }
-    if (menuRef.current && !menuRef.current.contains(event.target) && isMobileMenuOpen) {
+  
+    if (
+      menuRef.current &&
+      !menuRef.current.contains(event.target) &&
+      isMobileMenuOpen
+    ) {
       setIsMobileMenuOpen(false);
     }
+  
+    if (
+      cartRef.current &&
+      !cartRef.current.contains(event.target) &&
+      isCartOpen
+    ) {
+      setIsCartOpen(false);
+    }
   };
-
+  useEffect(() => {
+    const closeHandler = () => setIsCartOpen(false);
+    window.addEventListener('closeCart', closeHandler);
+    return () => window.removeEventListener('closeCart', closeHandler);
+  }, []);
   useEffect(() => {
     // Load cart from localStorage
     const localCart =
@@ -95,12 +116,12 @@ const Navbar = () => {
     <div className="fixed top-0 inset-x-0 z-50">
       {/* Top Bar: only visible on md+ */}
       <div className="hidden md:flex bg-customBlue py-2 overflow-hidden">
-  <div className="marquee">
-    <p className="inline-block text-white text-sm md:text-base font-medium">
-      Questions? Call Us Toll-Free <span className="font-bold">1-800-567-000</span>
-    </p>
-  </div>
-</div>
+        <div className="marquee">
+          <p className="inline-block text-white text-sm md:text-base font-medium">
+            Questions? Call Us Toll-Free <span className="font-bold">1-800-567-000</span>
+          </p>
+        </div>
+      </div>
 
       {/* Main Navbar */}
       <div className="bg-white shadow-lg px-4 lg:px-8 py-2 flex items-center justify-between">
@@ -111,8 +132,9 @@ const Navbar = () => {
             <img
               src="https://images.squarespace-cdn.com/content/v1/60aefe75c1a8f258e529fbac/1622081456984-G5MG4OZZJFVIM3R01YN7/jkare-2.png?format=1500w"
               alt="Logo"
-              className="h-10 flex-shrink-0"
+              className="h-6 md:h-8 lg:h-10 flex-shrink-0"
             />
+
           </Link>
 
           {/* Mobile Search */}
@@ -386,7 +408,7 @@ const Navbar = () => {
                 {cartItems}
               </span>
             )}
-            {isCartOpen && <Cart isCartOpen={isCartOpen} authSession={session} />}
+            {isCartOpen && <Cart isCartOpen={isCartOpen} authSession={session} cartRef={cartRef} />}
           </div>
 
           {/* User (Desktop) */}
@@ -468,6 +490,7 @@ const Navbar = () => {
             <Link
               href="/"
               className="block text-gray-700 hover:bg-gray-100 px-3 py-2 rounded"
+              onClick={delayedCloseMobileMenu}
             >
               Home
             </Link>
@@ -499,12 +522,13 @@ const Navbar = () => {
                     key={d.name}
                     href={`/category/${d.name}`}
                     className="block text-gray-700 hover:bg-gray-100 px-3 py-1 rounded"
+                    onClick={delayedCloseMobileMenu}
                   >
                     {d.name}
                   </Link>
                 ))}
                 <div className="flex items-center ml-3 mt-1">
-                  <HoveredLink href="/category">
+                  <HoveredLink href="/category" onClick={delayedCloseMobileMenu}>
                     <div className="pr-2 text-blue-600 hover:underline">
                       Shop All
                     </div>
@@ -539,76 +563,76 @@ const Navbar = () => {
 
                 {/* ——— 1. Safety & Emergency Planning ——— */}
                 <span className="block font-semibold mt-2">Safety & Emergency Planning</span>
-                <Link href="/Safety&Emergency" className="block px-3 py-1 rounded hover:bg-gray-100">
+                <Link href="/Safety&Emergency" onClick={delayedCloseMobileMenu}  className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Emergency Planning for the Home Care Patient
                 </Link>
-                <Link href="/Safety&Emergency" className="block px-3 py-1 rounded hover:bg-gray-100">
+                <Link href="/Safety&Emergency" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   How to Make Your Home Safe for Medical Care
                 </Link>
 
                 {/* ——— 2. Patient Rights & Advocacy ——— */}
                 <span className="block font-semibold mt-3">Patient Rights & Advocacy</span>
-                <Link href="/PatientRights" className="block px-3 py-1 rounded hover:bg-gray-100">
+                <Link href="/PatientRights" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   HIPAA Privacy Notice
                 </Link>
-                <Link href="/PatientRights" className="block px-3 py-1 rounded hover:bg-gray-100">
+                <Link href="/PatientRights" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Patient’s Bill of Rights and Responsibilities
                 </Link>
-                <Link href="/PatientRights" className="block px-3 py-1 rounded hover:bg-gray-100">
+                <Link href="/PatientRights" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Patient Grievance and Complaint Procedure
                 </Link>
-                <Link href="/PatientRights" className="block px-3 py-1 rounded hover:bg-gray-100">
+                <Link href="/PatientRights" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Making Decisions About Your Health Care
                 </Link>
 
                 {/* ——— 3. Support Policies & Information ——— */}
                 <span className="block font-semibold mt-3">Support Policies & Information</span>
-                <Link href="/SupportPolicies" className="block px-3 py-1 rounded hover:bg-gray-100">
+                <Link href="/SupportPolicies" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Medicare DMEPOS Supplier Standards
                 </Link>
-                <Link href="/SupportPolicies" className="block px-3 py-1 rounded hover:bg-gray-100">
+                <Link href="/SupportPolicies" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Warranty Information
                 </Link>
-                <Link href="/SupportPolicies" className="block px-3 py-1 rounded hover:bg-gray-100">
+                <Link href="/SupportPolicies" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Insurance Information
                 </Link>
-                <Link href="/SupportPolicies" className="block px-3 py-1 rounded hover:bg-gray-100">
+                <Link href="/SupportPolicies" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Prescription Requirements
                 </Link>
-                <Link href="/SupportPolicies" className="block px-3 py-1 rounded hover:bg-gray-100">
+                <Link href="/SupportPolicies" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Medicare Support
                 </Link>
 
                 {/* ——— 4. Equipment Guides & Instructions ——— */}
                 <span className="block font-semibold mt-3">Equipment Guides & Instructions</span>
-                <Link href="/EquipmentGuide" className="block px-3 py-1 rounded hover:bg-gray-100">
+                <Link href="/EquipmentGuide" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Customer Instruction Guide for CPAP & BiPAP
                 </Link>
-                <Link href="/EquipmentGuide" className="block px-3 py-1 rounded hover:bg-gray-100">
+                <Link href="/EquipmentGuide" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Nebulizer/Compressor Therapy & Cleaning Instructions
                 </Link>
 
                 {/* ——— 5. Product Brochures ——— */}
                 <span className="block font-semibold mt-3">Product Brochures</span>
-                <Link href="/ProductBrochers" className="block px-3 py-1 rounded hover:bg-gray-100">
+                <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Afflovest (English)
                 </Link>
-                <Link href="/ProductBrochers" className="block px-3 py-1 rounded hover:bg-gray-100">
+                <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Biwaze Airway Clearance System User Manual
                 </Link>
-                <Link href="/ProductBrochers" className="block px-3 py-1 rounded hover:bg-gray-100">
+                <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Biwaze Clear Quick Hits
                 </Link>
-                <Link href="/ProductBrochers" className="block px-3 py-1 rounded hover:bg-gray-100">
+                <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Biwaze Cough User Manual (English)
                 </Link>
-                <Link href="/ProductBrochers" className="block px-3 py-1 rounded hover:bg-gray-100">
+                <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Biwaze Cough User Manual (Spanish)
                 </Link>
-                <Link href="/ProductBrochers" className="block px-3 py-1 rounded hover:bg-gray-100">
+                <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Oxlife Liberty User Manual
                 </Link>
-                <Link href="/ProductBrochers" className="block px-3 py-1 rounded hover:bg-gray-100">
+                <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   MyAirvo Use and Care Guide
                 </Link>
 
@@ -618,24 +642,29 @@ const Navbar = () => {
             <Link
               href="/about-us"
               className="block text-gray-700 hover:bg-gray-100 px-3 py-2 rounded"
+              onClick={delayedCloseMobileMenu}
+              
             >
               About Us
             </Link>
             <Link
               href="/our-services"
               className="block text-gray-700 hover:bg-gray-100 px-3 py-2 rounded"
+              onClick={delayedCloseMobileMenu}
             >
               Our Services
             </Link>
             <Link
               href="/blog"
               className="block text-gray-700 hover:bg-gray-100 px-3 py-2 rounded"
+              onClick={delayedCloseMobileMenu}
             >
               Blog
             </Link>
             <Link
               href="/contact-us"
               className="block text-gray-700 hover:bg-gray-100 px-3 py-2 rounded"
+              onClick={delayedCloseMobileMenu}
             >
               Contact Us
             </Link>
@@ -653,7 +682,7 @@ const Navbar = () => {
                       </button>
                     </Link>
                   )}
-                  <Link href="/order-history">
+                  <Link href="/order-history" onClick={delayedCloseMobileMenu}>
                     <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded">
                       Order History
                     </button>

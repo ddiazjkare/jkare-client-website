@@ -1,10 +1,4 @@
-/* ------------------------------------------------------------------
-   HeroSection.jsx  –  dual render: desktop untouched,
-   mobile mirrors the provided UI but keeps animations
-------------------------------------------------------------------- */
-
 'use client';
-
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
@@ -90,20 +84,20 @@ export default function HeroSection() {
           </h1>
 
           {/* headline */}
-          <h2 className="mt-4 text-[36px] font-extrabold leading-tight tracking-tight uppercase text-gray-900">
+          <h2 className="mt-4 md:text-[36px] text-[40px] font-extrabold leading-tight  tracking-tight uppercase text-gray-900">
             IN-HOME&nbsp;CARE
             <br />
-            <p className='text-[48px]'>FOR&nbsp;EVERY</p>
+            <p className='md:text-[48px] text-[52px] font-bold'>FOR&nbsp;EVERY</p>
           </h2>
 
           {/* dynamically-typed word */}
-          <p className="mt-3 text-[64px] sm:text-[64px] font-extrabold leading-none text-customPink uppercase  ">
+          <p className="md:text-[64px] text-[68px] font-bold leading-none text-customPink uppercase  ">
             {/* {typed} */}
             BREATH
           </p>
 
-          {/* rotating tag-lines */} 
-          <div className="relative h-[72px] mt-4 overflow-hidden text-center">
+          {/* rotating tag-lines */}
+          <div className="relative h-[78px] mt-4 overflow-hidden text-center">
             {prevIdx !== null && (
               <p className="tagline animate-slideUp text-center">{TAGLINES[prevIdx]}</p>
             )}
@@ -173,23 +167,25 @@ export default function HeroSection() {
 
       {/* ──────────────  shared animation styles ────────────── */}
       <style jsx>{`
-        .tagline {
-          position: absolute;
-          inset: 0;
-          display: flex;
-          align-items: start;
-          justify-content: start;
-          font-size: 0.875rem;
-          line-height: 1.4;
-          font-weight: 500;
-          color: #1f2937;
-          text-align: left;
-        }
-        @media (min-width: 768px) {
-          .tagline {
-            font-size: 1rem;
-          }
-        }
+       .tagline {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;       
+  justify-content: center; 
+  font-size: 1rem;
+  line-height: 1.4;
+  font-weight: 500;
+  color: #1f2937;
+  text-align: center;        
+}
+@media (min-width: 640px) {
+  .tagline {
+    justify-content: start;  
+    text-align: left;
+  }
+}
+
         .animate-slideIn {
           animation: slideIn 0.8s ease forwards;
         }

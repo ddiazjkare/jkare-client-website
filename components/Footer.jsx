@@ -7,8 +7,7 @@ import { FaInstagram, FaFacebook, FaLinkedin } from 'react-icons/fa';
 function Col({ title, links }) {
   return (
     <ul className="space-y-1 text-center sm:text-left">
-      {/* blue heading on phones, white on ≥ sm */}
-      <li className="font-extraBold text-[15px] sm:text-lg mb-1 text-customLightBlue sm:text-white">
+      <li className="font-extraBold text-[22px] md:text-lg mb-1 text-customBlue sm:text-white">
         {title}
       </li>
 
@@ -16,7 +15,7 @@ function Col({ title, links }) {
         <li key={label}>
           <Link
             href={href}
-            className="text-[13px] sm:text-base font-normal text-white hover:text-customBlue"
+            className="text-[14px] sm:text-base font-normal text-white hover:text-customBlue"
           >
             {label}
           </Link>
@@ -45,9 +44,9 @@ export default function Footer() {
       />
 
       {/* purple veil */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#461f4d] via-[#632a6d]/90 to-white/10" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#461f4d] via-[#632a6d]/80 to-white" />
 
-      <div className="relative z-30 mx-auto max-w-7xl px-4 sm:px-6 py-10 space-y-10">
+      <div className="relative z-30 mx-auto max-w-7xl px-4 sm:px-6 py-10 space-y-4">
         {/* ---------- TOP STRIP ---------- */}
         <div className="flex flex-col lg:flex-row gap-8 justify-between">
           {/* logo + tagline */}
@@ -55,13 +54,12 @@ export default function Footer() {
             <img
               src="https://images.squarespace-cdn.com/content/v1/60aefe75c1a8f258e529fbac/1622081456984-G5MG4OZZJFVIM3R01YN7/jkare-2.png?format=1500w"
               alt="JKARE logo"
-              className="w-28 sm:w-36 mx-auto lg:mx-0 mb-4"
+              className="w-36 sm:w-36 mx-auto lg:mx-0 mb-2"
             />
-
-            <h3 className="text-customBlue sm:text-white/95 text-base sm:text-lg font-semibold">
+            <h3 className="text-customBlue sm:text-white/95  sm:text-lg text-2xl font-semibold">
               “Oxygen for Life,&nbsp;Care for&nbsp;You”
             </h3>
-            <p className="mt-2 text-[13px] sm:text-sm italic sm:not-italic text-white/90 leading-relaxed">
+            <p className="mt-2 text-[16px] sm:text-sm italic sm:not-italic text-black sm:text-white/90 leading-relaxed">
               Reflects <span className="font-semibold">JKARE’s</span> mission to
               provide vital oxygen services with compassionate, personalized care.
             </p>
@@ -97,7 +95,7 @@ export default function Footer() {
 
         {/* ---------- LINK BLOCK (mobile-centered) ---------- */}
         <div
-          className="grid grid-cols-2 md:grid-cols-3 gap-10 sm:gap-8
+          className="grid md:grid-cols-3 gap-10 sm:gap-8
                      justify-items-center sm:justify-items-start
                      text-[13px] sm:text-sm"
         >
@@ -138,9 +136,9 @@ export default function Footer() {
             />
 
             {/* hide socials on phones to match mock-up */}
-            <div className="hidden sm:block">
-              <p className="font-semibold mb-2 text-white">Follow Us</p>
-              <div className="flex gap-3">
+            <div className="sm:block">
+              <p className="hidden sm:block font-semibold mb-2 text-white">Follow Us</p>
+              <div className="flex justify-center sm:justify-start gap-3">
                 {[
                   ['https://www.instagram.com/jkaremiami/', <FaInstagram key="ig" size={18} />],
                   ['https://www.facebook.com/JKAREMiami', <FaFacebook key="fb" size={18} />],
@@ -152,21 +150,20 @@ export default function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="grid h-8 w-8 place-items-center rounded-full
-                               border border-white/40 hover:bg-customPink transition-colors"
+                   border border-white/40 hover:bg-customPink transition-colors"
                   >
                     {icon}
                   </a>
                 ))}
               </div>
             </div>
+
           </div>
         </div>
-
         <hr className="border-white/20" />
-
         {/* ---------- BOTTOM LINE ---------- */}
         <div className="flex flex-col sm:flex-row justify-between items-center gap-3
-                        pt-4 text-[12px] sm:text-xs text-white/80 text-center sm:text-left">
+                         text-[12px] sm:text-xs text-white/80 text-center sm:text-left">
           <span>© 2024 JKARE. All Rights Reserved.</span>
           <span className="space-x-2">
             <Link href="/privacy-policy" className="hover:text-white">

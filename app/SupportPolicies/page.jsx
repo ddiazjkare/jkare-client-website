@@ -6,7 +6,7 @@ const guides = [
     blurb:
       'THIS NOTICE DESCRIBES HOW MEDICAL INFORMATION ABOUT YOU MAY BE USED AND DISCLOSED AND HOWYOU CAN GET ACCESS TO THIS INFORMATION. PLEASE REVIEW IT CAREFULLY.',
     imgAlt: 'Man pointing to CPAP screen',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/pexels-photo-2977565.jpeg',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/support+policies/asian-pharmacist-giving-assistance-to-client-in-ph-2025-02-18-01-27-03-utc.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/MEDICARE+DMEPOS+SUPPLIER+STANDARDS.pdf",
   },
   {
@@ -15,7 +15,7 @@ const guides = [
     blurb:
       'We believe that all patients receiving services from JKARE should be informed of their rights',
     imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/pexels-photo-2977565.jpeg',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/support+policies/senior-doctor-talking-with-patient-office.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/WARRANTY+INFORMATION.pdf",
   },
   {
@@ -24,7 +24,7 @@ const guides = [
     blurb:
       "You may lodge a complaint without concern for reprisal, discrimination, or unreasonable interruption of service. To place a grievance, please call 305-248-1003 and speak to the Customer Services Supervisor.",
     imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/pexels-photo-2977565.jpeg',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/support+policies/unrecognizable-doctor-extending-digital-tab-anonymous-patient-fill-questionnaire.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/PATIENT+GRIEVANCE+AND+COMPLAINT+PROCEDURE.pdf",
   },
   {
@@ -33,7 +33,7 @@ const guides = [
     blurb:
       "You may lodge a complaint without concern for reprisal, discrimination, or unreasonable interruption of service. To place a grievance, please call 305-248-1003 and speak to the Customer Services Supervisor.",
     imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/pexels-photo-2977565.jpeg',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/support+policies/heathcare-form-insurance-application-concept.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/PATIENT+GRIEVANCE+AND+COMPLAINT+PROCEDURE.pdf",
   },
   {
@@ -42,7 +42,7 @@ const guides = [
     blurb:
       "Advance Directives are forms that say, in advance, what kind of treatment you want or don't want under serious medical conditions. Some conditions, if severe, may make you unable to tell the doctor how you want to be treated at that time. Your Advance Directives will help the doctor to provide the care you would wish to have.",
     imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/pexels-photo-2977565.jpeg',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/support+policies/doctor-doing-their-work-pediatrics-office.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/MAKING+DECISIONS+ABOUT+YOUR+HEALTH+CARE.pdf",
   },
 ];
