@@ -65,7 +65,11 @@ export default function BorderfreeStyleCheckout() {
     // Fetch environment data
     fetchEnvData();
   }, []);
-  // Close suggestions dropdown if user clicks outside
+
+  useEffect(()=>{
+    window.dispatchEvent(new CustomEvent('closeCart'));
+  },[])
+  
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
@@ -77,6 +81,8 @@ export default function BorderfreeStyleCheckout() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  
 
   // 2a) Fetch environment data
   const fetchEnvData = async () => {
