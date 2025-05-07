@@ -19,7 +19,7 @@ export const MenuItem = ({ setActive, active, item, children }) => {
       <motion.p
         transition={{ duration: 0.3 }}
         // Navbar styling Properties
-        className='cursor-pointer text-black hover:text-customPink lg:text-lg lg:font-normal md:font-light font-montserrat '
+        className='cursor-pointer text-black hover:text-customPink lg:text-base lg:font-normal md:font-light font-montserrat '
       >
         {item}
       </motion.p>
@@ -89,7 +89,7 @@ export const ProductItem = ({ title, description, href, src }) => {
 
 export const HoveredLink = ({ children, ...rest }) => {
   return (
-    <Link {...rest} className='text-black  hover:text-customPink py-2'>
+    <Link {...rest} className='text-black text-sm font-normal hover:text-customPink py-2'>
       {children}
     </Link>
   )

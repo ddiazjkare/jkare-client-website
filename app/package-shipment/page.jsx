@@ -81,9 +81,6 @@ export default function BorderfreeStyleCheckout() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
-  
-
   // 2a) Fetch environment data
   const fetchEnvData = async () => {
     try {

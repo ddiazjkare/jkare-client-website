@@ -204,7 +204,7 @@ const Navbar = () => {
                   ))}
                   <div className="flex items-center">
                     <HoveredLink href="/category">
-                      <div className="pr-2 font-bold text-black hover:text-customPink">
+                      <div className="pr-2 font-normal text-black hover:text-customPink">
                         Shop All
                       </div>
                     </HoveredLink>
