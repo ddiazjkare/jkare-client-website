@@ -137,7 +137,7 @@ export default function Contact() {
             <div>
               <h4 className="text-lg font-semibold text-customBlue">Address</h4>
               <p className="text-gray-700 leading-snug">
-                4101&nbsp;SW&nbsp;73rd&nbsp;Ave<br />Miami, FL&nbsp;33155<br />United States
+                4101&nbsp;SW&nbsp;73rd&nbsp;Avenue,<br />Unit C. Miami, FL&nbsp;33155<br />United States
               </p>
             </div>
           </div>
@@ -154,7 +154,7 @@ export default function Contact() {
             <Phone className="h-10 w-10 text-customBlue flex-shrink-0" />
             <div>
               <h4 className="text-lg font-semibold text-customBlue">Phone</h4>
-              <p className="text-gray-700 leading-snug">1‑800‑567‑000</p>
+              <p className="text-gray-700 leading-snug">305‑248‑1003</p>
             </div>
           </div>
         </div>

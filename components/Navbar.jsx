@@ -118,7 +118,7 @@ const Navbar = () => {
       <div className="hidden md:flex bg-customBlue py-2 overflow-hidden">
         <div className="marquee">
           <p className="inline-block text-white text-sm md:text-base font-medium">
-            Questions? Call Us Toll-Free <span className="font-bold">1-800-567-000</span>
+            Questions? Call Us Toll-Free <span className="font-bold">305-248-1003</span>
           </p>
         </div>
       </div>

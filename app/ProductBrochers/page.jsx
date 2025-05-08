@@ -6,16 +6,16 @@ const guides = [
     blurb:
       'The AflloVest User Manual contains important SAFETY and TECHICAL DATA. Please keep this manual in a safe... ',
     imgAlt: 'Man pointing to CPAP screen',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/pexels-photo-2977565.jpeg',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/AffloVest%2BTween%2B(4)edit.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/AfflovestEnglish_FINAL.pdf",
   },
   {
     id: 2,
     title: "Biwaze Airway Clearance System User Manual",
     blurb:
-      'YOUR PHYSICIAN HAS PRESCRIBED A NEBULIZER/COMPRESSOR FOR YOUR HOME USE. THE FOLLOWING INSTRUCTIONS WILL BE EXPLAINED IN DETAIL AT TIME OF SET-UP. PLEASE SAVE THESE GENERAL INSTRUCTIONS FOR YOUR REFERENCE.',
+      'Your Physician Has Prescribed a Nebulizer/Compressor for Your Home Use. The Following Instructions Will Be Explained in Detail at Time of Set-Up. Please Save These General Instructions for Your Reference.',
     imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/pexels-photo-2977565.jpeg',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/BiWaze-Clear-group-screen-on-4.png',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/BiWaze+-+Clear_User-Manual_US_Printable.pdf",
   },
   {
@@ -24,7 +24,7 @@ const guides = [
     blurb:
       'The BiWaze® Clear System delivers oscillating lung expansion (OLE) therapy to help treat and prevent atelectasis, clear retained secretions from deep within the lungs...',
     imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/pexels-photo-2977565.jpeg',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/ABM-041524-085.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/BiWaze+-+Clear-Quick+Hits.pdf",
   },
   {
@@ -33,7 +33,7 @@ const guides = [
     blurb:
       'The BiWaze® Cough device helps to clear bronchopulmonary secretions from the respiratory system by providing a therapy which mimics a cough. The therapy consists of three phases which mimic a cough; inhale, exhale, and pause phase.',
     imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/pexels-photo-2977565.jpeg',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/porta-medical-produkte-cough-header.png',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/BiWaze+-+Cough+-User+Manual_US_English.pdf",
   },
   {
@@ -51,7 +51,7 @@ const guides = [
     blurb:
       "The Oxlife Liberty® is a portable oxygen concentrator used on a prescriptive basis that enables patients requiring supplemental oxygen to be treated in a home, institutional, or vehicle/mobile environment. The Oxlife Liberty® delivers 87% -95 % pure oxygen to a patient through a standard single lumen nasal cannula. ",
     imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/pexels-photo-2977565.jpeg',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/LibertyPOC-Adjustments-scaled-1.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/Oxlife%2BLiberty%2BUser%2BManual.pdf",
   },
   {
@@ -60,7 +60,7 @@ const guides = [
     blurb:
       "The MyAirvo 2 is a humidifier with integrated flow generator that delivers warmed and humidified respiratory gases to spontaneously breating patients through a variety of patient interfaces.",
     imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/pexels-photo-2977565.jpeg',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/myairvo2-humidified-high-flow-system-fisher-paykel_600x600.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/myairvo2-user-manual-ui-185045490.pdf",
   }
 ];

@@ -71,13 +71,14 @@ const AboutPage = () => {
 
               <div className="space-y-5 text-gray-700 text-lg leading-relaxed">
                 <p>
-                  Our son was born in 2002 and, from his earliest days, faced significant respiratory challenges. Chronic asthma and recurrent pneumonia kept him frequently hospitalized, bringing uncertainty and distress. In May&nbsp;2007, we finally received a definitive diagnosis: Cystic Fibrosis—an inherited condition affecting the lungs and digestive system. A rigorous regimen of respiratory therapy and medication transformed his health, thanks to an interdisciplinary team of compassionate professionals.
+                “Our family’s journey with chronic respiratory illness revealed a need and sparked a mission.”
+                Our son was born in 2002 and, from his earliest days, faced significant respiratory challenges. Chronic asthma and recurrent pneumonia kept him frequently hospitalized, bringing uncertainty and distress. In May 2007, we finally received a definitive diagnosis: Cystic Fibrosis, an inherited condition affecting the lungs and digestive system. A rigorous regimen of respiratory therapy and medication transformed his health, thanks to an interdisciplinary team of compassionate professionals.
                 </p>
                 <p>
-                  This experience revealed a critical gap: families like ours needed expert respiratory care providers who truly empathized with their struggles. Driven to make a difference, we founded JKARE in&nbsp;2010. While we began with a pediatric focus, demand quickly extended to adults, prompting us to broaden our services for patients of all ages.
+                This experience revealed a critical gap: our families needed expert respiratory care providers who empathized with their struggles. Driven to make a difference, we founded JKARE in 2010. While we began with a pediatric focus, demand quickly extended to adults, prompting us to broaden our services for patients of all ages.
                 </p>
                 <p>
-                  Today, JKARE remains a family‑inspired, clinician‑led organization dedicated to reducing hospitalizations, lightening the burden on caregivers, and empowering patients to live joyful, independent lives. Every service we deliver is guided by the unwavering belief that quality respiratory care should be compassionate, comprehensive, and accessible to all.
+                Today, JKARE remains a family-inspired, clinician-led organization dedicated to reducing hospitalization, lightening the burden on caregivers, and empowering patients to live joyful, independent lives. Every service we deliver is guided by the unwavering belief that quality respiratory care should be compassionate, comprehensive, and accessible to all.
                 </p>
               </div>
             </div>
@@ -137,7 +138,7 @@ const AboutPage = () => {
             <h2 className="text-customBlue text-4xl font-extrabold">Our Vision</h2>
             <h3 className="text-customBlue text-2xl mt-3 font-semibold">To Accommodate All Patients</h3>
             <p className="text-gray-700 mt-6 text-lg leading-relaxed">
-              We aspire to build a professional team governed by strong ethics, delivering the best respiratory care services and medical equipment across Miami‑Dade and Broward Counties. Our growth is anchored in scientific advancement and strict legal compliance.
+            To serve all patients with integrity and excellence by building a trusted team dedicated to delivering advanced respiratory care and medical equipment across Florida. Our commitment to innovation, ethical standards, and full regulatory compliance drives our growth and impact.
             </p>
           </div>
 

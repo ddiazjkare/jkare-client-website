@@ -265,7 +265,7 @@ const AdvancedProductDetail = ({ data }) => {
           <p className="my-2 lg:text-xl text-sm font-bold">
             Questions about this product?{" "}
             <span className="text-customBlue lg:text-xl text-sm">
-              Call 1-866-414-9700.
+              Call 305-248-1003.
             </span>
           </p>
           <div className="product-badges flex mt-4 justify-around ">

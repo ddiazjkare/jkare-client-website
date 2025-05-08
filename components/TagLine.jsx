@@ -29,7 +29,7 @@ export default function TagLine() {
           />
           {/* Card 2 */}
           <ServiceCard
-            title="The Agency for Healthcare Administration (AHCA)"
+            title="Health Care Services Pool"
             desc="Certified by the Agency for Healthcare Administration (AHCA) as a Healthcare Service Pool, we provide licensed respiratory therapists for in-home care and as temporary staff for residential facilities."
             href="/our-services"
           />

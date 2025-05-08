@@ -2,7 +2,7 @@ import GuidesSection from '../../components/GuideSection';
 const guides = [
   {
     id: 1,
-    title: 'In-home & Clinical Respiratory Services',
+    title: 'Clinical Respiratory Services',
     blurb:
       'Our Respiratory Therapy team delivers specialized, high-quality in-home care to patients of all ages with complex pulmonary conditions. We provide clinical expertise in managing and optimizing respiratory function through advanced therapeutic techniques, state-of-the-art equipment, and a compassionate, patient-centered approach. Our licensed therapists work collaboratively with physicians and families to ensure safety, comfort, and improved quality of life for every patient we serve.',
     imgAlt: 'Man pointing to CPAP screen',
@@ -11,7 +11,7 @@ const guides = [
   },
   {
     id: 2,
-    title: "The Agency for Healthcare Administration (AHCA)",
+    title: "Health Care Services Pool",
     blurb:
       'Certified by the Agency for Healthcare Administration (AHCA) as a Healthcare Service Pool, we provide licensed respiratory therapists for in-home care and as temporary staff for residential facilities.',
     imgAlt: 'Woman using nebulizer',

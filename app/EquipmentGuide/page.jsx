@@ -13,7 +13,7 @@ const guides = [
     id: 2,
     title: "Nebulizer/Compressor Therapy & Cleaning Instructions",
     blurb:
-      'YOUR PHYSICIAN HAS PRESCRIBED A NEBULIZER/COMPRESSOR FOR YOUR HOME USE. THE FOLLOWING INSTRUCTIONS WILL BE EXPLAINED IN DETAIL AT TIME OF SET-UP. PLEASE SAVE THESE GENERAL INSTRUCTIONS FOR YOUR REFERENCE.',
+      'Your Physician Has Prescribed a Nebulizer/Compressor for Your Home Use. The Following Instructions Will Be Explained in Detail at Time of Set-Up. Please Save These General Instructions for Your Reference.',
     imgAlt: 'Woman using nebulizer',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/support+policies/images+(1).jpg',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/Resources+-+Nebulizer+Instructions.pdf",
