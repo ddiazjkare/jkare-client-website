@@ -229,7 +229,7 @@ function OrderHistory({ orders = [], email }) {
 
               <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
                 <p className="text-sm text-gray-600">
-                  <strong>ORDER ID #</strong> <br /> {order._id}
+                  <strong>ORDER ID #</strong> <br /> {order.order_id}
                 </p>
                 <span className="self-start sm:self-auto inline-block bg-yellow-400 text-xs sm:text-sm font-semibold text-black px-3 py-1 rounded-md">
                   {order.order_status}
