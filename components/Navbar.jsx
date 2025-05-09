@@ -229,7 +229,7 @@ const Navbar = () => {
                 active={active}
                 item="Patient Resources">
                 {/* EXACT multi-column layout shown in your screenshot */}
-                <div className="grid grid-cols-5 gap-8 w-[1200px] p-4 rounded-md text-gray-800 font-light">
+                <div className="grid grid-cols-5 gap-8 w-[1400px] p-4 rounded-md text-gray-800 font-light">
                   {/* 1st Column */}
                   <div>
                     <h4 className="text-base font-semibold mb-1">

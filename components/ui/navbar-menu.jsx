@@ -17,7 +17,7 @@ export const MenuItem = ({ setActive, active, item, children }) => {
     const handleDelayedClose = () => {
     setTimeout(() => {
       setActive(null);
-    }, 900);
+    }, 1200);
   };
   return (
     <div onMouseEnter={() => setActive(item)} onMouseLeave={() => setActive(null)} className='relative '>
@@ -63,13 +63,10 @@ export const Menu = ({ setActive, children }) => {
       // resets the state
       onMouseLeave={() => setActive(null)}
       className='relative w-full
-      shadow-input flex justify-center space-x-4 px-8 py-2 '
-    >
-      {children}
-    </nav>
+      shadow-input flex justify-center space-x-6 px-8 py-2 '
+    >{children}</nav>
   )
 }
-
 export const ProductItem = ({ title, description, href, src }) => {
   return (
     <Link href={href} className='flex space-x-2'>
