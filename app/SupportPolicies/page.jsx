@@ -4,7 +4,7 @@ const guides = [
     id: 1,
     title: 'Medicare DMEPOS Supplier Standards',
     blurb:
-      'THIS NOTICE DESCRIBES HOW MEDICAL INFORMATION ABOUT YOU MAY BE USED AND DISCLOSED AND HOWYOU CAN GET ACCESS TO THIS INFORMATION. PLEASE REVIEW IT CAREFULLY.',
+      'JKARE complies with all Medicare DMEPOS Supplier Standards, ensuring ethical practices, quality products, proper documentation, and patient-centered service. We are dedicated to meeting federal requirements while delivering dependable medical equipment and supplies.',
     imgAlt: 'Man pointing to CPAP screen',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/support+policies/asian-pharmacist-giving-assistance-to-client-in-ph-2025-02-18-01-27-03-utc.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/MEDICARE+DMEPOS+SUPPLIER+STANDARDS.pdf",
@@ -13,7 +13,7 @@ const guides = [
     id: 2,
     title: "Warranty Information",
     blurb:
-      'We believe that all patients receiving services from JKARE should be informed of their rights',
+      'JKARE provides warranty coverage on all eligible medical equipment as per manufacturer terms. We ensure prompt support for repairs or replacements, helping patients receive reliable and worry-free care with every product delivered.',
     imgAlt: 'Woman using nebulizer',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/support+policies/senior-doctor-talking-with-patient-office.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/WARRANTY+INFORMATION.pdf",
@@ -22,7 +22,7 @@ const guides = [
     id: 3,
     title: 'Insurance Information',
     blurb:
-      "You may lodge a complaint without concern for reprisal, discrimination, or unreasonable interruption of service. To place a grievance, please call 305-248-1003 and speak to the Customer Services Supervisor.",
+      "JKARE works with most major insurance providers to help cover the cost of your medical equipment and services. Our team assists with verification, billing, and claims to make your experience smooth and stress-free.",
     imgAlt: 'Woman using nebulizer',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/support+policies/unrecognizable-doctor-extending-digital-tab-anonymous-patient-fill-questionnaire.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/PATIENT+GRIEVANCE+AND+COMPLAINT+PROCEDURE.pdf",
@@ -31,7 +31,7 @@ const guides = [
     id: 4,
     title: 'Prescription Requirements',
     blurb:
-      "You may lodge a complaint without concern for reprisal, discrimination, or unreasonable interruption of service. To place a grievance, please call 305-248-1003 and speak to the Customer Services Supervisor.",
+      "Certain medical equipment and supplies require a valid prescription. At JKARE, we ensure all prescriptions meet federal and insurance guidelines, helping you receive the right products safely, efficiently, and in full compliance.",
     imgAlt: 'Woman using nebulizer',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/support+policies/heathcare-form-insurance-application-concept.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/PATIENT+GRIEVANCE+AND+COMPLAINT+PROCEDURE.pdf",
@@ -40,7 +40,7 @@ const guides = [
     id: 5,
     title: 'Medicare Support',
     blurb:
-      "Advance Directives are forms that say, in advance, what kind of treatment you want or don't want under serious medical conditions. Some conditions, if severe, may make you unable to tell the doctor how you want to be treated at that time. Your Advance Directives will help the doctor to provide the care you would wish to have.",
+      "JKARE provides dedicated Medicare support, assisting with coverage, claims, and eligibility. Our team guides you through the process to ensure you receive the benefits you're entitled to for medical equipment and services.",
     imgAlt: 'Woman using nebulizer',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/support+policies/doctor-doing-their-work-pediatrics-office.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/MAKING+DECISIONS+ABOUT+YOUR+HEALTH+CARE.pdf",

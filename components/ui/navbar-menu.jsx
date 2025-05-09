@@ -14,8 +14,13 @@ const transition = {
 }
 
 export const MenuItem = ({ setActive, active, item, children }) => {
+    const handleDelayedClose = () => {
+    setTimeout(() => {
+      setActive(null);
+    }, 900);
+  };
   return (
-    <div onMouseEnter={() => setActive(item)} className='relative '>
+    <div onMouseEnter={() => setActive(item)} onMouseLeave={() => setActive(null)} className='relative '>
       <motion.p
         transition={{ duration: 0.3 }}
         // Navbar styling Properties
@@ -42,7 +47,7 @@ export const MenuItem = ({ setActive, active, item, children }) => {
                   layout
                   className='w-max h-full p-4 '
                 >
-                  {children}
+                  <div onClick={handleDelayedClose}>{children}</div>
                 </motion.div>
               </motion.div>
             </div>

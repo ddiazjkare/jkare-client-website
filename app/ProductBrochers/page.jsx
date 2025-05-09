@@ -4,7 +4,7 @@ const guides = [
     id: 1,
     title: 'Afflovest (English)',
     blurb:
-      'The AflloVest User Manual contains important SAFETY and TECHICAL DATA. Please keep this manual in a safe... ',
+      'Afflovest is a state-of-the-art wearable therapy device designed to relieve symptoms of chronic respiratory conditions. Using advanced high-frequency chest wall oscillation, it helps clear mucus and improve lung function. Comfortable, easy to use, and effective for home therapy.',
     imgAlt: 'Man pointing to CPAP screen',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/AffloVest%2BTween%2B(4)edit.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/AfflovestEnglish_FINAL.pdf",
@@ -13,7 +13,7 @@ const guides = [
     id: 2,
     title: "Biwaze Airway Clearance System User Manual",
     blurb:
-      'Your Physician Has Prescribed a Nebulizer/Compressor for Your Home Use. The Following Instructions Will Be Explained in Detail at Time of Set-Up. Please Save These General Instructions for Your Reference.',
+      'The Biwaze Airway Clearance System is designed to improve lung health through high-frequency chest wall oscillation. This user manual provides step-by-step instructions for safe and effective use, including setup, maintenance, and troubleshooting tips for optimal performance.',
     imgAlt: 'Woman using nebulizer',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/BiWaze-Clear-group-screen-on-4.png',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/BiWaze+-+Clear_User-Manual_US_Printable.pdf",
@@ -22,7 +22,7 @@ const guides = [
     id: 3,
     title: "Biwaze Clear Quick Hits",
     blurb:
-      'The BiWaze® Clear System delivers oscillating lung expansion (OLE) therapy to help treat and prevent atelectasis, clear retained secretions from deep within the lungs...',
+      'Biwaze Clear Quick Hits are designed to deliver fast, effective airway clearance for patients with chronic respiratory conditions. These quick bursts of high-frequency oscillation help loosen mucus and improve lung function, providing rapid relief and enhancing daily breathing.',
     imgAlt: 'Woman using nebulizer',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/ABM-041524-085.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/BiWaze+-+Clear-Quick+Hits.pdf",
@@ -31,7 +31,7 @@ const guides = [
     id: 4,
     title: "Biwaze Cough User Manual (English)",
     blurb:
-      'The BiWaze® Cough device helps to clear bronchopulmonary secretions from the respiratory system by providing a therapy which mimics a cough. The therapy consists of three phases which mimic a cough; inhale, exhale, and pause phase.',
+      'The Biwaze Cough device is designed to assist with effective airway clearance by simulating a natural cough. This user manual provides detailed instructions for proper use, maintenance, and troubleshooting to ensure optimal device performance and patient comfort.',
     imgAlt: 'Woman using nebulizer',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/porta-medical-produkte-cough-header.png',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/BiWaze+-+Cough+-User+Manual_US_English.pdf",
@@ -64,7 +64,6 @@ const guides = [
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/myairvo2-user-manual-ui-185045490.pdf",
   }
 ];
-
 export default function ProductBrochers() {
   return (
     <GuidesSection

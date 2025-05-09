@@ -35,7 +35,6 @@ const Navbar = () => {
       setIsMobileMenuOpen(false);
     }, 800);
   };
-  
 
   // Fetch product search results
   const searchHandler = async (e) => {
@@ -70,7 +69,7 @@ const Navbar = () => {
     ) {
       setIsSearchDropdownVisible(false);
     }
-  
+
     if (
       userCardRef.current &&
       !userCardRef.current.contains(event.target) &&
@@ -78,7 +77,7 @@ const Navbar = () => {
     ) {
       setIsUserCardOpen(false);
     }
-  
+
     if (
       menuRef.current &&
       !menuRef.current.contains(event.target) &&
@@ -86,7 +85,7 @@ const Navbar = () => {
     ) {
       setIsMobileMenuOpen(false);
     }
-  
+
     if (
       cartRef.current &&
       !cartRef.current.contains(event.target) &&
@@ -183,7 +182,6 @@ const Navbar = () => {
                 </div>
               </div>
             )}
-
           </div>
         </div>
 
@@ -229,8 +227,7 @@ const Navbar = () => {
               <MenuItem
                 setActive={setActive}
                 active={active}
-                item="Patient Resources"
-              >
+                item="Patient Resources">
                 {/* EXACT multi-column layout shown in your screenshot */}
                 <div className="grid grid-cols-5 gap-8 w-[1200px] p-4 rounded-md text-gray-800 font-light">
                   {/* 1st Column */}
@@ -240,10 +237,10 @@ const Navbar = () => {
                     </h4>
                     <hr className="border-gray-300 mb-2" />
                     <div className="flex flex-col space-y-1 text-sm">
-                      <HoveredLink href="/Safety&Emergency">
+                      <HoveredLink href="/Safety&Emergency" >
                         Emergency Planning for the Home Care Patient
                       </HoveredLink>
-                      <HoveredLink href="/Safety&Emergency">
+                      <HoveredLink href="/Safety&Emergency" >
                         How to Make Your Home Safe for Medical Care
                       </HoveredLink>
                     </div>
@@ -327,6 +324,8 @@ const Navbar = () => {
                     </div>
                   </div>
                 </div>
+                
+
               </MenuItem>
               <Link href="/blog">
                 <MenuItem setActive={setActive} active={active} item="Blog" />
@@ -563,7 +562,7 @@ const Navbar = () => {
 
                 {/* ——— 1. Safety & Emergency Planning ——— */}
                 <span className="block font-semibold mt-2">Safety & Emergency Planning</span>
-                <Link href="/Safety&Emergency" onClick={delayedCloseMobileMenu}  className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
+                <Link href="/Safety&Emergency" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Emergency Planning for the Home Care Patient
                 </Link>
                 <Link href="/Safety&Emergency" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
@@ -643,7 +642,7 @@ const Navbar = () => {
               href="/about-us"
               className="block text-gray-700 hover:bg-gray-100 px-3 py-2 rounded"
               onClick={delayedCloseMobileMenu}
-              
+
             >
               About Us
             </Link>

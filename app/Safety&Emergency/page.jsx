@@ -4,7 +4,7 @@ const guides = [
     id: 1,
     title: 'Emergency Planning for the Home Care Patient',
     blurb:
-      'Every patient receiving care or services in the home should think about what they would do in the event of an emergency. Our goal is to help you plan so that we can try to provide you with the best, most consistent service we can during the emergency.',
+      'Emergency planning is essential for home care patients to ensure safety during unexpected events. Proper plans include emergency contacts, medical information, supplies, and caregiver instructions to guarantee continuous care and minimize health risks.',
     imgAlt: 'Man pointing to CPAP screen',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/support+policies/we-have-just-what-the-doctor-prescribed-2025-04-05-21-38-17-utc.jpg',
     link: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/EMERGENCY+PLANNING+FOR+THE+HOME+CARE+PATIENT.pdf',

@@ -4,7 +4,7 @@ const guides = [
     id: 1,
     title: 'Customer Instruction Guide for CPAP & BiPAP',
     blurb:
-      'Congratulations on making the move toward better sleep and overall improved health by becoming a CPAP/BiPAP user. Thank you for choosing JKARE to be your provider. ',
+      'JKARE provides detailed customer instruction guides for CPAP and BiPAP machines, covering setup, usage, maintenance, and troubleshooting. Our goal is to ensure optimal comfort and effectiveness for patients managing sleep apnea. ',
     imgAlt: 'Man pointing to CPAP screen',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/support+policies/images+(2).jpg',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/Customer+Instruction+Guide+for+CPAP+%26+BiPAP.pdf",
@@ -13,7 +13,7 @@ const guides = [
     id: 2,
     title: "Nebulizer/Compressor Therapy & Cleaning Instructions",
     blurb:
-      'Your Physician Has Prescribed a Nebulizer/Compressor for Your Home Use. The Following Instructions Will Be Explained in Detail at Time of Set-Up. Please Save These General Instructions for Your Reference.',
+      'JKARE offers comprehensive instructions for using and cleaning nebulizers and compressors. Regular cleaning and proper usage ensure effective therapy and prolong the life of your equipment. Follow our step-by-step guide for optimal performance and hygiene.',
     imgAlt: 'Woman using nebulizer',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/support+policies/images+(1).jpg',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/Resources+-+Nebulizer+Instructions.pdf",
