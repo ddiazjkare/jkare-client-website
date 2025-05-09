@@ -5,8 +5,8 @@ import Stripe from "stripe";
 // import { transaction } from "../../../lib/shippo";
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 function generateOrderString() {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  let result = '';
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let result = "";
   for (let i = 0; i < 8; i++) {
     result += chars.charAt(Math.floor(Math.random() * chars.length));
   }
@@ -20,17 +20,22 @@ export const POST = async (req) => {
     // );
     // checkout_session = await checkout_session.json();
 
-    const checkout_session = await stripe.checkout.sessions.retrieve(body.sessionID, {
-      expand: ['line_items'],
-    });
+    const checkout_session = await stripe.checkout.sessions.retrieve(
+      body.sessionID,
+      {
+        expand: ["line_items"],
+      }
+    );
     const customer = checkout_session.customer_details;
     let user_info = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/user/info/${customer.email}`
     );
     const user = await user_info.json();
 
-    const paymentIntent = await stripe.paymentIntents.retrieve(checkout_session.payment_intent);
-    
+    const paymentIntent = await stripe.paymentIntents.retrieve(
+      checkout_session.payment_intent
+    );
+
     if (user.message == "Not Found") {
       await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/create`, {
         method: "POST",
@@ -41,9 +46,9 @@ export const POST = async (req) => {
     const date = new Date();
 
     // const trans = await transaction(checkout_session.metadata.shipping_rate);
-
+    const orderNumber = `ORD-${generateOrderString()}`;
     const orderParams = {
-      order_id: `ORD-${generateOrderString()}`,
+      order_id: orderNumber,
       checkout_session: body.sessionID,
       shipping_rate: checkout_session.metadata.shipping_rate,
       // carrier: trans.carrier,
@@ -105,7 +110,9 @@ export const POST = async (req) => {
         image: product.product.prod_images[0],
         quantity: item.quantity,
         price: (item.amount_total / 100).toFixed(2),
-        prescription_required: product.product._id in presItems || presItems[product.product._id] == "",
+        prescription_required:
+          product.product._id in presItems ||
+          presItems[product.product._id] == "",
         prescription_file: presItems[product.product._id] ?? "",
       });
     }
@@ -134,13 +141,13 @@ export const POST = async (req) => {
     <p class="mb-4">Hi ${customer.name},</p>
 
     <p class="mb-4">
-      This email confirms that your order (#${orderCrt._id}) has been
+      This email confirms that your order (#${orderNumber}) has been
       successfully processed and is now complete.
     </p>
 
     <h2 class="text-xl font-semibold mb-2">Order Summary:</h2>
     <ul class="list-disc list-inside mb-4">
-      <li>Order Number: #${orderCrt._id}</li>
+      <li>Order Number: #${orderNumber}</li>
       <li>Order Date: ${orderParams.order_date}</li>
       <li>Shipping Address: ${ship.line1}, ${
       ship.line2 ? `${ship.line2},` : ""
