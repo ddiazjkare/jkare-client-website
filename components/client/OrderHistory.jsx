@@ -5,7 +5,6 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Alert from "../../components/ui/Alert";
 
-/* --- example static tracking data (replace with real-time API data in production) --- */
 const staticTrackingData = {
   tracking_number: "SHIPPO_TRANSIT",
   carrier: "shippo",
