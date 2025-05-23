@@ -44,7 +44,7 @@ export const POST = async (req) => {
               amount: total_amount < threshold ? shippingAmount : 0, 
               currency: "usd",
             },
-            display_name: selectedRate.servicelevel.display_name, // Shipping method name (e.g., "UPS® Ground")
+            display_name: selectedRate.servicelevel.display_name ?? "Shipping", // Shipping method name (e.g., "UPS® Ground")
             delivery_estimate: {
               minimum: {
                 unit: "business_day",

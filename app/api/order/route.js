@@ -117,10 +117,12 @@ export const POST = async (req) => {
       });
     }
 
-    const orderCrt = await Order.create(orderParams);
+    await Order.create(orderParams);
 
     const ship = orderParams.shipping_address;
     const bill = orderParams.billing_address;
+
+    console.log("ornder", orderNumber);
 
     const html = `<!DOCTYPE html>
 <html lang="en">
