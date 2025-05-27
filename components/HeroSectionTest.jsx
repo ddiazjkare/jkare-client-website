@@ -8,7 +8,7 @@ function HeroSection() {
       className="relative w-full h-screen flex items-center justify-center sm:justify-start bg-cover bg-center bg-no-repeat"
       style={{
         backgroundImage:
-          "url('https://s3.ap-south-1.amazonaws.com/medical.jkare.files/8349198.jpg')",
+          "url('https://s3.ap-south-1.amazonaws.com/jkare.data/hero+section+background+.jpg')",
       }}
     >
          {/* <div className="absolute inset-0 w-full h-full">

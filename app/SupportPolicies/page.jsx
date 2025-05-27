@@ -7,7 +7,7 @@ const guides = [
       'JKARE complies with all Medicare DMEPOS Supplier Standards, ensuring ethical practices, quality products, proper documentation, and patient-centered service. We are dedicated to meeting federal requirements while delivering dependable medical equipment and supplies.',
     imgAlt: 'Man pointing to CPAP screen',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/support+policies/asian-pharmacist-giving-assistance-to-client-in-ph-2025-02-18-01-27-03-utc.jpg',
-    link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/MEDICARE+DMEPOS+SUPPLIER+STANDARDS.pdf",
+    link: "https://s3.ap-south-1.amazonaws.com/jkare.data/patient+resources+files/MEDICARE+DMEPOS+SUPPLIER+STANDARDS.pdf",
   },
   {
     id: 2,
@@ -16,7 +16,7 @@ const guides = [
       'JKARE provides warranty coverage on all eligible medical equipment as per manufacturer terms. We ensure prompt support for repairs or replacements, helping patients receive reliable and worry-free care with every product delivered.',
     imgAlt: 'Woman using nebulizer',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/support+policies/senior-doctor-talking-with-patient-office.jpg',
-    link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/WARRANTY+INFORMATION.pdf",
+    link: "https://s3.ap-south-1.amazonaws.com/jkare.data/patient+resources+files/WARRANTY+INFORMATION.pdf",
   },
   {
     id: 3,

@@ -18,7 +18,7 @@ const categories = [
   },
   {
     title: 'PAP Devices',
-    img: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/luna-travelpap-auto-cpap-machine-removebg-preview.png',
+    img: 'https://s3.ap-south-1.amazonaws.com/jkare.data/papdevice+home+page.png',
     href: '/category/Pap%20Devices',
   },
   {

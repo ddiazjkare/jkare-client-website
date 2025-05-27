@@ -47,7 +47,7 @@ export default function AboutUs() {
             />
             {/* foreground photo */}
             <img
-              src="https://s3.ap-south-1.amazonaws.com/medical.jkare.files/image.jpeg"
+              src="https://s3.ap-south-1.amazonaws.com/jkare.data/WhatsApp+Image+2025-05-22+at+14.12.20_3017a96a.jpg"
               alt="JKARE facility exterior"
               className="relative z-10 h-[340px] w-[440px] object-cover"
               

@@ -31,7 +31,7 @@ export default function Footer() {
       className="relative isolate text-white font-montserrat"
       style={{
         backgroundImage:
-          "url('https://s3.ap-south-1.amazonaws.com/medicom.hexerve/footer+base+image+1.png')",
+          "url('https://s3.ap-south-1.amazonaws.com/jkare.data/footer+image.jpeg')",
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
@@ -52,7 +52,7 @@ export default function Footer() {
           {/* logo + tagline */}
           <div className="text-center lg:text-left max-w-lg mx-auto lg:mx-0">
             <img
-              src="https://images.squarespace-cdn.com/content/v1/60aefe75c1a8f258e529fbac/1622081456984-G5MG4OZZJFVIM3R01YN7/jkare-2.png?format=1500w"
+              src="https://s3.ap-south-1.amazonaws.com/jkare.data/jkarelogo.png"
               alt="JKARE logo"
               className="w-36 sm:w-36 mx-auto lg:mx-0 mb-2"
             />

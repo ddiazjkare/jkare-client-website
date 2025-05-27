@@ -7,7 +7,7 @@ const guides = [
       'JKARE provides detailed customer instruction guides for CPAP and BiPAP machines, covering setup, usage, maintenance, and troubleshooting. Our goal is to ensure optimal comfort and effectiveness for patients managing sleep apnea. ',
     imgAlt: 'Man pointing to CPAP screen',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/support+policies/images+(2).jpg',
-    link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/Customer+Instruction+Guide+for+CPAP+%26+BiPAP.pdf",
+    link: "https://s3.ap-south-1.amazonaws.com/jkare.data/patient+resources+files/Customer+Instruction+Guide+for+CPAP+%26+BiPAP.pdf",
   },
   {
     id: 2,

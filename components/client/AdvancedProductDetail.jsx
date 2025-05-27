@@ -274,7 +274,7 @@ const AdvancedProductDetail = ({ data }) => {
                 <img
                   className="badge-image text-gray-50 w-20"
                   loading="lazy"
-                  src="https://s3.ap-south-1.amazonaws.com/medicom.hexerve/Icons/Prescription.svg"
+                  src="https://s3.ap-south-1.amazonaws.com/jkare.data/poduct+details+icons/Prescription.svg"
                   alt="Prescription Required"
                 />
                 <div className="badge-title lg:text-sm sm: text-xs text-center">
@@ -286,7 +286,7 @@ const AdvancedProductDetail = ({ data }) => {
               <div className="badge flex flex-col items-center  sm:w-36 w-16">
                 <img
                   loading="lazy"
-                  src={`https://s3.ap-south-1.amazonaws.com/medicom.hexerve/Icons/${warrantyYears}.svg`}
+                  src={`https://s3.ap-south-1.amazonaws.com/jkare.data/poduct+details+icons/${warrantyYears}.svg`}
                   alt={`${warrantyYears} Year Warranty`}
                   className="badge-image w-20"
                 />
@@ -301,7 +301,7 @@ const AdvancedProductDetail = ({ data }) => {
                 <img
                   className="badge-image w-20"
                   loading="lazy"
-                  src="https://s3.ap-south-1.amazonaws.com/medicom.hexerve/Icons/Free+Shipping.svg"
+                  src="https://s3.ap-south-1.amazonaws.com/jkare.data/poduct+details+icons/Free+Shipping.svg"
                   alt="Free Shipping Over $99"
                 />
                 <div className="badge-title lg:text-sm text-xs text-center ">
@@ -314,7 +314,7 @@ const AdvancedProductDetail = ({ data }) => {
                 <img
                   className="badge-image w-20"
                   loading="lazy"
-                  src="https://s3.ap-south-1.amazonaws.com/medicom.hexerve/Icons/Pay+Overtime.svg"
+                  src="https://s3.ap-south-1.amazonaws.com/jkare.data/poduct+details+icons/Pay+Overtime.svg"
                   alt="Pay Over Time"
                 />
                 <div className="badge-title lg:text-sm text-xs text-center">

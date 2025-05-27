@@ -50,15 +50,15 @@ const Login = () => {
   return (
     <div
       className="flex min-h-screen items-center justify-end bg-cover bg-center overflow-hidden"
-      style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/medicom.hexerve/login2.png')" }}
+      style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/jkare.data/loginpage+background.jpg')" }}
     >
       {errMsg && <Alert message={errMsg} closeHandler={() => setErrMsg(null)} />}
       {/* Background image for mobiles */}
       <div
         className="lg:hidden absolute inset-0 z-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/medicom.hexerve/login.png')" }}
+        style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/jkare.data/loginpage+background.jpg')" }}
       ></div>
-      <div className="relative p-8 mx-8 rounded-lg max-w-md w-full z-10 lg:mr-32 border-2 border-white shadow-2xl bg-black/50 backdrop-blur-sm transition-transform duration-500 ease-out transform hover:scale-105">
+      <div className="relative p-8 mx-8 rounded-lg max-w-md w-full z-10 lg:mr-32 border-2 border-white shadow-2xl bg-black/10 backdrop-blur-sm transition-transform duration-500 ease-out transform hover:scale-105">
         <h2 className="text-4xl font-bold mb-6 text-center text-white">
           Log in
         </h2>
