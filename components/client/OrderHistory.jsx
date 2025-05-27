@@ -152,7 +152,7 @@ function OrderHistory({ orders = [], email }) {
       )}
 
       {/* --- header --- */}
-      <h1 className="text-2xl md:text-3xl font-bold mb-4 border-b-2 border-gray-300 pb-2">
+      <h1 className="text-2xl md:text-3xl font-bold my-4 border-b-2 border-gray-300 pb-2">
         Your Orders
       </h1>
 
@@ -335,7 +335,7 @@ function OrderHistory({ orders = [], email }) {
         /* -------- no orders -------- */
         <div className="flex flex-col items-center justify-center">
           <Image
-            src="https://s3.ap-south-1.amazonaws.com/medicom.hexerve/removing-goods-from-basket-refusing-purchase-changing-decision-item-deletion-emptying-trash-online-shopping-app-laptop-user-cartoon-character_335657-1172.avif"
+            src="https://s3.ap-south-1.amazonaws.com/jkare.data/no+orders.jpg"
             alt="No orders"
             width={250}
             height={250}

@@ -66,10 +66,10 @@ export default function BorderfreeStyleCheckout() {
     fetchEnvData();
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     window.dispatchEvent(new CustomEvent('closeCart'));
-  },[])
-  
+  }, [])
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
@@ -304,7 +304,7 @@ export default function BorderfreeStyleCheckout() {
     if (!envData) return;
     const threshold = parseFloat(envData.offer_price || 0);
     const qualifies = itemSubtotal >= threshold;
-  
+
     if (qualifies && !isFreeShipping) {
       setIsFreeShipping(true);
       toast.success("Hurray! You got free shipping!");
@@ -317,29 +317,42 @@ export default function BorderfreeStyleCheckout() {
   }, [envData, itemSubtotal, isFreeShipping]);
 
   // Automatic free shipping row
-  let displayedRates = shipment?.rates || [];
-  if (isFreeShipping) {
+  let displayedRates = shipment?.rates ? [...shipment.rates] : [];
+  let randomRateId = "";
+  if (isFreeShipping && shipment?.rates?.length > 0) {
+    const randomIndex = Math.floor(Math.random() * shipment.rates.length);
+    randomRateId = shipment.rates[randomIndex].object_id;
     const freeRow = {
-      object_id: "jkare_free_shipping",
+      object_id: randomRateId, // Use a real rate id
       servicelevel: { display_name: "JKARE Shipment" },
-      estimated_days: 7, // "1 week approx~"
+      estimated_days: 7,
       amount: "0.00",
+      isFree: true, // Custom flag for UI logic
     };
+    // Only add the free row ONCE at the top
     displayedRates = [freeRow, ...displayedRates];
   }
 
   // If we have free shipping, default-select it if not already chosen
   useEffect(() => {
-    if (isFreeShipping && (!selectedRate || selectedRate.object_id !== "jkare_free_shipping")) {
+    if (
+      isFreeShipping &&
+      shipment?.rates?.length > 0 &&
+      (!selectedRate || !selectedRate.isFree)
+    ) {
+      // Pick a random rate id for the free row
+      const randomIndex = Math.floor(Math.random() * shipment.rates.length);
+      const randomRate = shipment.rates[randomIndex];
       setSelectedRate({
-        object_id: "jkare_free_shipping",
+        object_id: randomRate.object_id,
         servicelevel: { display_name: "JKARE Shipment" },
         estimated_days: 7,
         amount: "0.00",
+        isFree: true,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFreeShipping]);
+  }, [isFreeShipping, shipment]);
 
   // Calculate shipping cost
   const shippingCost = selectedRate ? parseFloat(selectedRate.amount) : 0;
@@ -372,14 +385,14 @@ export default function BorderfreeStyleCheckout() {
         theme="colored"
       />
       {showConfetti && (
-      <Confetti
-        width={window.innerWidth}
-        height={window.innerHeight}
-        numberOfPieces={500}
-        gravity={0.1}
-        recycle={false}
-      />
-    )}
+        <Confetti
+          width={window.innerWidth}
+          height={window.innerHeight}
+          numberOfPieces={500}
+          gravity={0.1}
+          recycle={false}
+        />
+      )}
 
       <div className="max-w-7xl mx-auto mt-36 px-4 md:px-0 mb-12">
         <h1 className="text-2xl md:text-3xl font-extrabold text-gray-800 mb-2 flex items-center gap-2">
@@ -586,16 +599,15 @@ export default function BorderfreeStyleCheckout() {
               </h2>
 
               <p className="text-sm text-gray-500 mb-2">
-                Shipping rates are automatically fetched. 
+                Shipping rates are automatically fetched.
               </p>
 
               {/* If you still want a "Refresh" button: */}
               <button
                 onClick={fetchRates}
                 disabled={isFetchingRates}
-                className={`bg-green-600 hover:bg-green-700 text-white font-medium px-5 py-2 rounded-md flex items-center gap-2 transition-colors duration-200 ${
-                  isFetchingRates ? "opacity-75 cursor-not-allowed" : ""
-                }`}
+                className={`bg-green-600 hover:bg-green-700 text-white font-medium px-5 py-2 rounded-md flex items-center gap-2 transition-colors duration-200 ${isFetchingRates ? "opacity-75 cursor-not-allowed" : ""
+                  }`}
               >
                 {isFetchingRates && (
                   <svg
@@ -621,18 +633,34 @@ export default function BorderfreeStyleCheckout() {
                       </tr>
                     </thead>
                     <tbody>
-                      {displayedRates.map((rate) => {
-                        const isSelected = selectedRate?.object_id === rate.object_id;
+                      {displayedRates.map((rate, idx) => {
+                        const isSelected = selectedRate?.object_id === rate.object_id && selectedRate?.amount === rate.amount;
                         const cost = parseFloat(rate.amount);
                         const days = rate.estimated_days;
 
                         return (
                           <tr
-                            key={rate.object_id}
-                            onClick={() => setSelectedRate(rate)}
-                            className={`border-b cursor-pointer transition-colors duration-150 ${
-                              isSelected ? "bg-blue-50" : "hover:bg-gray-50"
-                            }`}
+                            key={rate.isFree ? "free-shipping-row" : rate.object_id}
+                            onClick={() => {
+                              if (rate.isFree) {
+                                // When user clicks free row, pick a new random id
+                                if (shipment?.rates?.length > 0) {
+                                  const randomIndex = Math.floor(Math.random() * shipment.rates.length);
+                                  const randomRate = shipment.rates[randomIndex];
+                                  setSelectedRate({
+                                    object_id: randomRate.object_id,
+                                    servicelevel: { display_name: "JKARE Shipment" },
+                                    estimated_days: 7,
+                                    amount: "0.00",
+                                    isFree: true,
+                                  });
+                                }
+                              } else {
+                                setSelectedRate(rate);
+                              }
+                            }}
+                            className={`border-b cursor-pointer transition-colors duration-150 ${isSelected ? "bg-blue-50" : "hover:bg-gray-50"
+                              }`}
                           >
                             <td className="py-3 px-3">
                               <div className="flex items-center">
@@ -653,7 +681,7 @@ export default function BorderfreeStyleCheckout() {
                                     {rate.servicelevel?.token?.includes("EXPRESS")
                                       ? ""
                                       : ""}
-                                      {/* ? "No additional import charges at delivery"
+                                    {/* ? "No additional import charges at delivery"
                                       : "No additional import charges at delivery"} */}
                                   </div>
                                 </div>
@@ -759,9 +787,8 @@ export default function BorderfreeStyleCheckout() {
               <button
                 onClick={handleProceedToPayment}
                 disabled={!selectedRate || isCreatingShipment}
-                className={`bg-blue-600 hover:bg-blue-700 text-white text-xl font-medium px-5 py-4 rounded-md flex items-center justify-center w-full gap-2 transition-colors duration-200 ${
-                  (!selectedRate || isCreatingShipment) ? "opacity-80 cursor-not-allowed" : ""
-                }`}
+                className={`bg-blue-600 hover:bg-blue-700 text-white text-xl font-medium px-5 py-4 rounded-md flex items-center justify-center w-full gap-2 transition-colors duration-200 ${(!selectedRate || isCreatingShipment) ? "opacity-80 cursor-not-allowed" : ""
+                  }`}
               >
                 {isCreatingShipment && (
                   <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full " />

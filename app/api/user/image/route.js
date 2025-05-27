@@ -6,7 +6,7 @@ export const POST = async (req) => {
     const data = await req.formData();
     const file = data.get("profile");
     const byteData = await file.arrayBuffer();
-    const Bucket = "medicom.hexerve";
+    const Bucket = "jkare.data";
     const Body = Buffer.from(byteData);
     // const [file_name, extension] = file.name.split(".");
     const lastDot = file.name.lastIndexOf(".");

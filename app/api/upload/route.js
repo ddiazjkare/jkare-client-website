@@ -12,13 +12,13 @@ export const POST = async req => {
     const newFileName = `px&inc/${file_name}_${new Date().getTime()}.${extension}`;
     const s3 = new S3Client();
     const params = {
-      Bucket: "medicom.hexerve", // Replace with your S3 bucket name
+      Bucket: "jkare.data", 
       Key: newFileName, 
       Body: fileBuffer,
       ContentType: fileType,
     };
     await s3.send(new PutObjectCommand(params));
-    const fileURL = `https://medicom.hexerve.s3.${process.env.AWS_REGION}.amazonaws.com/${newFileName}`;
+    const fileURL = `https://s3.${process.env.AWS_REGION}.amazonaws.com/${params.Bucket}/${params.Key}`;
     return NextResponse.json({ fileURL }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });

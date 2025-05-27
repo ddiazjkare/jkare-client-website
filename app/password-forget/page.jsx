@@ -37,17 +37,32 @@ const Forgot = () => {
 
   return (
     <div
-      className="flex min-h-screen items-center justify-end bg-cover bg-center overflow-hidden"
-      style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/medicom.hexerve/33.png')" }}
+      className="flex min-h-screen items-center justify-center bg-cover bg-center overflow-hidden"
+      style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/jkare.data/admin+login+background.jpg')" }}
     >
+      {/* Logo */}
+    <img
+      src="https://images.squarespace-cdn.com/content/v1/60aefe75c1a8f258e529fbac/1622081456984-G5MG4OZZJFVIM3R01YN7/jkare-2.png?format=1500w"
+      alt="JKare Logo"
+      className="absolute top-6 left-6 h-12 w-auto z-20 lg:top-8 lg:left-8
+        lg:block
+        hidden
+        "
+    />
+    {/* Mobile logo */}
+    <img
+      src="https://images.squarespace-cdn.com/content/v1/60aefe75c1a8f258e529fbac/1622081456984-G5MG4OZZJFVIM3R01YN7/jkare-2.png?format=1500w"
+      alt="JKare Logo"
+      className="absolute top-6 left-1/2 -translate-x-1/2 h-10 w-auto z-20 block lg:hidden"
+    />
       <ToastContainer />
       {/* Background image for mobiles */}
       <div
         className="lg:hidden absolute inset-0 z-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/medicom.hexerve/login.png')" }}
+        style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/jkare.data/admin+login+background.jpg')" }}
       ></div>
 
-      <div className="relative p-8 rounded-lg max-w-md w-full z-10 lg:mr-32 border-2 border-white shadow-xl shadow-teal-800/80 onject-center">
+      <div className="relative p-8 mx-4 rounded-lg max-w-md w-full z-10 lg:mr-32 border-2 border-white shadow-xl shadow-teal-800/80 onject-center">
         <h2 className="text-4xl font-bold mb-6 text-center text-white">
           Forgot Password
         </h2>
@@ -62,12 +77,12 @@ const Forgot = () => {
               type="email"
               value={email}
               onChange={({ target }) => setEmail(target.value)}
-              placeholder="Enter your Email"
+              placeholder="Enter your Registered Email"
             />
           </div>
           <div>
             <input
-              className="bg-teal-500 shadow-inner  text-white hover:bg-white  hover:text-teal-500 font-bold py-2 px-4 rounded borderhover:border-transparent focus:outline-none focus:shadow-outline w-full"
+              className="bg-customBlue shadow-inner  text-white hover:bg-white  hover:text-customBlue font-bold py-2 px-4 rounded borderhover:border-transparent focus:outline-none focus:shadow-outline w-full"
               type="submit"
               value="Send Reset Link"
             />
@@ -75,7 +90,7 @@ const Forgot = () => {
         </form>
         <div className="flex items-center justify-center mt-6">
           <a
-            className="inline-block align-baseline font-bold text-sm text-white hover:text-teal-600"
+            className="inline-block align-baseline font-bold text-sm text-white hover:text-customPink"
             href="/login"
           >
             Back to Login

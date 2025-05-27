@@ -49,14 +49,29 @@ const Login = () => {
 
   return (
     <div
-      className="flex min-h-screen items-center justify-end bg-cover bg-center overflow-hidden"
-      style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/jkare.data/loginpage+background.jpg')" }}
+      className="flex min-h-screen items-center justify-center bg-cover bg-center overflow-hidden"
+      style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/jkare.data/admin+login+background.jpg')" }}
     >
+       {/* Logo */}
+    <img
+      src="https://s3.ap-south-1.amazonaws.com/jkare.data/jkarelogo.png"
+      alt="JKare Logo"
+      className="absolute top-6 left-6 h-16 w-auto z-20 lg:top-8 lg:left-8
+        lg:block
+        hidden
+        "
+    />
+    {/* Mobile logo */}
+    <img
+      src="https://s3.ap-south-1.amazonaws.com/jkare.data/jkarelogo.png"
+      alt="JKare Logo"
+      className="absolute top-10 left-1/2 -translate-x-1/2 h-16 w-auto z-20 block lg:hidden"
+    />
       {errMsg && <Alert message={errMsg} closeHandler={() => setErrMsg(null)} />}
       {/* Background image for mobiles */}
       <div
         className="lg:hidden absolute inset-0 z-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/jkare.data/loginpage+background.jpg')" }}
+        style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/jkare.data/admin+login+background.jpg')" }}
       ></div>
       <div className="relative p-8 mx-8 rounded-lg max-w-md w-full z-10 lg:mr-32 border-2 border-white shadow-2xl bg-black/10 backdrop-blur-sm transition-transform duration-500 ease-out transform hover:scale-105">
         <h2 className="text-4xl font-bold mb-6 text-center text-white">
