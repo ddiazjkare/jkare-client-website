@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic';
 
 async function page({ params }) {
   let data = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}product?category=${params.id}`, {
+    `${process.env.NEXT_PUBLIC_API_URL}/product?category=${params.id}`, {
       next: { revalidate: 60 }, 
     }
   );

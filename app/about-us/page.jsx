@@ -16,7 +16,7 @@ const AboutPage = () => {
       {/* -------------------------------------------------- */}
       <div className="relative h-[450px] w-full">
         <Image
-          src="https://s3.ap-south-1.amazonaws.com/medicom.hexerve/Shutterstock%2B350925269.jpg"
+          src="https://s3.ap-south-1.amazonaws.com/jkare.data/kid+waving+hair.jpg"
           alt="About JKARE Hero"
           layout="fill"
           objectFit="cover"
@@ -32,7 +32,7 @@ const AboutPage = () => {
       {/* -------------------------------------------------- */}
       {/* WHY JKARE  +  OUR STORY */}
       {/* -------------------------------------------------- */}
-      <section className="py-20 px-6 md:px-10 lg:px-16 xl:px-20 bg-[url('https://images.unsplash.com/photo-1587500152349-954f5eca2e7d?auto=format&fit=crop&w=1950&q=80')] bg-no-repeat bg-cover bg-fixed bg-center/cover/50 after:content-[''] after:absolute after:inset-0 after:bg-white/90 relative">
+      <section className="py-20 px-6 md:px-10 lg:px-16 xl:px-20 bg-[url('https://s3.ap-south-1.amazonaws.com/jkare.data/kid+waving+hair.jpg')] bg-no-repeat bg-cover bg-fixed bg-center/cover/50 after:content-[''] after:absolute after:inset-0 after:bg-white/90 relative">
         <div className="relative z-10 max-w-6xl mx-auto space-y-20">
           {/* WHY JKARE */}
           <div className="bg-gradient-to-r from-[#E0F7FF] to-[#F3FBFF] border-l-8 border-customBlue rounded-2xl shadow-xl p-10 md:p-14">
@@ -116,7 +116,7 @@ const AboutPage = () => {
 
               <div className="md:w-1/3 mt-8 md:mt-0 flex justify-center">
                 <Image
-                  src="https://s3.ap-south-1.amazonaws.com/medicom.hexerve/certificado12.jpg"
+                  src="https://s3.ap-south-1.amazonaws.com/jkare.data/ACHC+Logo.jpg"
                   alt="ACHC Logo"
                   width={220}
                   height={220}

@@ -215,7 +215,7 @@ const Products = ({ productList, brands, selectedBrand = null }) => {
           ) : (
             <div className="text-center lg:w-[60vw] lg:h-[50vh] mt-5 flex items-center justify-center">
               <Image
-                src="https://s3.ap-south-1.amazonaws.com/medicom.hexerve/data-search-not-found-concept-vector-36073021_1-removebg-preview.png"
+                src="https://s3.ap-south-1.amazonaws.com/jkare.data/no+orders.jpg"
                 height={600}
                 width={500}
                 alt="not found"

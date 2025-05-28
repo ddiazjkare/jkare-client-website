@@ -8,8 +8,9 @@ export const generateMetadata = () => {
 
 const fetchApi = async (id) => {
   let data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product/${id}`, {
-    // next: { revalidate: 60 }, 
+    cache: 'no-store'
   });
+
   return await data.json();
 };
 
