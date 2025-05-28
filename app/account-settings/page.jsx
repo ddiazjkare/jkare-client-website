@@ -83,10 +83,11 @@ const EditProfile = () => {
   const [activeOption, setActiveOption] = useState("/profile-detail");
   const [phone, setPhone] = useState(localUser ? localUser.phone : "");
   const [address, setAddress] = useState(localUser ? localUser.address : {});
+  const [loading, setLoading] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState(
     localUser?.image ??
-    "https://s3.ap-south-1.amazonaws.com/medicom.hexerve/profilelogo.png"
-  ); // Default profile photo
+    "https://s3.ap-south-1.amazonaws.com/jkare.data/default_user_profile.jpg"
+  );
   const [file, setFile] = useState(null);
 
   const { data: session, update, status } = useSession();
@@ -139,9 +140,9 @@ const EditProfile = () => {
   };
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
     try {
-      e.preventDefault();
-
       if (
         name === "" ||
         phone === "" ||
@@ -163,9 +164,6 @@ const EditProfile = () => {
       formData.append("fullName", name);
       formData.append("address", JSON.stringify(address));
       formData.append("phone", phone);
-      // formData.append("updatedAt", new Date().toLocaleString());
-      // formData.append("createdAt", localUser.createdAt);
-
       const res = await fetch(`/api/user/update/${localUser.username}`, {
         method: "PUT",
         body: formData,
@@ -194,155 +192,167 @@ const EditProfile = () => {
     } catch (err) {
       console.error("err", err);
     }
+    finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="w-full mt-36 mb-14 font-montserrat flex items-center justify-center">
       <ToastContainer />
-        {/* Edit Profile Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 border-2 border-black">
-            {/* Profile Photo Section */}
-            <div className="bg-gradient-to-r from-customPink/80 to-gray-100 p-8 flex flex-col items-center text-white">
-              <img
-                src={profilePhoto}
-                alt="Profile Photo"
-                className="rounded-full w-40 h-40 mb-4 object-cover shadow-lg border-4 border-white"
-              />
-              <button
-                onClick={triggerPhotoUpload}
-                className="bg-white text-customPink font-medium py-2 px-6 rounded-full shadow-md hover:bg-gray-100"
-              >
-                Change Photo
-              </button>
+      {/* Edit Profile Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 border-2 border-black">
+        {/* Profile Photo Section */}
+        <div className="bg-gradient-to-r from-customPink/80 to-gray-100 p-8 flex flex-col items-center text-white">
+          <img
+            src={profilePhoto}
+            alt="Profile Photo"
+            className="rounded-full w-40 h-40 mb-4 object-cover shadow-lg border-4 border-white"
+          />
+          <button
+            onClick={triggerPhotoUpload}
+            className="bg-white text-customPink font-medium py-2 px-6 rounded-full shadow-md hover:bg-gray-100"
+          >
+            Change Photo
+          </button>
+          <input
+            type="file"
+            id="profilePhotoInput"
+            accept="image/*"
+            className="hidden"
+            onChange={handlePhotoChange}
+          />
+        </div>
+        {/* Form Section */}
+        <div className="col-span-2 p-8">
+          <h2 className="text-3xl font-semibold text-gray-800 mb-6">Edit Profile</h2>
+          <form encType="multipart/form-data" onSubmit={handleSubmit} className="space-y-6">
+            {/* Name and Phone Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-gray-600 mb-2 font-medium">Name</label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={handleNameChange}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-customPink focus:outline-none"
+                  placeholder="Enter your full name"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-600 mb-2 font-medium">Phone</label>
+                <input
+                  type="text"
+                  value={phone}
+                  onChange={handlePhoneChange}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-customPink focus:outline-none"
+                  placeholder="Enter your phone number"
+                />
+              </div>
+            </div>
+            {/* Address Section */}
+            <div>
+              <label className="block text-gray-600 mb-1">
+                Address Line 1
+              </label>
               <input
-                type="file"
-                id="profilePhotoInput"
-                accept="image/*"
-                className="hidden"
-                onChange={handlePhotoChange}
+                type="text"
+                value={address?.line1}
+                name="line1"
+                onChange={handleAddressChange}
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-customPink focus:outline-none"
+                placeholder="Address line 1"
               />
             </div>
-            {/* Form Section */}
-            <div className="col-span-2 p-8">
-              <h2 className="text-3xl font-semibold text-gray-800 mb-6">Edit Profile</h2>
-              <form encType="multipart/form-data" onSubmit={handleSubmit} className="space-y-6">
-                {/* Name and Phone Section */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-gray-600 mb-2 font-medium">Name</label>
-                    <input
-                      type="text"
-                      value={name}
-                      onChange={handleNameChange}
-                      className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-customPink focus:outline-none"
-                      placeholder="Enter your full name"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-600 mb-2 font-medium">Phone</label>
-                    <input
-                      type="text"
-                      value={phone}
-                      onChange={handlePhoneChange}
-                      className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-customPink focus:outline-none"
-                      placeholder="Enter your phone number"
-                    />
-                  </div>
-                </div>
-                {/* Address Section */}
-                <div>
-                  <label className="block text-gray-600 mb-1">
-                    Address Line 1
-                  </label>
-                  <input
-                    type="text"
-                    value={address?.line1}
-                    name="line1"
-                    onChange={handleAddressChange}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-customPink focus:outline-none"
-                    placeholder="Address line 1"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-600 mb-1">
-                    {" "}
-                    Address Line 2
-                  </label>
-                  <input
-                    type="text"
-                    value={address?.line2}
-                    name="line2"
-                    onChange={handleAddressChange}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-customPink focus:outline-none"
-                    placeholder="Address line 2"
-                  />
-                </div>
-                {/* City, State, Zip, Country Section */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-gray-600 mb-2 font-medium">City</label>
-                    <input
-                      type="text"
-                      name="city"
-                      value={address?.city}
-                      onChange={handleAddressChange}
-                      className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-customPink focus:outline-none"
-                      placeholder="Enter city"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-600 mb-2 font-medium">State</label>
-                    <input
-                      type="text"
-                      name="state"
-                      value={address?.state}
-                      onChange={handleAddressChange}
-                      className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-customPink focus:outline-none"
-                      placeholder="Enter state"
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-gray-600 mb-2 font-medium">Zip Code</label>
-                    <input
-                      type="text"
-                      name="postal_code"
-                      value={address?.postal_code}
-                      maxLength={6}
-                      onChange={handleAddressChange}
-                      className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-customPink focus:outline-none"
-                      placeholder="Enter postal code"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-600 mb-2 font-medium">Country</label>
-                    <input
-                      type="text"
-                      name="country"
-                      value={address?.country}
-                      onChange={handleAddressChange}
-                      className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-customPink focus:outline-none"
-                      placeholder="Enter country"
-                    />
-                  </div>
-                </div>
-                {/* Submit Button */}
-                <div className="flex justify-end">
-                  <button
-                    type="submit"
-                    onChange={handleSubmit}
-                    className="bg-customPink text-white font-medium py-3 px-8 rounded-lg shadow-md hover:bg-customPink-dark transition duration-200"
-                  >
-                    Save Changes
-                  </button>
-                </div>
-              </form>
+            <div>
+              <label className="block text-gray-600 mb-1">
+                {" "}
+                Address Line 2
+              </label>
+              <input
+                type="text"
+                value={address?.line2}
+                name="line2"
+                onChange={handleAddressChange}
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-customPink focus:outline-none"
+                placeholder="Address line 2"
+              />
             </div>
-          </div>
+            {/* City, State, Zip, Country Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-gray-600 mb-2 font-medium">City</label>
+                <input
+                  type="text"
+                  name="city"
+                  value={address?.city}
+                  onChange={handleAddressChange}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-customPink focus:outline-none"
+                  placeholder="Enter city"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-600 mb-2 font-medium">State</label>
+                <input
+                  type="text"
+                  name="state"
+                  value={address?.state}
+                  onChange={handleAddressChange}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-customPink focus:outline-none"
+                  placeholder="Enter state"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-gray-600 mb-2 font-medium">Zip Code</label>
+                <input
+                  type="text"
+                  name="postal_code"
+                  value={address?.postal_code}
+                  maxLength={6}
+                  onChange={handleAddressChange}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-customPink focus:outline-none"
+                  placeholder="Enter postal code"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-600 mb-2 font-medium">Country</label>
+                <input
+                  type="text"
+                  name="country"
+                  value={address?.country}
+                  onChange={handleAddressChange}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-customPink focus:outline-none"
+                  placeholder="Enter country"
+                />
+              </div>
+            </div>
+            {/* Submit Button */}
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                onClick={handleSubmit}
+                className="bg-customPink text-white font-medium py-3 px-8 rounded-lg shadow-md hover:bg-customPink-dark transition duration-200"
+              >
+                {loading ? (
+                  <>
+                    <svg className="animate-spin mr-2 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                    </svg>
+                    Saving Changes...
+                  </>
+                ) : (
+                  "Save Changes"
+                )}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
+    </div>
   );
 };
-
 export default EditProfile;
 

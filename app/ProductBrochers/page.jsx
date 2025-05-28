@@ -6,7 +6,7 @@ const guides = [
     blurb:
       'Afflovest is a state-of-the-art wearable therapy device designed to relieve symptoms of chronic respiratory conditions. Using advanced high-frequency chest wall oscillation, it helps clear mucus and improve lung function. Comfortable, easy to use, and effective for home therapy.',
     imgAlt: 'Man pointing to CPAP screen',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/AffloVest%2BTween%2B(4)edit.jpg',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/medical-doctors-at-the-conference-2024-10-21-09-48-40-utc.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/jkare.data/patient+resources+files/AfflovestEnglish_FINAL.pdf",
   },
   {
@@ -15,7 +15,7 @@ const guides = [
     blurb:
       'The Biwaze Airway Clearance System is designed to improve lung health through high-frequency chest wall oscillation. This user manual provides step-by-step instructions for safe and effective use, including setup, maintenance, and troubleshooting tips for optimal performance.',
     imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/BiWaze-Clear-group-screen-on-4.png',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/medical-doctors-at-the-conference-2024-10-21-09-48-40-utc.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/jkare.data/patient+resources+files/ABMRC+BiWaze+Airway+Clearance+System+brochure.pdf",
   },
   {
@@ -24,7 +24,7 @@ const guides = [
     blurb:
       'Biwaze Clear Quick Hits are designed to deliver fast, effective airway clearance for patients with chronic respiratory conditions. These quick bursts of high-frequency oscillation help loosen mucus and improve lung function, providing rapid relief and enhancing daily breathing.',
     imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/ABM-041524-085.jpg',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/medical-doctors-at-the-conference-2024-10-21-09-48-40-utc.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/jkare.data/patient+resources+files/BiWaze+-+Clear-Quick+Hits.pdf",
   },
   {
@@ -33,7 +33,7 @@ const guides = [
     blurb:
       'The Biwaze Cough device is designed to assist with effective airway clearance by simulating a natural cough. This user manual provides detailed instructions for proper use, maintenance, and troubleshooting to ensure optimal device performance and patient comfort.',
     imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/porta-medical-produkte-cough-header.png',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/medical-doctors-at-the-conference-2024-10-21-09-48-40-utc.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/jkare.data/patient+resources+files/BiWaze+-+Cough+-User+Manual_US_English.pdf",
   },
   {
@@ -42,7 +42,7 @@ const guides = [
     blurb:
       "El dispositivo BiWaze® Cough ayuda a eliminar las secreciones broncopulmonares del sistema respiratorio mediante una terapia que imita la tos. La terapia consta de tres fases que imitan una tos: fase de inhalación, fase de exhalación y fase de pausa.  ",
     imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/pexels-photo-2977565.jpeg',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/medical-doctors-at-the-conference-2024-10-21-09-48-40-utc.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/jkare.data/patient+resources+files/BiWaze+-+Cough+-User+Manual_US_Spanish.pdf",
   },
   {
@@ -51,7 +51,7 @@ const guides = [
     blurb:
       "The Oxlife Liberty® is a portable oxygen concentrator used on a prescriptive basis that enables patients requiring supplemental oxygen to be treated in a home, institutional, or vehicle/mobile environment. The Oxlife Liberty® delivers 87% -95 % pure oxygen to a patient through a standard single lumen nasal cannula. ",
     imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/LibertyPOC-Adjustments-scaled-1.jpg',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/medical-doctors-at-the-conference-2024-10-21-09-48-40-utc.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/jkare.data/patient+resources+files/Oxlife%2BLiberty%2BUser%2BManual.pdf",
   },
   {
@@ -60,7 +60,7 @@ const guides = [
     blurb:
       "The MyAirvo 2 is a humidifier with integrated flow generator that delivers warmed and humidified respiratory gases to spontaneously breating patients through a variety of patient interfaces.",
     imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medical.jkare.files/myairvo2-humidified-high-flow-system-fisher-paykel_600x600.jpg',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/medical-doctors-at-the-conference-2024-10-21-09-48-40-utc.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/jkare.data/patient+resources+files/myairvo2-user-manual-ui-185045490.pdf",
   }
 ];
@@ -68,7 +68,7 @@ export default function ProductBrochers() {
   return (
     <GuidesSection
       heroTitle="Product Brochures"
-      heroImage="https://s3.ap-south-1.amazonaws.com/medical.jkare.files/pexels-photo-2977565.jpeg"
+      heroImage="https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/patienttakingadvice.jpg"
       guides={guides}
     />
   );

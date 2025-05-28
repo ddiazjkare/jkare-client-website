@@ -7,14 +7,11 @@ export const generateMetadata = () => {
         title: "Verify"
     }
 }
-
 function page({ params }) {
     if (params.for == 'email')
         return <Notification subject="Verification Successful!" body="Congratulations, you have been successfully verified." />
-
     if (params.for == 'user_created')
         return <Notification subject="User Created Successful!" body="Congratulations, you have been successfully registered with us." />
-
     return (
         <div className="max-w-md mx-auto p-8 bg-white rounded-lg shadow-md my-10">
             <h1 className="text-2xl font-semibold mb-4 text-center">Password Reset Successful</h1>
