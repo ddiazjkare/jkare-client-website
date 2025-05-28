@@ -20,10 +20,12 @@ function getUniqueObjects(arr) {
 
 export const GET = async (req, ctx) => {
   try {
-    const result = await Product.findOne({_id: ctx.params.id})
+    const result = await Product.findOne({ _id: ctx.params.id });
 
-    const jsonRes = await fetch('https://s3.ap-south-1.amazonaws.com/medicom.hexerve/stopWords.json');
-    const stopWords = await jsonRes.json();
+    const jsonRes = await fetch(
+      "https://s3.ap-south-1.amazonaws.com/jkare.data/expanded_stopwords.json"
+    );
+    const { stopwords: stopWords } = await jsonRes.json();
 
     if (Object.keys(result).length > 0) {
       const product = result;
@@ -33,12 +35,12 @@ export const GET = async (req, ctx) => {
       for (const text of filteredText.trim().split(" ")) {
         let filterText = text.trim();
         filterText = filterText[0].toUpperCase() + filterText.substr(1);
-        
+
         const query = {
           _id: { $ne: ctx.params.id }, // Exclude a specific _id
-          prod_name: { $regex: new RegExp(filterText, "i") } // Case-insensitive search in product name
+          prod_name: { $regex: new RegExp(filterText, "i") }, // Case-insensitive search in product name
         };
-        
+
         const products = await Product.find(query);
         if (products) relatedProducts.push(...products);
       }

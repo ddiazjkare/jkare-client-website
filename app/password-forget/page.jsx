@@ -15,7 +15,7 @@ const Forgot = () => {
   const submitHandler = async e => {
     try {
       e.preventDefault()
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/forgetpassword`, {
+      const res = await fetch(`/api/auth/forgetpassword`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
