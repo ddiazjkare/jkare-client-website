@@ -1,11 +1,11 @@
 "use client"
-import { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { FaGoogle, FaFacebook, FaXTwitter, FaEye, FaEyeSlash, FaSpinner } from "react-icons/fa6"
 import { useRouter } from "next/navigation"
 import { signIn } from 'next-auth/react'
 import Alert from "../../components/ui/Alert"
-import { CartContext } from "../../components/SessionProVider"
+// import { CartContext } from "../../components/SessionProVider"
 
 const Login = () => {
   const [username, setUsername] = useState('')
@@ -13,7 +13,7 @@ const Login = () => {
   const [errMsg, setErrMsg] = useState(null)
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
-  const [, setCartItems] = useContext(CartContext)
+  // const [, setCartItems] = useContext(CartContext)
   const router = useRouter()
 
   const pageTitle = 'Login';
@@ -32,8 +32,8 @@ const Login = () => {
     });
 
     if (!result?.error) {
-      const res = await fetch(`/api/user/info/${username}`)
-      const dbUser = await res.json()
+      // const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/info/${username}`)
+      // const dbUser = await res.json()
 
       router.push("/"); 
       return
