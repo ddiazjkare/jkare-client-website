@@ -12,7 +12,7 @@ function MainPage() {
     <>
       <HeroSection />
       <div className=" font-montserrat">
-      {/* <NewArrivals /> */}
+      <NewArrivals />
       <HomeProduct />
       </div>
       <TagLine/>
