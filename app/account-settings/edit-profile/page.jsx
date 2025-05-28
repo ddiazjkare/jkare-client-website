@@ -4,7 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { FaArrowLeft } from "react-icons/fa";
+// import { FaArrowLeft } from "react-icons/fa";
 
 const EditProfile = () => {
   let localUser =
@@ -12,7 +12,7 @@ const EditProfile = () => {
   localUser = JSON.parse(localUser);
 
   const [name, setName] = useState(localUser ? localUser.fullName : "");
-  const [activeOption, setActiveOption] = useState("/profile-detail");
+  // const [activeOption, setActiveOption] = useState("/profile-detail");
   const [phone, setPhone] = useState(localUser ? localUser.phone : "");
   const [address, setAddress] = useState(localUser ? localUser.address : {});
   const [profilePhoto, setProfilePhoto] = useState(
@@ -33,10 +33,10 @@ const EditProfile = () => {
     }
   }, [pageTitle]);
 
-  const handleNavigation = (path) => {
-    setActiveOption(path); // Update the active option
-    router.push(path);
-  };
+  // const handleNavigation = (path) => {
+  //   setActiveOption(path); // Update the active option
+  //   router.push(path);
+  // };
 
   const handleNameChange = (e) => {
     setName(e.target.value);
