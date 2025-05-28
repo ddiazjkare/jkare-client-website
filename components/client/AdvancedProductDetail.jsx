@@ -32,7 +32,7 @@ const AdvancedProductDetail = ({ data }) => {
   const warrantyYears = (() => {
     const key = Object.keys(data.product.key_features)
       .find(k => /^\d+_year(s)?_warranty$/.test(k) && data.product.key_features[k]);
-    return key ? key.split('_')[0] : null ;   // "2_years_warranty" → "2"
+    return key ? key.split('_')[0] : null ; 
   })();
 
 

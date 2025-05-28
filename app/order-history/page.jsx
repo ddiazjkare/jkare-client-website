@@ -9,7 +9,7 @@ export const generateMetadata = () => {
 }
 
 const fetchApi = async (email) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/order/${email}`);
+  const res = await fetch(`/api/order/${email}`);
   return await res.json();
 }
 

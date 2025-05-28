@@ -13,6 +13,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   title: "Home",
   description: "Medical Equipment Commerce",
+  cache: "no-cache",
 };
 
 export default async function RootLayout({ children }) {

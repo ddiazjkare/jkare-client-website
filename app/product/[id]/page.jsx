@@ -1,6 +1,5 @@
 import AdvancedProductDetail from '../../../components/client/AdvancedProductDetail'
 export const dynamic = 'force-dynamic';
-
 export const generateMetadata = () => {
   return {
     title: "Product Detail",
@@ -19,11 +18,4 @@ async function ProductDetailPage({ params }) {
 
   return <AdvancedProductDetail data={data} />
 }
-
-// export async function generateStaticParams() {
-//   let data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product`);
-//   data = await data.json();
-//   return data.map((p) => ({ id: p._id.toString() }));
-// }
-
 export default ProductDetailPage;
