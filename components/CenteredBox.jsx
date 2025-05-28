@@ -78,10 +78,10 @@ export default function FaqSection() {
   };
 
   return (
-    <section className="font-montserrat bg-gradient-to-t from-white via-[#fdf5ff] to-white py-20">
+    <section className="font-montserrat bg-gradient-to-t from-white via-[#fdf5ff] to-white py-20 pt-0">
       <div className="mx-auto max-w-5xl px-6 text-center">
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900">
-          FAQS
+          FAQ's
         </h2>
 
         {/* ---------- CATEGORY TABS ---------- */}
