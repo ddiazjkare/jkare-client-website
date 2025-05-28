@@ -7,7 +7,7 @@ function getUniqueObjects(arr) {
   const seenObjects = new Set();
 
   for (const obj of arr) {
-    const serializedObj = JSON.stringify(obj); // Convert object to a string for comparison
+    const serializedObj = JSON.stringify(obj);
 
     if (!seenObjects.has(serializedObj)) {
       uniqueObjects.push(obj);

@@ -29,14 +29,10 @@ const AdvancedProductDetail = ({ data }) => {
     fetchShippingOffer();
   }, []);
 
-  /* -------------------------------------------------------------
-   Find warranty key like “2_years_warranty” (if any) and pull
-   out just the number (“2”).  Returns null when there is none.
-------------------------------------------------------------- */
   const warrantyYears = (() => {
     const key = Object.keys(data.product.key_features)
       .find(k => /^\d+_year(s)?_warranty$/.test(k) && data.product.key_features[k]);
-    return key ? key.split('_')[0] : null;   // "2_years_warranty" → "2"
+    return key ? key.split('_')[0] : null ;   // "2_years_warranty" → "2"
   })();
 
 
