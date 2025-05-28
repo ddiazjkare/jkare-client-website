@@ -65,8 +65,6 @@
 // };
 
 // export default Navigation;
-
-
 "use client";
 import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
@@ -142,7 +140,9 @@ const EditProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    
     try {
+      // Validation check
       if (
         name === "" ||
         phone === "" ||
@@ -154,21 +154,22 @@ const EditProfile = () => {
         address?.line1 === ""
       ) {
         toast.error("Some fields are missing!");
+        setLoading(false); // Reset loading state when validation fails
         return;
       }
 
       const formData = new FormData();
       if (file)
         formData.append("profile", file);
-
-      formData.append("fullName", name);
-      formData.append("address", JSON.stringify(address));
-      formData.append("phone", phone);
+        formData.append("fullName", name);
+        formData.append("address", JSON.stringify(address));
+        formData.append("phone", phone);
+        
       const res = await fetch(`/api/user/update/${localUser.username}`, {
         method: "PUT",
         body: formData,
       });
-
+      
       const updatedUser = await res.json();
       const updatedSession = {
         ...session,
@@ -178,21 +179,21 @@ const EditProfile = () => {
           ...updatedUser.user
         },
       };
+      
       await update(updatedSession);
       window.localStorage.setItem(
         "nextUser",
         JSON.stringify({
           ...session.user,
           ...updatedUser.user
-
         })
       );
-
+      
       toast.success("Data updated successfully!");
     } catch (err) {
       console.error("err", err);
-    }
-    finally {
+      toast.error("An error occurred while updating profile!");
+    } finally {
       setLoading(false);
     }
   };
@@ -332,8 +333,12 @@ const EditProfile = () => {
             <div className="flex justify-end">
               <button
                 type="submit"
-                onClick={handleSubmit}
-                className="bg-customPink text-white font-medium py-3 px-8 rounded-lg shadow-md hover:bg-customPink-dark transition duration-200"
+                disabled={loading}
+                className={`${
+                  loading 
+                    ? 'bg-gray-400 cursor-not-allowed' 
+                    : 'bg-customPink hover:bg-customPink-dark'
+                } text-white font-medium py-3 px-8 rounded-lg shadow-md transition duration-200 flex items-center`}
               >
                 {loading ? (
                   <>
@@ -354,5 +359,6 @@ const EditProfile = () => {
     </div>
   );
 };
+
 export default EditProfile;
 

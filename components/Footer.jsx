@@ -67,28 +67,28 @@ export default function Footer() {
 
           {/* newsletter */}
           <div className="w-full max-w-[420px] mx-auto lg:mx-0">
-  <h4 className="text-[14px] sm:text-base font-semibold mb-2 text-center lg:text-left text-black">
-    SIGNUP FOR NEWSLETTER
-  </h4>
+            <h4 className="text-[14px] sm:text-base font-semibold mb-2 text-center lg:text-left text-black">
+              SIGNUP FOR NEWSLETTER
+            </h4>
 
-  <form
-    onSubmit={(e) => e.preventDefault()}
-    className="flex overflow-hidden rounded-full shadow-lg"
-  >
-    <input
-      type="email"
-      required
-      placeholder="Enter Your Email ID"
-      className="flex-1 px-4 py-2 text-gray-900 placeholder-gray-400 text-sm focus:outline-none"
-    />
-    <button
-      type="submit"
-      className="bg-pink-500 text-white px-6 py-2 text-sm font-semibold hover:bg-pink-600 transition-colors"
-    >
-      Signup
-    </button>
-  </form>
-</div>
+            <form
+              onSubmit={(e) => e.preventDefault()}
+              className="flex overflow-hidden rounded-full shadow-lg"
+            >
+              <input
+                type="email"
+                required
+                placeholder="Enter Your Email ID"
+                className="flex-1 px-4 py-2 text-gray-900 placeholder-gray-400 text-sm focus:outline-none"
+              />
+              <button
+                type="submit"
+                className="bg-pink-500 text-white px-6 py-2 text-sm font-semibold hover:bg-pink-600 transition-colors"
+              >
+                Signup
+              </button>
+            </form>
+          </div>
 
         </div>
 
@@ -107,8 +107,8 @@ export default function Footer() {
               ['About Us', '/about-us'],
               ['Services', '/services'],
               ['Contact', '/contact'],
-              ['Privacy Policy', '/privacy-policy'],
-              ['Cookie Policy', '/cookie-policy'],
+              ['Privacy Policy', '#'],
+              ['Cookie Policy', '#'],
             ]}
           />
 
@@ -167,11 +167,11 @@ export default function Footer() {
                          text-[12px] sm:text-xs text-white/80 text-center sm:text-left">
           <span>© 2024 JKARE. All Rights Reserved.</span>
           <span className="space-x-2">
-            <Link href="/privacy-policy" className="hover:text-white">
+            <Link href="#" className="hover:text-white">
               Privacy Policy
             </Link>
             <span aria-hidden> | </span>
-            <Link href="/cookie-policy" className="hover:text-white">
+            <Link href="#" className="hover:text-white">
               Cookie Policy
             </Link>
             <span aria-hidden> | </span>
