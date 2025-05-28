@@ -4,7 +4,7 @@ import Category from '../../components/client/Category'
 export const dynamic = 'force-dynamic';
 
 const Page = async () => {
-  const res = await fetch(`/api/category?num=8`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/category?num=8`, {
     next: { revalidate: 60 }, // Revalidate every 60 seconds
   })
   const data = await res.json()
