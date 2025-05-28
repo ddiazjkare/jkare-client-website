@@ -10,7 +10,7 @@ export const PUT = async (req, ctx) => {
 
     if (file) {
       const byteData = await file.arrayBuffer();
-      const Bucket = "medicom.hexerve";
+      const Bucket = "jkare.data";
       const Body = Buffer.from(byteData);
       const lastDot = file.name.lastIndexOf(".");
       const file_name = file.name.slice(0, lastDot);
