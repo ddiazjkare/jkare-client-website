@@ -41,7 +41,7 @@ export default function Contact() {
       {/* -------------------------------------------------- */}
       <div className="relative h-[450px] w-full font-montserrat">
         <Image
-          src="https://s3.ap-south-1.amazonaws.com/medicom.hexerve/Shutterstock%2B350925269.jpg"
+          src="https://s3.ap-south-1.amazonaws.com/jkare.data/kid+waving+hair.jpg"
           alt="JKARE Hero"
           layout="fill"
           objectFit="cover"

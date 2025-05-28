@@ -16,7 +16,7 @@ export const GET = async (req, ctx) => {
     for (const item in lineItems) {
       const fileName = lineItems[item].split("/").pop();
       const params = {
-        Bucket: "medicom.hexerve",
+        Bucket: "jkare.data",
         Key: fileName,
       };
       await s3.send(new DeleteObjectCommand(params));
