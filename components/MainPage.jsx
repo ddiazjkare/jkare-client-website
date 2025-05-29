@@ -2,7 +2,7 @@ import HeroSection from "./HeroSection";
 // import DealsandOffers from "./DealsandOffers";
 import Testimonials from "./Testimonials";
 import TagLine from "./TagLine";
-// import NewArrivals from "./NewArrivals";
+import NewArrivals from "./NewArrivals";
 import HomeProduct from "./server/HomeProduct";
 import AboutUs from  "./AboutUs";
 import CenteredBox from "./CenteredBox"
@@ -12,10 +12,10 @@ function MainPage() {
     <>
       <HeroSection />
       <div className=" font-montserrat">
-      {/* <NewArrivals /> */}
-      {/* <HomeProduct /> */}
+      <NewArrivals />
+      <HomeProduct />
       </div>
-      {/* <TagLine/> */}
+      <TagLine/>
       <AboutUs/>
       <Testimonials />
       <CenteredBox/>
