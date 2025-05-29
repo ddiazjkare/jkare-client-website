@@ -13,9 +13,9 @@ function MainPage() {
       <HeroSection />
       <div className=" font-montserrat">
       {/* <NewArrivals /> */}
-      <HomeProduct />
+      {/* <HomeProduct /> */}
       </div>
-      <TagLine/>
+      {/* <TagLine/> */}
       <AboutUs/>
       <Testimonials />
       <CenteredBox/>
