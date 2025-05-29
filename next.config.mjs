@@ -35,7 +35,7 @@ const nextConfig = {
       }, 
       {
         protocol: 'https', 
-        hostname: 'medicom.hexerve.s3.ap-south-1.amazonaws.com',
+        hostname: 'jkare.data.s3.ap-south-1.amazonaws.com',
         port: '', 
         pathname: '/**', 
       }, 
