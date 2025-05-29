@@ -89,6 +89,23 @@ function OrderHistory({ orders = [], email }) {
       setTimeout(() => setErrMsg(null), 3000);
     }
   };
+  // Add this inside your OrderHistory component (before the return statement)
+  const handleDownloadFile = async (url, fileName) => {
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = downloadUrl;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(downloadUrl);
+    } catch (error) {
+      console.error("Error downloading file:", error);
+    }
+  };
 
   /* ---- searching ---- */
   const searchByID = async (val) => {
@@ -230,8 +247,25 @@ function OrderHistory({ orders = [], email }) {
                 <p className="text-sm text-gray-600">
                   <strong>ORDER ID #</strong> <br /> {order.order_id}
                 </p>
-                <span className="self-start sm:self-auto inline-block bg-yellow-400 text-xs sm:text-sm font-semibold text-black px-3 py-1 rounded-md">
-                  {order.order_status}
+                <span
+                  className={`self-start sm:self-auto inline-block text-xs sm:text-sm font-semibold text-center text-white px-3 py-1 rounded-md ${order.prescription_status === "Pending"
+                    ? "bg-yellow-400"
+                    : order.prescription_status === "Received"
+                      ? "bg-green-600"
+                      : "bg-gray-200"
+                    }`}
+                >
+                  Prescription Status : <br /> {order.prescription_status}
+                </span>
+                <span
+                  className={`self-start sm:self-auto inline-block text-xs sm:text-sm font-semibold text-center text-white px-3 py-1 rounded-md ${order.order_status === "Pending"
+                    ? "bg-yellow-400"
+                    : order.order_status === "Completed"
+                      ? "bg-green-600"
+                      : "bg-gray-200"
+                    }`}
+                >
+                  Order Status : <br /> {order.order_status}
                 </span>
               </div>
             </div>
@@ -247,6 +281,7 @@ function OrderHistory({ orders = [], email }) {
                     <th className="pb-2 pr-3 text-center">Qty</th>
                     <th className="pb-2 pr-3">Price</th>
                     <th className="pb-2">Total</th>
+                    <th className="pb-2">Prescription File</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -280,6 +315,21 @@ function OrderHistory({ orders = [], email }) {
                       <td className="py-3 pr-3">${product.price}</td>
                       <td className="py-3">
                         ${(product.quantity * product.price).toFixed(2)}
+                      </td>
+                      <td className="py-3 w-[15%]">
+                        {product.prescription_file && (
+                          <button
+                            onClick={() =>
+                              handleDownloadFile(
+                                product.prescription_file,
+                                `${product.product_name}_prescription.pdf`
+                              )
+                            }
+                            className="bg-purple-500 text-white text-sm font-semibold px-4 py-2 rounded-md hover:bg-purple-600"
+                          >
+                            Download File
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -321,12 +371,14 @@ function OrderHistory({ orders = [], email }) {
                   <p className="font-bold">Total: ${order.total_amount}</p>
                 </div>
 
-                <button
-                  onClick={() => handleTrackShipment(order._id)}
-                  className="self-stretch md:self-auto bg-blue-500 text-white text-sm font-semibold px-4 py-2 rounded-md hover:bg-blue-600"
-                >
-                  Track Shipment
-                </button>
+                {order.order_status === "Completed" && (
+                  <button
+                    onClick={() => handleTrackShipment(order.order_id)}
+                    className="self-stretch md:self-auto bg-blue-500 text-white text-sm font-semibold px-4 py-2 rounded-md hover:bg-blue-600"
+                  >
+                    Track Shipment
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -353,11 +405,10 @@ function OrderHistory({ orders = [], email }) {
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
             <button
               key={n}
-              className={`px-4 py-2 rounded-md transition-colors ${
-                currentPage === n
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 hover:bg-gray-300"
-              }`}
+              className={`px-4 py-2 rounded-md transition-colors ${currentPage === n
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 hover:bg-gray-300"
+                }`}
               onClick={() => handlePageChange(n)}
             >
               {n}
@@ -423,8 +474,8 @@ function OrderHistory({ orders = [], email }) {
                     {/* vertical line */}
                     {idx <
                       staticTrackingData.tracking_history.length - 1 && (
-                      <div className="absolute left-[3.5px] top-4 h-full border-l-2 border-blue-300" />
-                    )}
+                        <div className="absolute left-[3.5px] top-4 h-full border-l-2 border-blue-300" />
+                      )}
                     <p className="text-gray-500 mb-1">
                       {new Date(hist.status_date).toLocaleString()}
                     </p>

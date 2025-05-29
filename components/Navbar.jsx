@@ -675,7 +675,7 @@ const Navbar = () => {
                 <p className="text-sm text-gray-600">{session.user.email}</p>
                 <div className="mt-3 flex flex-col space-y-2">
                   {session.provider === "credentials" && (
-                    <Link href="/profile-detail">
+                    <Link href="/account-settings">
                       <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded">
                         Edit Profile
                       </button>
