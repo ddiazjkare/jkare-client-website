@@ -405,12 +405,14 @@ function OrderHistory({ orders = [], email }) {
                             </div>
 
                             {product.prescription_file && (
-                              <button
-                                onClick={() => handleDownloadFile(product.prescription_file, `${product.product_name}_prescription.pdf`)}
-                                className="mt-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white text-xs font-semibold px-4 py-2 rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105"
+                              <a
+                                href={product.prescription_file}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="mt-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white text-xs font-semibold px-4 py-2 rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 inline-block"
                               >
-                                📄 Download Prescription
-                              </button>
+                                👁️ View File
+                              </a>
                             )}
                           </div>
                         </div>
@@ -465,12 +467,14 @@ function OrderHistory({ orders = [], email }) {
                             </td>
                             <td className="py-4 text-center">
                               {product.prescription_file && (
-                                <button
-                                  onClick={() => handleDownloadFile(product.prescription_file, `${product.product_name}_prescription.pdf`)}
-                                  className="bg-gradient-to-r from-purple-500 to-purple-600 text-white text-xs font-semibold px-3 py-2 rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105"
+                                <a
+                                  href={product.prescription_file}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="bg-gradient-to-r from-purple-500 to-purple-600 text-white text-xs font-semibold px-3 py-2 rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 inline-block"
                                 >
-                                  📄 Download
-                                </button>
+                                  👁️ Download File
+                                </a>
                               )}
                             </td>
                           </tr>
@@ -524,15 +528,17 @@ function OrderHistory({ orders = [], email }) {
                       <div className="space-y-2 text-sm mb-4">
                         <div className="flex justify-between">
                           <span className="text-gray-600">Subtotal:</span>
-                          <span className="font-semibold">${order.sub_amount}</span>
+                          <span className="font-semibold">${order.items.reduce((sum, item) => sum + item.quantity * item.price, 0).toFixed(2)}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-gray-600">Discount:</span>
+                          <span className="text-gray-600">Price Discount:</span>
                           <span className="font-semibold text-red-600">-${order.discount_amount}</span>
                         </div>
                         <div className="flex justify-between text-lg font-bold text-green-600 pt-2 border-t border-gray-200">
                           <span>Total:</span>
-                          <span>${order.total_amount}</span>
+                          <span>
+                            ${order.items.reduce((sum, item) => sum + item.quantity * item.price, 0).toFixed(2)}
+                          </span>
                         </div>
                       </div>
 
@@ -604,8 +610,8 @@ function OrderHistory({ orders = [], email }) {
                     key={index + 1}
                     onClick={() => handlePageChange(index + 1)}
                     className={`px-4 py-2 rounded-xl font-semibold transition-all duration-200 ${currentPage === index + 1
-                        ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg"
-                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                      ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                       }`}
                   >
                     {index + 1}
