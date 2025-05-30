@@ -20,40 +20,43 @@ function getUniqueObjects(arr) {
 
 export const GET = async (req, ctx) => {
   try {
-    const result = await Product.findOne({ _id: ctx.params.id });
+    const product = await Product.findOne({ _id: ctx.params.id });
+
+    if (!product) {
+      return NextResponse.json(
+        { message: "Product not found" },
+        { status: 404 }
+      );
+    }
 
     const jsonRes = await fetch(
       "https://s3.ap-south-1.amazonaws.com/jkare.data/expanded_stopwords.json"
     );
     const { stopwords: stopWords } = await jsonRes.json();
 
-    if (Object.keys(result).length > 0) {
-      const product = result;
-      let relatedProducts = [];
+    const filteredText = removeStopWords(product.prod_name, stopWords);
 
-      const filteredText = removeStopWords(product.prod_name, stopWords);
-      for (const text of filteredText.trim().split(" ")) {
-        let filterText = text.trim();
-        filterText = filterText[0].toUpperCase() + filterText.substr(1);
+    const keywords = filteredText.trim().split(" ").filter(Boolean);
+    const regexPattern = keywords.map((word) => `\\b${word}\\b`).join("|");
+    const query = {
+      _id: { $ne: ctx.params.id }, 
+      prod_name: { $regex: regexPattern, $options: "i" }, 
+    };
 
-        const query = {
-          _id: { $ne: ctx.params.id }, // Exclude a specific _id
-          prod_name: { $regex: new RegExp(filterText, "i") }, // Case-insensitive search in product name
-        };
+    const relatedProducts = await Product.find(query).limit(10); // Limit to avoid excessive results
 
-        const products = await Product.find(query);
-        if (products) relatedProducts.push(...products);
-      }
-      relatedProducts = getUniqueObjects(relatedProducts);
-      return NextResponse.json({ product, relatedProducts }, { status: 200 });
-    } else {
-      return NextResponse.json({ message: "Not Found" }, { status: 404 });
-    }
+    const uniqueRelatedProducts = getUniqueObjects(relatedProducts);
+
+    return NextResponse.json(
+      { product, relatedProducts: uniqueRelatedProducts },
+      { status: 200 }
+    );
   } catch (error) {
-    console.error("er", error);
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-    });
+    console.error("Error in GET /products/:id:", error);
+    return NextResponse.json(
+      { error: "Internal server error", details: error.message },
+      { status: 500 }
+    );
   }
 };
 
