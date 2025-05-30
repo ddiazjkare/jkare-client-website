@@ -5,42 +5,6 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Alert from "../../components/ui/Alert";
 
-const staticTrackingData = {
-  tracking_number: "SHIPPO_TRANSIT",
-  carrier: "shippo",
-  tracking_status: {
-    status_date: "2025-03-19T17:00:35.846Z",
-    status_details: "Your shipment has departed from the origin.",
-    location: {
-      city: "San Francisco",
-      state: "CA",
-      zip: "94103",
-      country: "US",
-    },
-    status: "TRANSIT",
-  },
-  tracking_history: [
-    {
-      status_date: "2025-03-18T13:00:35.846Z",
-      status_details:
-        "The carrier has received the electronic shipment information.",
-      location: null,
-      status: "UNKNOWN",
-    },
-    {
-      status_date: "2025-03-19T17:00:35.846Z",
-      status_details: "Your shipment has departed from the origin.",
-      location: {
-        city: "San Francisco",
-        state: "CA",
-        zip: "94103",
-        country: "US",
-      },
-      status: "TRANSIT",
-    },
-  ],
-};
-
 function OrderHistory({ orders = [], email }) {
   /* ---------------- state & helpers ---------------- */
   const sortedOrders = [...orders].sort(
@@ -53,7 +17,9 @@ function OrderHistory({ orders = [], email }) {
   const [currentOrders, setCurrentOrders] = useState(sortedOrders);
   const [errMsg, setErrMsg] = useState(null);
   const [showTrackingModal, setShowTrackingModal] = useState(false);
-  const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [trackingData, setTrackingData] = useState(null);
+  const [trackingLoading, setTrackingLoading] = useState(false);
 
   /* ---- pagination ---- */
   const ordersPerPage = 4;
@@ -150,22 +116,48 @@ function OrderHistory({ orders = [], email }) {
       setTimeout(() => setErrMsg(null), 3000);
     }
   };
-  const filterOrdersById = (val) => {
-  setSearchTerm(val);
-  if (val.trim() === "") {
-    setCurrentOrders(sortedOrders);
-    return;
-  }
-  const filtered = sortedOrders.filter((order) =>
-    order.order_id.toLowerCase().includes(val.toLowerCase())
-  );
-  setCurrentOrders(filtered);
-  setCurrentPage(1);
-};
 
-  const handleTrackShipment = (orderId) => {
-    setSelectedOrderId(orderId);
+  const filterOrdersById = (val) => {
+    setSearchTerm(val);
+    if (val.trim() === "") {
+      setCurrentOrders(sortedOrders);
+      return;
+    }
+    const filtered = sortedOrders.filter((order) =>
+      order.order_id.toLowerCase().includes(val.toLowerCase())
+    );
+    setCurrentOrders(filtered);
+    setCurrentPage(1);
+  };
+
+  // Enhanced tracking function with dynamic API call
+  const handleTrackShipment = async (order) => {
+    setSelectedOrder(order);
     setShowTrackingModal(true);
+    setTrackingLoading(true);
+    setTrackingData(null);
+
+    try {
+      if (!order.carrier || !order.tracking_number) {
+        throw new Error("Tracking information not available for this order");
+      }
+
+      const response = await fetch(
+        `http://localhost:3000/api/track?carrier=${order.carrier}&tracking=${order.tracking_number}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch tracking information");
+      }
+
+      const data = await response.json();
+      setTrackingData(data);
+    } catch (error) {
+      setErrMsg(error.message || "Failed to fetch tracking information");
+      setTimeout(() => setErrMsg(null), 5000);
+    } finally {
+      setTrackingLoading(false);
+    }
   };
 
   const getStatusColor = (status) => {
@@ -177,8 +169,27 @@ function OrderHistory({ orders = [], email }) {
         return "bg-gradient-to-r from-emerald-400 to-green-500";
       case "cancelled":
         return "bg-gradient-to-r from-red-400 to-red-500";
+      case "transit":
+        return "bg-gradient-to-r from-blue-400 to-blue-500";
+      case "delivered":
+        return "bg-gradient-to-r from-green-500 to-emerald-600";
       default:
         return "bg-gradient-to-r from-gray-400 to-gray-500";
+    }
+  };
+
+  const getTrackingStatusIcon = (status) => {
+    switch (status?.toLowerCase()) {
+      case "unknown":
+        return "🔍";
+      case "transit":
+        return "🚚";
+      case "delivered":
+        return "📦";
+      case "exception":
+        return "⚠️";
+      default:
+        return "📍";
     }
   };
 
@@ -270,23 +281,22 @@ function OrderHistory({ orders = [], email }) {
                   onChange={(e) => setToDate(e.target.value)}
                 />
               </div>
-
-           
             </div>
-               <div className="flex gap-3">
-                <button
-                  className="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-indigo-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
-                  onClick={searchByDate}
-                >
-                  Search
-                </button>
-                <button
-                  className="px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-600 text-white font-semibold rounded-xl hover:from-gray-600 hover:to-gray-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
-                  onClick={resetDate}
-                >
-                  Reset
-                </button>
-              </div>
+
+            <div className="flex gap-3">
+              <button
+                className="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-indigo-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
+                onClick={searchByDate}
+              >
+                Search
+              </button>
+              <button
+                className="px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-600 text-white font-semibold rounded-xl hover:from-gray-600 hover:to-gray-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
+                onClick={resetDate}
+              >
+                Reset
+              </button>
+            </div>
           </div>
         </motion.div>
 
@@ -327,6 +337,12 @@ function OrderHistory({ orders = [], email }) {
                         <span className="font-semibold text-gray-800">ORDER ID</span>
                         <p className="text-gray-700 mt-1">{order.order_id}</p>
                       </div>
+                      {order.tracking_number && (
+                        <div className="text-sm text-gray-600">
+                          <span className="font-semibold text-gray-800">TRACKING #</span>
+                          <p className="text-gray-700 mt-1">{order.tracking_number}</p>
+                        </div>
+                      )}
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-3">
@@ -348,7 +364,7 @@ function OrderHistory({ orders = [], email }) {
                     </svg>
                     Order Items
                   </h3>
-                  
+
                   {/* Mobile: Card Layout */}
                   <div className="block lg:hidden space-y-4">
                     {order.items.map((product, idx) => (
@@ -363,14 +379,14 @@ function OrderHistory({ orders = [], email }) {
                               className="rounded-lg object-cover hover:scale-105 transition-transform duration-200"
                             />
                           </Link>
-                          
+
                           <div className="flex-1 min-w-0">
                             <Link href={`/product/${product.product_id}`}>
                               <h4 className="font-medium text-gray-800 hover:text-blue-600 transition-colors line-clamp-2 mb-2">
                                 {product.product_name}
                               </h4>
                             </Link>
-                            
+
                             <div className="grid grid-cols-2 gap-2 text-sm">
                               <div>
                                 <span className="text-gray-500">Qty:</span>
@@ -387,7 +403,7 @@ function OrderHistory({ orders = [], email }) {
                                 </span>
                               </div>
                             </div>
-                            
+
                             {product.prescription_file && (
                               <button
                                 onClick={() => handleDownloadFile(product.prescription_file, `${product.product_name}_prescription.pdf`)}
@@ -519,10 +535,10 @@ function OrderHistory({ orders = [], email }) {
                           <span>${order.total_amount}</span>
                         </div>
                       </div>
-                      
-                      {order.order_status === "Completed" && (
+
+                      {(order.order_status === "Completed" && order.tracking_number && order.carrier) && (
                         <button
-                          onClick={() => handleTrackShipment(order.order_id)}
+                          onClick={() => handleTrackShipment(order)}
                           className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold py-3 px-4 rounded-xl hover:from-blue-600 hover:to-indigo-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center"
                         >
                           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -553,115 +569,166 @@ function OrderHistory({ orders = [], email }) {
                 </div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-2">No Orders Found</h3>
                 <p className="text-gray-600 mb-6">
-                  You haven't placed any orders yet. Start shopping to see your order history here!
+                  You haven't placed any orders yet. Start shoppingto discover amazing products!
                 </p>
-                <Link
-                  href="/shop"
-                  className="inline-block bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold py-3 px-6 rounded-xl hover:from-blue-600 hover:to-indigo-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
-                >
-                  Start Shopping
+                <Link href="/shop">
+                  <button className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold py-3 px-8 rounded-xl hover:from-blue-600 hover:to-indigo-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+                    Start Shopping
+                  </button>
                 </Link>
               </div>
             </motion.div>
           )}
         </div>
 
-      {/* ------- pagination ------- */}
-      {totalPages > 1 && (
-        <div className="flex justify-center mt-6 flex-wrap gap-2">
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
-            <button
-              key={n}
-              className={`px-4 py-2 rounded-md transition-colors ${currentPage === n
-                ? "bg-blue-500 text-white"
-                : "bg-gray-200 hover:bg-gray-300"
-                }`}
-              onClick={() => handlePageChange(n)}
-            >
-              {n}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {/* -------------- tracking modal -------------- */}
-      <AnimatePresence>
-        {showTrackingModal && (
+        {/* --- Pagination --- */}
+        {totalPages > 1 && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="flex justify-center mt-12"
           >
-            {/* modal card */}
-            <motion.div
-              initial={{ scale: 0.85, y: 32 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.85, y: 32 }}
-              transition={{ duration: 0.25 }}
-              className="relative bg-white w-[95%] sm:w-[90%] md:w-[80%] lg:max-w-lg rounded-lg shadow-lg p-5 sm:p-6"
-            >
-              <button
-                className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl"
-                onClick={() => setShowTrackingModal(false)}
-              >
-                &times;
-              </button>
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 p-4">
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                >
+                  Previous
+                </button>
 
-              <h2 className="text-lg sm:text-xl font-bold mb-4 border-b pb-2">
-                Tracking Details
-              </h2>
+                {[...Array(totalPages)].map((_, index) => (
+                  <button
+                    key={index + 1}
+                    onClick={() => handlePageChange(index + 1)}
+                    className={`px-4 py-2 rounded-xl font-semibold transition-all duration-200 ${currentPage === index + 1
+                        ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg"
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                      }`}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
 
-              <div className="space-y-2 text-sm sm:text-base">
-                <p>
-                  <strong>Order ID:</strong> {selectedOrderId}
-                </p>
-                <p>
-                  <strong>Tracking #:</strong>{" "}
-                  {staticTrackingData.tracking_number}
-                </p>
-                <p>
-                  <strong>Carrier:</strong> {staticTrackingData.carrier}
-                </p>
-                <p>
-                  <strong>Current Status:</strong>{" "}
-                  {staticTrackingData.tracking_status.status}
-                </p>
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                >
+                  Next
+                </button>
               </div>
-
-              <h3 className="text-base sm:text-lg font-semibold mt-4 mb-2">
-                Shipment Timeline
-              </h3>
-
-              <div className="max-h-60 overflow-y-auto pr-2">
-                {staticTrackingData.tracking_history.map((hist, idx) => (
-                  <div key={idx} className="relative pl-10 mb-8 text-xs sm:text-sm">
-                    {/* bullet */}
-                    <div className="absolute left-2 top-4 w-3 h-3 rounded-full bg-blue-500" />
-                    {/* vertical line */}
-                    {idx <
-                      staticTrackingData.tracking_history.length - 1 && (
-                        <div className="absolute left-[3.5px] top-4 h-full border-l-2 border-blue-300" />
-                      )}
-                    <p className="text-gray-500 mb-1">
-                      {new Date(hist.status_date).toLocaleString()}
-                    </p>
-                    <p className="font-semibold">{hist.status}</p>
-                    <p>{hist.status_details}</p>
-                    {hist.location && (
-                      <p className="text-gray-500 mt-1">
-                        {hist.location.city}, {hist.location.state}{" "}
-                        {hist.location.zip}, {hist.location.country}
-                      </p>
-                    )}
-                  </div>
-                ))} 
-              </div>
-            </motion.div>
+            </div>
           </motion.div>
         )}
-      </AnimatePresence>
-    </motion.div>
+
+        {/* --- Tracking Modal --- */}
+        <AnimatePresence>
+          {showTrackingModal && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+              onClick={() => setShowTrackingModal(false)}
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Modal Header */}
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 border-b border-gray-100">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-800">Package Tracking</h3>
+                      <p className="text-gray-600 mt-1">Order : {selectedOrder?.order_id}</p>
+                    </div>
+                    <button
+                      onClick={() => setShowTrackingModal(false)}
+                      className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                    >
+                      <svg className="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Modal Content */}
+                <div className="p-6">
+                  {trackingLoading ? (
+                    <div className="flex flex-col items-center justify-center py-12">
+                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
+                      <p className="text-gray-600">Loading tracking information...</p>
+                    </div>
+                  ) : trackingData ? (
+                    <div className="space-y-6">
+                      {/* Tracking Summary */}
+                      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl py-2 px-4">
+                        <div className="flex items-center justify-between mb-4">
+                          <div>
+                            <h4 className="text-lg font-semibold text-gray-800">
+                              {getTrackingStatusIcon(trackingData.status)} Current Status
+                            </h4>
+                            <p className="text-2xl font-bold text-blue-600 mt-1">
+                              {trackingData.status || 'In Transit'}
+                            </p>
+                          </div>
+                          <div className="text-left">
+                            <p className="font-semibold text-gray-800"><span>Carrier : </span> {selectedOrder?.carrier}</p>
+                            <p className="font-semibold text-gray-800"> <span>Tracking ID : </span>{selectedOrder?.tracking_number}</p>
+                          </div>
+                        </div>
+
+                      </div>
+
+                      {/* Tracking Timeline */}
+                      {trackingData.tracking_history && trackingData.tracking_history.length > 0 && (
+                        <div>
+                          <h4 className="text-lg font-semibold text-gray-800 mb-4">Tracking History</h4>
+                          <div className="space-y-4">
+                            {trackingData.tracking_history.map((event, index) => (
+                              <div key={index} className="flex items-start space-x-4 pb-4 border-b border-gray-100 last:border-b-0">
+                                <div className="flex-shrink-0">
+                                  <div className={`w-3 h-3 rounded-full ${index === 0 ? 'bg-blue-500' : 'bg-gray-300'}`}></div>
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="font-medium text-gray-800"><span>Status:- </span> {event.status} <span className="text-xs">{event.status_date}</span></p>
+                                  <p className="text-sm text-gray-600">{event.status_details}</p>
+                                  <p className="text-sm text-gray-600">
+                                    {event.location
+                                      ? `${event.location.city}, ${event.location.state} ${event.location.zip}, ${event.location.country}`
+                                      : "Location not available"}
+                                  </p>
+                                  <p className="text-xs text-gray-500 mt-1">{event.datetime}</p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="text-center py-12">
+                      <div className="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
+                        <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z" />
+                        </svg>
+                      </div>
+                      <p className="text-gray-600">Unable to load tracking information</p>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
     </div>
   );
 }
