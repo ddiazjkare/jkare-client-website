@@ -7,19 +7,15 @@ export const generateMetadata = () => {
       title: "Order History"
   }
 }
-
 const fetchApi = async (email) => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/order/${email}`);
   console.log("respnse link" , res.url);
   return await res.json();
 }
-
-
 const ProductPage = async () => {
   const session = await getServerSession(authOptions);
   const orders = await fetchApi(session.user.email);
   console.log("orders and session" , orders , session);
   return <OrderHistory orders={orders} email={session.user.email} />
 };
-
 export default ProductPage;

@@ -13,7 +13,7 @@ export default function BorderfreeStyleCheckout() {
   // 1) State
   // =========================================================
   const [receiver, setReceiver] = useState({
-    address: "731 Market Street",
+    address: "456 Maple Ave",
     address2: "#200",
     postalCode: "94103",
     city: "San Francisco",
@@ -127,7 +127,6 @@ export default function BorderfreeStyleCheckout() {
         address_to: {
           name: (receiver.firstName ?? "") + " " + (receiver.lastName ?? ""),
           street1: receiver.address,
-          street2: receiver.address2,
           city: receiver.city,
           state: receiver.region,
           zip: receiver.postalCode,
@@ -262,8 +261,8 @@ export default function BorderfreeStyleCheckout() {
       }
       const data = await response.json();
 
-      if (data.recommended_address) {
-        setAddressSuggestions([data.recommended_address]);
+      if (data.validation?.shippo_response?.recommended_address) {
+        setAddressSuggestions([data.validation.shippo_response.recommended_address]);
       } else {
         setAddressSuggestions([]);
       }

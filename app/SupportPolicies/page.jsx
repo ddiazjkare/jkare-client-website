@@ -24,7 +24,7 @@ const guides = [
     blurb:
       "JKARE works with most major insurance providers to help cover the cost of your medical equipment and services. Our team assists with verification, billing, and claims to make your experience smooth and stress-free.",
     imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/medical-doctors-at-the-conference-2024-10-21-09-48-40-utc.jpg',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/pexels-photo-7163956.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/PATIENT+GRIEVANCE+AND+COMPLAINT+PROCEDURE.pdf",
   },
   {
@@ -33,7 +33,7 @@ const guides = [
     blurb:
       "Certain medical equipment and supplies require a valid prescription. At JKARE, we ensure all prescriptions meet federal and insurance guidelines, helping you receive the right products safely, efficiently, and in full compliance.",
     imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/medical-doctors-at-the-conference-2024-10-21-09-48-40-utc.jpg',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/prescription.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/PATIENT+GRIEVANCE+AND+COMPLAINT+PROCEDURE.pdf",
   },
   {
@@ -42,7 +42,7 @@ const guides = [
     blurb:
       "JKARE provides dedicated Medicare support, assisting with coverage, claims, and eligibility. Our team guides you through the process to ensure you receive the benefits you're entitled to for medical equipment and services.",
     imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/medical-doctors-at-the-conference-2024-10-21-09-48-40-utc.jpg',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/medicare+support.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/medical.jkare.files/MAKING+DECISIONS+ABOUT+YOUR+HEALTH+CARE.pdf",
   },
 ];

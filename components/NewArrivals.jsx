@@ -30,9 +30,9 @@ const NewArrivals = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       const urls = [
-        `${process.env.NEXT_PUBLIC_API_URL}/product/67e1389c121b72710a9d756b`,
-        `${process.env.NEXT_PUBLIC_API_URL}/product/67e1389c121b72710a9d756c`,
-        `${process.env.NEXT_PUBLIC_API_URL}/product/67e1389c121b72710a9d756d`,
+        `/api/product/67e1389c121b72710a9d756b`,
+        `/api/product/67e1389c121b72710a9d756c`,
+        `/api/product/67e1389c121b72710a9d756d`,
       ];
       const results = await Promise.all(urls.map((u) => fetch(u).then((r) => r.json())));
       setProducts(results.map((r) => r.product));

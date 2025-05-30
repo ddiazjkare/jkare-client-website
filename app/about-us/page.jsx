@@ -32,7 +32,7 @@ const AboutPage = () => {
       {/* -------------------------------------------------- */}
       {/* WHY JKARE  +  OUR STORY */}
       {/* -------------------------------------------------- */}
-      <section className="py-20 px-6 md:px-10 lg:px-16 xl:px-20 bg-[url('https://s3.ap-south-1.amazonaws.com/jkare.data/kid+waving+hair.jpg')] bg-no-repeat bg-cover bg-fixed bg-center/cover/50 after:content-[''] after:absolute after:inset-0 after:bg-white/90 relative">
+      <section className="py-20 px-6 md:px-10 lg:px-16 xl:px-20 bg-customButtonHover bg-no-repeat bg-cover bg-fixed bg-center/cover/50 after:content-[''] after:absolute after:inset-0 after:bg-white/90 relative">
         <div className="relative z-10 max-w-6xl mx-auto space-y-20">
           {/* WHY JKARE */}
           <div className="bg-gradient-to-r from-[#E0F7FF] to-[#F3FBFF] border-l-8 border-customBlue rounded-2xl shadow-xl p-10 md:p-14">
