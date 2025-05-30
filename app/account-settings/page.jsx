@@ -97,84 +97,84 @@ const EditProfile = () => {
   const pageTitle = "Profile Detail";
 
   // Skeletal Loader Component
-  const SkeletalLoader = () => (
-    <div className="w-full mt-36 mb-14 font-montserrat flex items-center justify-center">
-      <div className="grid grid-cols-1 lg:grid-cols-3 border-2 border-gray-200 rounded-2xl overflow-hidden shadow-xl max-w-6xl w-full mx-4">
-        {/* Profile Photo Skeleton */}
-        <div className="bg-gradient-to-br from-pink-400 via-purple-400 to-indigo-400 p-8 flex flex-col items-center">
-          <div className="rounded-full w-40 h-40 mb-6 bg-white/30 animate-pulse"></div>
-          <div className="bg-white/30 rounded-full w-32 h-10 mb-6 animate-pulse"></div>
-          <div className="space-y-3 w-full">
-            <div className="bg-white/20 rounded-lg p-4 animate-pulse">
-              <div className="h-4 bg-white/30 rounded mb-2"></div>
-              <div className="h-5 bg-white/40 rounded"></div>
-            </div>
-            <div className="bg-white/20 rounded-lg p-4 animate-pulse">
-              <div className="h-4 bg-white/30 rounded mb-2"></div>
-              <div className="h-5 bg-white/40 rounded"></div>
-            </div>
-          </div>
-        </div>
+  // const SkeletalLoader = () => (
+  //   <div className="w-full mt-36 mb-14 font-montserrat flex items-center justify-center">
+  //     <div className="grid grid-cols-1 lg:grid-cols-3 border-2 border-gray-200 rounded-2xl overflow-hidden shadow-xl max-w-6xl w-full mx-4">
+  //       {/* Profile Photo Skeleton */}
+  //       <div className="bg-gradient-to-br from-pink-400 via-purple-400 to-indigo-400 p-8 flex flex-col items-center">
+  //         <div className="rounded-full w-40 h-40 mb-6 bg-white/30 animate-pulse"></div>
+  //         <div className="bg-white/30 rounded-full w-32 h-10 mb-6 animate-pulse"></div>
+  //         <div className="space-y-3 w-full">
+  //           <div className="bg-white/20 rounded-lg p-4 animate-pulse">
+  //             <div className="h-4 bg-white/30 rounded mb-2"></div>
+  //             <div className="h-5 bg-white/40 rounded"></div>
+  //           </div>
+  //           <div className="bg-white/20 rounded-lg p-4 animate-pulse">
+  //             <div className="h-4 bg-white/30 rounded mb-2"></div>
+  //             <div className="h-5 bg-white/40 rounded"></div>
+  //           </div>
+  //         </div>
+  //       </div>
         
-        {/* Form Skeleton */}
-        <div className="col-span-2 p-8 bg-white">
-          <div className="h-8 bg-gray-200 rounded-lg mb-8 w-48 animate-pulse"></div>
-          <div className="space-y-6">
-            {/* Name and Phone skeleton */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <div className="h-5 bg-gray-200 rounded mb-3 w-16 animate-pulse"></div>
-                <div className="h-12 bg-gray-100 rounded-xl animate-pulse"></div>
-              </div>
-              <div>
-                <div className="h-5 bg-gray-200 rounded mb-3 w-16 animate-pulse"></div>
-                <div className="h-12 bg-gray-100 rounded-xl animate-pulse"></div>
-              </div>
-            </div>
+  //       {/* Form Skeleton */}
+  //       <div className="col-span-2 p-8 bg-white">
+  //         <div className="h-8 bg-gray-200 rounded-lg mb-8 w-48 animate-pulse"></div>
+  //         <div className="space-y-6">
+  //           {/* Name and Phone skeleton */}
+  //           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+  //             <div>
+  //               <div className="h-5 bg-gray-200 rounded mb-3 w-16 animate-pulse"></div>
+  //               <div className="h-12 bg-gray-100 rounded-xl animate-pulse"></div>
+  //             </div>
+  //             <div>
+  //               <div className="h-5 bg-gray-200 rounded mb-3 w-16 animate-pulse"></div>
+  //               <div className="h-12 bg-gray-100 rounded-xl animate-pulse"></div>
+  //             </div>
+  //           </div>
             
-            {/* Address skeletons */}
-            <div>
-              <div className="h-5 bg-gray-200 rounded mb-3 w-32 animate-pulse"></div>
-              <div className="h-12 bg-gray-100 rounded-xl animate-pulse"></div>
-            </div>
-            <div>
-              <div className="h-5 bg-gray-200 rounded mb-3 w-32 animate-pulse"></div>
-              <div className="h-12 bg-gray-100 rounded-xl animate-pulse"></div>
-            </div>
+  //           {/* Address skeletons */}
+  //           <div>
+  //             <div className="h-5 bg-gray-200 rounded mb-3 w-32 animate-pulse"></div>
+  //             <div className="h-12 bg-gray-100 rounded-xl animate-pulse"></div>
+  //           </div>
+  //           <div>
+  //             <div className="h-5 bg-gray-200 rounded mb-3 w-32 animate-pulse"></div>
+  //             <div className="h-12 bg-gray-100 rounded-xl animate-pulse"></div>
+  //           </div>
             
-            {/* City, State skeleton */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <div className="h-5 bg-gray-200 rounded mb-3 w-12 animate-pulse"></div>
-                <div className="h-12 bg-gray-100 rounded-xl animate-pulse"></div>
-              </div>
-              <div>
-                <div className="h-5 bg-gray-200 rounded mb-3 w-14 animate-pulse"></div>
-                <div className="h-12 bg-gray-100 rounded-xl animate-pulse"></div>
-              </div>
-            </div>
+  //           {/* City, State skeleton */}
+  //           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+  //             <div>
+  //               <div className="h-5 bg-gray-200 rounded mb-3 w-12 animate-pulse"></div>
+  //               <div className="h-12 bg-gray-100 rounded-xl animate-pulse"></div>
+  //             </div>
+  //             <div>
+  //               <div className="h-5 bg-gray-200 rounded mb-3 w-14 animate-pulse"></div>
+  //               <div className="h-12 bg-gray-100 rounded-xl animate-pulse"></div>
+  //             </div>
+  //           </div>
             
-            {/* Zip, Country skeleton */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <div className="h-5 bg-gray-200 rounded mb-3 w-20 animate-pulse"></div>
-                <div className="h-12 bg-gray-100 rounded-xl animate-pulse"></div>
-              </div>
-              <div>
-                <div className="h-5 bg-gray-200 rounded mb-3 w-18 animate-pulse"></div>
-                <div className="h-12 bg-gray-100 rounded-xl animate-pulse"></div>
-              </div>
-            </div>
+  //           {/* Zip, Country skeleton */}
+  //           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+  //             <div>
+  //               <div className="h-5 bg-gray-200 rounded mb-3 w-20 animate-pulse"></div>
+  //               <div className="h-12 bg-gray-100 rounded-xl animate-pulse"></div>
+  //             </div>
+  //             <div>
+  //               <div className="h-5 bg-gray-200 rounded mb-3 w-18 animate-pulse"></div>
+  //               <div className="h-12 bg-gray-100 rounded-xl animate-pulse"></div>
+  //             </div>
+  //           </div>
             
-            {/* Button skeleton */}
-            <div className="flex justify-end">
-              <div className="h-12 bg-gray-200 rounded-xl w-36 animate-pulse"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  //           {/* Button skeleton */}
+  //           <div className="flex justify-end">
+  //             <div className="h-12 bg-gray-200 rounded-xl w-36 animate-pulse"></div>
+  //           </div>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
 
   // Fetch user data on component mount
   const fetchUserData = async () => {
@@ -282,6 +282,7 @@ const EditProfile = () => {
         method: "PUT",
         body: formData,
       });
+            
 
       const updatedUser = await res.json();
       const updatedSession = {
@@ -292,8 +293,9 @@ const EditProfile = () => {
           ...updatedUser.user
         },
       };
+        
 
-      await update(updatedSession);
+      await update(updatedSession, { redirect: false });
       window.localStorage.setItem(
         "nextUser",
         JSON.stringify({
@@ -302,14 +304,8 @@ const EditProfile = () => {
         })
       );
 
-      toast.success("Data updated successfully! Changes reflect when you login again.", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+    toast.success("Data updated successfully! Changes reflect when you login again.");
+    
     } catch (err) {
       console.error("err", err);
       toast.error("An error occurred while updating profile!");
@@ -318,27 +314,25 @@ const EditProfile = () => {
     }
   };
 
-  if (dataLoading) {
-    return <SkeletalLoader />;
-  }
+  // if (dataLoading) {
+  //   return <SkeletalLoader />;
+  // }
 
   return (
-    <div className="w-full  mb-14 font-montserrat flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100">
+    <>
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={3000}
         hideProgressBar={false}
-        newestOnTop={false}
+        newestOnTop
         closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
         pauseOnHover
-        theme="light"
+        theme="colored"
       />
-      
-      {/* Edit Profile Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 mt-16 border border-gray-200 rounded-2xl overflow-hidden shadow-2xl max-w-6xl w-full mx-4 bg-white backdrop-blur-sm">
+   
+    <div className="w-full mb-14 font-montserrat flex items-center justify-center min-h-screen ">  
+    {/* Edit Profile Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 mt-28 border border-gray-200 rounded-2xl overflow-hidden shadow-2xl max-w-6xl w-full mx-4 bg-white backdrop-blur-sm">
         {/* Profile Photo Section */}
         <div className="bg-gradient-to-br from-pink-400 via-purple-400 to-indigo-500 p-8 flex flex-col items-center text-white relative">
           {/* Decorative elements */}
@@ -546,7 +540,10 @@ const EditProfile = () => {
         </div>
       </div>
     </div>
+     </>
+    
   );
+  
 };
 
 export default EditProfile;
