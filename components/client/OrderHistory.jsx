@@ -150,6 +150,18 @@ function OrderHistory({ orders = [], email }) {
       setTimeout(() => setErrMsg(null), 3000);
     }
   };
+  const filterOrdersById = (val) => {
+  setSearchTerm(val);
+  if (val.trim() === "") {
+    setCurrentOrders(sortedOrders);
+    return;
+  }
+  const filtered = sortedOrders.filter((order) =>
+    order.order_id.toLowerCase().includes(val.toLowerCase())
+  );
+  setCurrentOrders(filtered);
+  setCurrentPage(1);
+};
 
   const handleTrackShipment = (orderId) => {
     setSelectedOrderId(orderId);
@@ -200,7 +212,7 @@ function OrderHistory({ orders = [], email }) {
             Your Order History
           </h1>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Track and manage all your orders in one beautiful place
+            Track and manage all your orders in one place
           </p>
         </motion.div>
 
@@ -223,7 +235,7 @@ function OrderHistory({ orders = [], email }) {
                   placeholder="Enter Order ID..."
                   className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-200 bg-white/70"
                   value={searchTerm}
-                  onChange={(e) => searchByID(e.target.value)}
+                  onChange={(e) => filterOrdersById(e.target.value)}
                 />
                 <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 transition-colors">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -259,7 +271,9 @@ function OrderHistory({ orders = [], email }) {
                 />
               </div>
 
-              <div className="flex gap-3">
+           
+            </div>
+               <div className="flex gap-3">
                 <button
                   className="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-indigo-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
                   onClick={searchByDate}
@@ -273,7 +287,6 @@ function OrderHistory({ orders = [], email }) {
                   Reset
                 </button>
               </div>
-            </div>
           </div>
         </motion.div>
 
@@ -310,12 +323,9 @@ function OrderHistory({ orders = [], email }) {
                         <span className="font-semibold text-gray-800">ORDER PLACED</span>
                         <p className="text-gray-700 mt-1">{order.order_date}</p>
                       </div>
-                      
                       <div className="text-sm text-gray-600">
                         <span className="font-semibold text-gray-800">ORDER ID</span>
-                        <p className="text-gray-700 mt-1 font-mono bg-gray-100/50 px-2 py-1 rounded-md inline-block">
-                          #{order.order_id}
-                        </p>
+                        <p className="text-gray-700 mt-1">{order.order_id}</p>
                       </div>
                     </div>
 
