@@ -13,6 +13,10 @@ export default function BorderfreeStyleCheckout() {
   // 1) State
   // =========================================================
   const [receiver, setReceiver] = useState({
+    firstName: "John",
+    lastName: "Doe",
+    email: "",
+    phone: "",
     address: "456 Maple Ave",
     address2: "#200",
     postalCode: "94103",
@@ -125,7 +129,7 @@ export default function BorderfreeStyleCheckout() {
           phone: envData.phone,
         },
         address_to: {
-          name: (receiver.firstName ?? "") + " " + (receiver.lastName ?? ""),
+          name: (receiver.firstName ?? "") + "" + (receiver.lastName ?? ""),
           street1: receiver.address,
           city: receiver.city,
           state: receiver.region,

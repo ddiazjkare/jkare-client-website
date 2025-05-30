@@ -337,12 +337,12 @@ function OrderHistory({ orders = [], email }) {
                         <span className="font-semibold text-gray-800">ORDER ID</span>
                         <p className="text-gray-700 mt-1">{order.order_id}</p>
                       </div>
-                      {order.tracking_number && (
+                      {/* {order.tracking_number && (
                         <div className="text-sm text-gray-600">
                           <span className="font-semibold text-gray-800">TRACKING #</span>
                           <p className="text-gray-700 mt-1">{order.tracking_number}</p>
                         </div>
-                      )}
+                      )} */}
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-3">
@@ -569,9 +569,9 @@ function OrderHistory({ orders = [], email }) {
                 </div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-2">No Orders Found</h3>
                 <p className="text-gray-600 mb-6">
-                  You haven't placed any orders yet. Start shoppingto discover amazing products!
+                  You haven't placed any orders yet. Start shopping to discover amazing products!
                 </p>
-                <Link href="/shop">
+                <Link href="/product">
                   <button className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold py-3 px-8 rounded-xl hover:from-blue-600 hover:to-indigo-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
                     Start Shopping
                   </button>
@@ -684,7 +684,6 @@ function OrderHistory({ orders = [], email }) {
                             <p className="font-semibold text-gray-800"> <span>Tracking ID : </span>{selectedOrder?.tracking_number}</p>
                           </div>
                         </div>
-
                       </div>
 
                       {/* Tracking Timeline */}
