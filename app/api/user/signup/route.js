@@ -15,7 +15,7 @@ export const POST = async (req) => {
 
     if (!exUser?.message)
       return NextResponse.json(
-        { error: "Username already taken" },
+        { error: "Username or email already taken" },
         { status: 400 }
       );
 
