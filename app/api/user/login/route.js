@@ -5,15 +5,12 @@ import Users from "../../../../models/Users";
 export const POST = async (req) => {
   try {
     const { username, password } = await req.json();
-    // let user = await fetch(
-    //   `${process.env.NEXT_PUBLIC_API_URL}/user/info/${username}`
-    // );
-    // user = await user.json();
+
     let user = await Users.findOne({
       $or: [{ username: username }, { email: username }],
     }).lean();
 
-    if (user && user.message)
+    if (!user)
       return NextResponse.json(
         { error: "no such user exists" },
         { status: 400 }
@@ -37,6 +34,7 @@ export const POST = async (req) => {
 
     return NextResponse.json(user, { status: 200 });
   } catch (err) {
+    console.error(err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 };
