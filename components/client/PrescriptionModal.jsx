@@ -21,20 +21,20 @@ function PrescriptionModal({ cart, isModalOpen, setIsModalOpen, email }) {
   const router = useRouter();
 
   /* ----------  Disable / enable checkout  ---------- */
-  const checkDisabled = (later, same) => {
-    const perItemReady =
-      fileInputRefs.current.length &&
-      fileInputRefs.current.every((f) => f && f.value !== "");
-    setIsCheckoutDisabled(
-      !(perItemReady || same || later || prescriptionItems.length === 0)
-    );
-  };
+const checkDisabled = (later, sameForAll) => {
+  const perItemReady =
+    prescriptionItems.length > 0 &&
+    prescriptionItems.every((item) => !!item.file);
+  const sameFileReady = sameForAll && !!sameFile;
+  setIsCheckoutDisabled(
+    !(perItemReady || sameFileReady || later || prescriptionItems.length === 0)
+  );
+};
 
-  useEffect(() => {
-    checkDisabled(uploadLater, sameFile);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fileInputRefs, uploadLater, sameFile, prescriptionItems, isModalOpen]);
-
+useEffect(() => {
+  checkDisabled(uploadLater, sameFileForAll);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [fileInputRefs, uploadLater, sameFileForAll, sameFile, prescriptionItems, isModalOpen]);
   if (!isModalOpen) return null;
 
   /* ----------  Helpers  ---------- */
@@ -42,29 +42,31 @@ function PrescriptionModal({ cart, isModalOpen, setIsModalOpen, email }) {
     fileInputRefs.current.forEach((f) => f && (f.value = ""));
   };
 
-  const handleFileChange = (index, e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+const handleFileChange = (index, e) => {
+  const file = e.target.files[0];
+  if (!file) return;
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setPrescriptionItems((prev) => {
-        const updated = [...prev];
-        updated[index] = {
-          ...updated[index],
-          file: {
-            fileName: file.name,
-            fileSize: file.size,
-            fileType: file.type,
-            filePreview: reader.result,
-          },
-        };
-        return updated;
-      });
-    };
-    reader.readAsDataURL(file);
-    fileInputRefs.current[index] = file;
+  const reader = new FileReader();
+  reader.onloadend = () => {
+    setPrescriptionItems((prev) => {
+      const updated = [...prev];
+      updated[index] = {
+        ...updated[index],
+        file: {
+          fileName: file.name,
+          fileSize: file.size,
+          fileType: file.type,
+          filePreview: reader.result,
+        },
+      };
+      // Call checkDisabled after state update
+     setTimeout(() => checkDisabled(uploadLater, sameFileForAll), 0);
+      return updated;
+    });
   };
+  reader.readAsDataURL(file);
+  fileInputRefs.current[index] = file;
+};
 
   const sameUploadHandler = () => {
     setSameFileForAll((prev) => !prev);

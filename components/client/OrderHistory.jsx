@@ -337,12 +337,12 @@ function OrderHistory({ orders = [], email }) {
                         <span className="font-semibold text-gray-800">ORDER ID</span>
                         <p className="text-gray-700 mt-1">{order.order_id}</p>
                       </div>
-                      {order.tracking_number && (
+                      {/* {order.tracking_number && (
                         <div className="text-sm text-gray-600">
                           <span className="font-semibold text-gray-800">TRACKING #</span>
                           <p className="text-gray-700 mt-1">{order.tracking_number}</p>
                         </div>
-                      )}
+                      )} */}
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-3">
@@ -405,12 +405,14 @@ function OrderHistory({ orders = [], email }) {
                             </div>
 
                             {product.prescription_file && (
-                              <button
-                                onClick={() => handleDownloadFile(product.prescription_file, `${product.product_name}_prescription.pdf`)}
-                                className="mt-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white text-xs font-semibold px-4 py-2 rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105"
+                              <a
+                                href={product.prescription_file}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="mt-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white text-xs font-semibold px-4 py-2 rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 inline-block"
                               >
-                                📄 Download Prescription
-                              </button>
+                                👁️ View File
+                              </a>
                             )}
                           </div>
                         </div>
@@ -465,12 +467,14 @@ function OrderHistory({ orders = [], email }) {
                             </td>
                             <td className="py-4 text-center">
                               {product.prescription_file && (
-                                <button
-                                  onClick={() => handleDownloadFile(product.prescription_file, `${product.product_name}_prescription.pdf`)}
-                                  className="bg-gradient-to-r from-purple-500 to-purple-600 text-white text-xs font-semibold px-3 py-2 rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105"
+                                <a
+                                  href={product.prescription_file}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="bg-gradient-to-r from-purple-500 to-purple-600 text-white text-xs font-semibold px-3 py-2 rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 inline-block"
                                 >
-                                  📄 Download
-                                </button>
+                                  👁️ Download File
+                                </a>
                               )}
                             </td>
                           </tr>
@@ -524,15 +528,17 @@ function OrderHistory({ orders = [], email }) {
                       <div className="space-y-2 text-sm mb-4">
                         <div className="flex justify-between">
                           <span className="text-gray-600">Subtotal:</span>
-                          <span className="font-semibold">${order.sub_amount}</span>
+                          <span className="font-semibold">${order.items.reduce((sum, item) => sum + item.quantity * item.price, 0).toFixed(2)}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-gray-600">Discount:</span>
+                          <span className="text-gray-600">Price Discount:</span>
                           <span className="font-semibold text-red-600">-${order.discount_amount}</span>
                         </div>
                         <div className="flex justify-between text-lg font-bold text-green-600 pt-2 border-t border-gray-200">
                           <span>Total:</span>
-                          <span>${order.total_amount}</span>
+                          <span>
+                            ${order.items.reduce((sum, item) => sum + item.quantity * item.price, 0).toFixed(2)}
+                          </span>
                         </div>
                       </div>
 
@@ -569,9 +575,9 @@ function OrderHistory({ orders = [], email }) {
                 </div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-2">No Orders Found</h3>
                 <p className="text-gray-600 mb-6">
-                  You haven't placed any orders yet. Start shoppingto discover amazing products!
+                  You haven't placed any orders yet. Start shopping to discover amazing products!
                 </p>
-                <Link href="/shop">
+                <Link href="/product">
                   <button className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold py-3 px-8 rounded-xl hover:from-blue-600 hover:to-indigo-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
                     Start Shopping
                   </button>
@@ -604,8 +610,8 @@ function OrderHistory({ orders = [], email }) {
                     key={index + 1}
                     onClick={() => handlePageChange(index + 1)}
                     className={`px-4 py-2 rounded-xl font-semibold transition-all duration-200 ${currentPage === index + 1
-                        ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg"
-                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                      ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                       }`}
                   >
                     {index + 1}
@@ -684,7 +690,6 @@ function OrderHistory({ orders = [], email }) {
                             <p className="font-semibold text-gray-800"> <span>Tracking ID : </span>{selectedOrder?.tracking_number}</p>
                           </div>
                         </div>
-
                       </div>
 
                       {/* Tracking Timeline */}
