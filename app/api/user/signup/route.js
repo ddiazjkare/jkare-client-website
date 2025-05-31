@@ -9,10 +9,9 @@ export const POST = async (req) => {
   try {
     const userData = await req.json();
 
-    let exUser = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/info/${userData.username}`
-    );
-    exUser = await exUser.json();
+    const exUser = await Users.findOne({
+      $or: [{ username: userData.username }, { email: userData.email }],
+    });
 
     if (!exUser?.message)
       return NextResponse.json(
