@@ -1,72 +1,5 @@
-// "use client";
-// import React from "react";
-// import { useRouter } from "next/navigation";
-// import { FaArrowLeft } from "react-icons/fa";
-
-// const Navigation = () => {
-//   const router = useRouter();
-
-//   const handleNavigation = (path) => {
-//     router.push(`/account-settings/${path}`);
-//   };
-
-//   return (
-//     <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 mt-32">
-//       {/* Sidebar Navigation */}
-//       <div className="col-span-1 space-y-6">
-//         {/* Back to Home Button */}
-//         <div className="flex items-center space-x-3">
-//           <button
-//             onClick={() => router.push("/")}
-//             className="flex items-center gap-2 bg-customPink text-white px-4 py-2 rounded-full shadow-md hover:bg-customBlue hover:shadow-lg transition duration-200"
-//           >
-//             <FaArrowLeft className="text-lg" />
-//             <span className="text-sm font-medium">Back to Home</span>
-//           </button>
-//         </div>
-//         {/* Navigation Section */}
-//         <div className="bg-white shadow-lg rounded-lg p-6 border-2">
-//           <h3 className="text-xl font-semibold mb-4 border-b-2 border-gray-300 pb-2">
-//             Navigation
-//           </h3>
-//           <ul className="space-y-4">
-//             <li
-//               onClick={() => handleNavigation("edit-profile")}
-//               className={`cursor-pointer flex items-center gap-3 p-3 rounded-lg transition duration-200`}
-//             >
-//               <span className="text-base">Edit Profile</span>
-//             </li>
-//             <li
-//               onClick={() => handleNavigation("address-book")}
-//               className={`cursor-pointer flex items-center gap-3 p-3 rounded-lg transition duration-200`}
-//             >
-//               <span className="text-base">Address Book</span>
-//             </li>
-//             <li
-//               onClick={() => handleNavigation("gift-card")}
-//               className={`cursor-pointer flex items-center gap-3 p-3 rounded-lg transition duration-200`}
-//             >
-//               <span className="text-base">Gift Card</span>
-//             </li>
-//           </ul>
-//         </div>
-//       </div>
-
-//       {/* Main Content */}
-//       <div className="col-span-1 lg:col-span-3 bg-white shadow-lg rounded-lg p-6 border-2 ">
-//         <iframe
-//           src={router.pathname}
-//           title="Dynamic Content"
-//           className="w-full h-full border-0"
-//         ></iframe>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Navigation;
 "use client";
-import React, { useEffect, useState } from "react";
+import React, {useRef, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSession } from "next-auth/react";
@@ -80,6 +13,7 @@ const EditProfile = () => {
     (localUser && localUser.username) || (session && session.user && session.user.username) || "";
   const userEmail =
     (localUser && localUser.email) || (session && session.user && session.user.email) || "";
+      const fileInputRef = useRef(null);
 
   const [name, setName] = useState("");
   const [activeOption, setActiveOption] = useState("/profile-detail");
@@ -95,110 +29,33 @@ const EditProfile = () => {
   
   const router = useRouter();
   const pageTitle = "Profile Detail";
-
-  // Skeletal Loader Component
-  // const SkeletalLoader = () => (
-  //   <div className="w-full mt-36 mb-14 font-montserrat flex items-center justify-center">
-  //     <div className="grid grid-cols-1 lg:grid-cols-3 border-2 border-gray-200 rounded-2xl overflow-hidden shadow-xl max-w-6xl w-full mx-4">
-  //       {/* Profile Photo Skeleton */}
-  //       <div className="bg-gradient-to-br from-pink-400 via-purple-400 to-indigo-400 p-8 flex flex-col items-center">
-  //         <div className="rounded-full w-40 h-40 mb-6 bg-white/30 animate-pulse"></div>
-  //         <div className="bg-white/30 rounded-full w-32 h-10 mb-6 animate-pulse"></div>
-  //         <div className="space-y-3 w-full">
-  //           <div className="bg-white/20 rounded-lg p-4 animate-pulse">
-  //             <div className="h-4 bg-white/30 rounded mb-2"></div>
-  //             <div className="h-5 bg-white/40 rounded"></div>
-  //           </div>
-  //           <div className="bg-white/20 rounded-lg p-4 animate-pulse">
-  //             <div className="h-4 bg-white/30 rounded mb-2"></div>
-  //             <div className="h-5 bg-white/40 rounded"></div>
-  //           </div>
-  //         </div>
-  //       </div>
-        
-  //       {/* Form Skeleton */}
-  //       <div className="col-span-2 p-8 bg-white">
-  //         <div className="h-8 bg-gray-200 rounded-lg mb-8 w-48 animate-pulse"></div>
-  //         <div className="space-y-6">
-  //           {/* Name and Phone skeleton */}
-  //           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-  //             <div>
-  //               <div className="h-5 bg-gray-200 rounded mb-3 w-16 animate-pulse"></div>
-  //               <div className="h-12 bg-gray-100 rounded-xl animate-pulse"></div>
-  //             </div>
-  //             <div>
-  //               <div className="h-5 bg-gray-200 rounded mb-3 w-16 animate-pulse"></div>
-  //               <div className="h-12 bg-gray-100 rounded-xl animate-pulse"></div>
-  //             </div>
-  //           </div>
-            
-  //           {/* Address skeletons */}
-  //           <div>
-  //             <div className="h-5 bg-gray-200 rounded mb-3 w-32 animate-pulse"></div>
-  //             <div className="h-12 bg-gray-100 rounded-xl animate-pulse"></div>
-  //           </div>
-  //           <div>
-  //             <div className="h-5 bg-gray-200 rounded mb-3 w-32 animate-pulse"></div>
-  //             <div className="h-12 bg-gray-100 rounded-xl animate-pulse"></div>
-  //           </div>
-            
-  //           {/* City, State skeleton */}
-  //           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-  //             <div>
-  //               <div className="h-5 bg-gray-200 rounded mb-3 w-12 animate-pulse"></div>
-  //               <div className="h-12 bg-gray-100 rounded-xl animate-pulse"></div>
-  //             </div>
-  //             <div>
-  //               <div className="h-5 bg-gray-200 rounded mb-3 w-14 animate-pulse"></div>
-  //               <div className="h-12 bg-gray-100 rounded-xl animate-pulse"></div>
-  //             </div>
-  //           </div>
-            
-  //           {/* Zip, Country skeleton */}
-  //           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-  //             <div>
-  //               <div className="h-5 bg-gray-200 rounded mb-3 w-20 animate-pulse"></div>
-  //               <div className="h-12 bg-gray-100 rounded-xl animate-pulse"></div>
-  //             </div>
-  //             <div>
-  //               <div className="h-5 bg-gray-200 rounded mb-3 w-18 animate-pulse"></div>
-  //               <div className="h-12 bg-gray-100 rounded-xl animate-pulse"></div>
-  //             </div>
-  //           </div>
-            
-  //           {/* Button skeleton */}
-  //           <div className="flex justify-end">
-  //             <div className="h-12 bg-gray-200 rounded-xl w-36 animate-pulse"></div>
-  //           </div>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
-
   // Fetch user data on component mount
-  const fetchUserData = async () => {
-    try {
-      setDataLoading(true);
-      const response = await fetch(`/api/user/info/${userEmail}`);
-      const userData = await response.json();
-      
-      if (response.ok) {
-        setUserInfo(userData);
-        setName(userData.fullName || "");
-        setPhone(userData.phone || "");
-        setAddress(userData.address || {});
-        setProfilePhoto(userData.image || "https://s3.ap-south-1.amazonaws.com/jkare.data/default_user_profile.jpg");
-      } else {
-        toast.error("Failed to fetch user data");
-      }
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-      toast.error("An error occurred while fetching user data");
-    } finally {
-      setDataLoading(false);
+ const fetchUserData = async () => {
+  try {
+    setDataLoading(true);
+    const response = await fetch(`/api/user/info/${userEmail}`);
+    const userData = await response.json();
+
+    if (response.ok) {
+      setUserInfo(userData);
+      setName(userData.fullName || "");
+      setPhone(userData.phone || "");
+      setAddress(userData.address || {});
+      setProfilePhoto(
+        userData.image && userData.image.trim() !== ""
+          ? userData.image
+          : "https://s3.ap-south-1.amazonaws.com/jkare.data/default_user_profile.jpg"
+      );
+    } else {
+      toast.error("Failed to fetch user data");
     }
-  };
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    toast.error("An error occurred while fetching user data");
+  } finally {
+    setDataLoading(false);
+  }
+};
 
   useEffect(() => {
     document.title = pageTitle;
@@ -240,8 +97,20 @@ const EditProfile = () => {
     });
   };
 
-  const handlePhotoChange = async (e) => {
+const handlePhotoChange = (e) => {
     const fileInput = e.target.files?.[0];
+    if (!fileInput) return;
+
+    // Validate file size (2MB = 2 * 1024 * 1024 bytes)
+    if (fileInput.size > 2 * 1024 * 1024) {
+      // Clear the file input using ref
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+       toast.error("Please select image less than 2MB in size.");
+      return;
+    }
+
     setFile(fileInput);
     setProfilePhoto(URL.createObjectURL(fileInput));
   };
@@ -367,13 +236,14 @@ const EditProfile = () => {
             </div>
           </div>
           
-          <input
-            type="file"
-            id="profilePhotoInput"
-            accept="image/*"
-            className="hidden"
-            onChange={handlePhotoChange}
-          />
+        <input
+        type="file"
+        id="profilePhotoInput"
+        accept="image/*"
+        className="hidden"
+        onChange={handlePhotoChange}
+        ref={fileInputRef}
+      />
         </div>
         
         {/* Form Section */}
