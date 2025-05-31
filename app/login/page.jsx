@@ -150,7 +150,7 @@ const Login = () => {
           >
             <FaGoogle size={20} color="#DB4437" />
           </button>
-          <button
+          {/* <button
             className="bg-white hover:bg-gray-100 text-gray-800 font-bold p-3 rounded-full border border-gray-400 shadow flex items-center"
             type="button"
             onClick={() => signIn("facebook")}
@@ -163,7 +163,7 @@ const Login = () => {
             onClick={() => signIn("twitter")}
           >
             <FaXTwitter size={20} color="#1DA1F2" />
-          </button>
+          </button> */}
         </div>
 
         {/* Sign up link */}
