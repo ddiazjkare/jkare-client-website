@@ -7,7 +7,9 @@ export const generateMetadata = () => {
 };
 
 const apiCall = async () => {
-  const response = await fetch("/api/ship-env");
+    const response = await fetch("http://13.201.44.76/api/ship-env", {
+      cache: "no-store",
+    });
   if (!response.ok) {
     throw new Error("Failed to fetch environment data (/api/ship-env).");
   }

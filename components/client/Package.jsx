@@ -158,21 +158,6 @@ export default function Package({env}) {
     };
   }, []);
 
-  // Fetch environment data
-  // const fetchEnvData = async () => {
-  //   try {
-  //     const response = await fetch("/api/ship-env");
-  //     if (!response.ok) {
-  //       throw new Error("Failed to fetch environment data (/api/ship-env).");
-  //     }
-  //     const data = await response.json();
-  //     setEnvData(data);
-  //   } catch (error) {
-  //     console.error("Error fetching /api/ship-env:", error);
-  //     toast.error("Error fetching environment data.");
-  //   }
-  // };
-
   // =========================================================
   // 4) Automatic shipping-rate fetch
   // =========================================================
