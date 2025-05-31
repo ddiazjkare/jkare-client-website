@@ -105,8 +105,8 @@ export default function Footer() {
             links={[
               // ['Home', '/'],
               ['About Us', '/about-us'],
-              ['Services', '/services'],
-              ['Contact', '/contact'],
+              ['Services', '/our-services'],
+              ['Contact', '/contact-us'],
               ['Privacy Policy', '#'],
               ['Cookie Policy', '#'],
             ]}
