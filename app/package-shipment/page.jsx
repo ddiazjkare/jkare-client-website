@@ -10,7 +10,7 @@ import { MdOutlineLocalShipping } from "react-icons/md";
 export default function BorderfreeStyleCheckout() {
   const [showConfetti, setShowConfetti] = useState(false);
   const router = useRouter();
-  
+
   // =========================================================
   // 1) State
   // =========================================================
@@ -25,26 +25,26 @@ export default function BorderfreeStyleCheckout() {
     region: "CA",
     location: "US",
   });
-  
+
   const [validationErrors, setValidationErrors] = useState({});
   const [parcels, setParcels] = useState([]);
   const [shipment, setShipment] = useState(null);
   const [selectedRate, setSelectedRate] = useState(null);
   const [cartItems, setCartItems] = useState([]);
-  
+
   // Tracks whether we're busy fetching rates or finalizing checkout
   const [isFetchingRates, setIsFetchingRates] = useState(false);
   const [isCreatingShipment, setIsCreatingShipment] = useState(false);
-  
+
   // For address suggestions
   const [addressSuggestions, setAddressSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isFetchingAddress, setIsFetchingAddress] = useState(false);
   const suggestionsRef = useRef(null);
-  
+
   // Env data (from /api/ship-env)
   const [envData, setEnvData] = useState(null);
-  
+
   // For free shipping
   const [isFreeShipping, setIsFreeShipping] = useState(false);
 
@@ -63,35 +63,35 @@ export default function BorderfreeStyleCheckout() {
 
   const validateForm = () => {
     const errors = {};
-    
+
     if (!receiver.name.trim()) {
       errors.name = "Name is required";
     }
-    
+
     if (!receiver.email.trim()) {
       errors.email = "Email is required";
     } else if (!validateEmail(receiver.email)) {
       errors.email = "Please enter a valid email address";
     }
-    
+
     if (!receiver.phone.trim()) {
       errors.phone = "Phone number is required";
     } else if (!validatePhone(receiver.phone)) {
       errors.phone = "Please enter a valid phone number (numbers only)";
     }
-    
+
     if (!receiver.address.trim()) {
       errors.address = "Address is required";
     }
-    
+
     if (!receiver.city.trim()) {
       errors.city = "City is required";
     }
-    
+
     if (!receiver.postalCode.trim()) {
       errors.postalCode = "Postal code is required";
     }
-    
+
     if (!receiver.region.trim()) {
       errors.region = "State/Province is required";
     }
@@ -101,14 +101,14 @@ export default function BorderfreeStyleCheckout() {
   };
 
   const isFormValid = () => {
-    return receiver.name.trim() && 
-           validateEmail(receiver.email) && 
-           validatePhone(receiver.phone) && 
-           receiver.address.trim() && 
-           receiver.city.trim() && 
-           receiver.postalCode.trim() && 
-           receiver.region.trim() &&
-           selectedRate;
+    return receiver.name.trim() &&
+      validateEmail(receiver.email) &&
+      validatePhone(receiver.phone) &&
+      receiver.address.trim() &&
+      receiver.city.trim() &&
+      receiver.postalCode.trim() &&
+      receiver.region.trim() &&
+      selectedRate;
   };
 
   // =========================================================
@@ -118,7 +118,7 @@ export default function BorderfreeStyleCheckout() {
     // Load cart
     const medCart = JSON.parse(localStorage.getItem("medCart")) || [];
     setCartItems(medCart);
-    
+
     // Convert cart items -> Shippo parcels
     const formattedParcels = medCart.map((item) => {
       const length = item.parcel_info?.length ?? 10;
@@ -245,12 +245,12 @@ export default function BorderfreeStyleCheckout() {
       toast.warn("Please fill in all required fields correctly.");
       return;
     }
-    
+
     if (!selectedRate) {
       toast.warn("Please select a delivery option before proceeding.");
       return;
     }
-    
+
     try {
       setIsCreatingShipment(true);
 
@@ -300,7 +300,7 @@ export default function BorderfreeStyleCheckout() {
   // =========================================================
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    
+
     // For phone, only allow numbers
     if (name === 'phone') {
       const numbersOnly = value.replace(/\D/g, '');
@@ -308,7 +308,7 @@ export default function BorderfreeStyleCheckout() {
     } else {
       setReceiver(prev => ({ ...prev, [name]: value }));
     }
-    
+
     // Clear validation error when user starts typing
     if (validationErrors[name]) {
       setValidationErrors(prev => ({ ...prev, [name]: '' }));
@@ -319,7 +319,7 @@ export default function BorderfreeStyleCheckout() {
     const { name, value } = e.target;
     const updatedReceiver = { ...receiver, [name]: value };
     setReceiver(updatedReceiver);
-    
+
     // Clear validation error
     if (validationErrors[name]) {
       setValidationErrors(prev => ({ ...prev, [name]: '' }));
@@ -414,7 +414,7 @@ export default function BorderfreeStyleCheckout() {
   // Prepare displayed rates with free shipping option
   let displayedRates = shipment?.rates ? [...shipment.rates] : [];
   let freeShippingRate = null;
-  
+
   if (isFreeShipping && shipment?.rates?.length > 0) {
     const randomIndex = Math.floor(Math.random() * shipment.rates.length);
     const randomRateId = shipment.rates[randomIndex].object_id;
@@ -485,7 +485,13 @@ export default function BorderfreeStyleCheckout() {
                   <FaUser className="text-blue-600" />
                   Contact Information
                 </h2>
-                
+                {/* Note about email for tracking */}
+                <div className="mb-4">
+                  <span className="text-xs text-yellow-700 bg-yellow-100 px-3 py-2 rounded block">
+                    <strong>Note:</strong> Please ensure the email address you provide is correct. You will only be able to track and view your order by logging in with this same email on our website.
+                  </span>
+                </div>
+
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -496,9 +502,8 @@ export default function BorderfreeStyleCheckout() {
                       name="name"
                       value={receiver.name}
                       onChange={handleInputChange}
-                      className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                        validationErrors.name ? 'border-red-500' : 'border-gray-300'
-                      }`}
+                      className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${validationErrors.name ? 'border-red-500' : 'border-gray-300'
+                        }`}
                       placeholder="Enter your full name"
                     />
                     {validationErrors.name && (
@@ -517,9 +522,8 @@ export default function BorderfreeStyleCheckout() {
                         name="email"
                         value={receiver.email}
                         onChange={handleInputChange}
-                        className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                          validationErrors.email ? 'border-red-500' : 'border-gray-300'
-                        }`}
+                        className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${validationErrors.email ? 'border-red-500' : 'border-gray-300'
+                          }`}
                         placeholder="your@email.com"
                       />
                       {validationErrors.email && (
@@ -537,9 +541,8 @@ export default function BorderfreeStyleCheckout() {
                         name="phone"
                         value={receiver.phone}
                         onChange={handleInputChange}
-                        className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                          validationErrors.phone ? 'border-red-500' : 'border-gray-300'
-                        }`}
+                        className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${validationErrors.phone ? 'border-red-500' : 'border-gray-300'
+                          }`}
                         placeholder="1234567890"
                       />
                       {validationErrors.phone && (
@@ -568,15 +571,14 @@ export default function BorderfreeStyleCheckout() {
                         name="address"
                         value={receiver.address}
                         onChange={handleAddressInput}
-                        className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                          validationErrors.address ? 'border-red-500' : 'border-gray-300'
-                        }`}
+                        className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${validationErrors.address ? 'border-red-500' : 'border-gray-300'
+                          }`}
                         placeholder="123 Main Street"
                       />
                       {validationErrors.address && (
                         <p className="text-red-500 text-xs mt-1">{validationErrors.address}</p>
                       )}
-                      
+
                       {/* Address Suggestions */}
                       {showSuggestions && (
                         <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg">
@@ -624,9 +626,8 @@ export default function BorderfreeStyleCheckout() {
                         name="city"
                         value={receiver.city}
                         onChange={handleAddressInput}
-                        className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                          validationErrors.city ? 'border-red-500' : 'border-gray-300'
-                        }`}
+                        className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${validationErrors.city ? 'border-red-500' : 'border-gray-300'
+                          }`}
                         placeholder="San Francisco"
                       />
                       {validationErrors.city && (
@@ -643,9 +644,8 @@ export default function BorderfreeStyleCheckout() {
                         name="region"
                         value={receiver.region}
                         onChange={handleAddressInput}
-                        className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                          validationErrors.region ? 'border-red-500' : 'border-gray-300'
-                        }`}
+                        className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${validationErrors.region ? 'border-red-500' : 'border-gray-300'
+                          }`}
                         placeholder="CA"
                       />
                       {validationErrors.region && (
@@ -662,9 +662,8 @@ export default function BorderfreeStyleCheckout() {
                         name="postalCode"
                         value={receiver.postalCode}
                         onChange={handleAddressInput}
-                        className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                          validationErrors.postalCode ? 'border-red-500' : 'border-gray-300'
-                        }`}
+                        className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${validationErrors.postalCode ? 'border-red-500' : 'border-gray-300'
+                          }`}
                         placeholder="94103"
                       />
                       {validationErrors.postalCode && (
@@ -718,19 +717,18 @@ export default function BorderfreeStyleCheckout() {
                 {displayedRates.length > 0 ? (
                   <div className="space-y-3">
                     {displayedRates.map((rate, idx) => {
-                      const isSelected = selectedRate?.object_id === rate.object_id && 
-                                       selectedRate?.amount === rate.amount;
+                      const isSelected = selectedRate?.object_id === rate.object_id &&
+                        selectedRate?.amount === rate.amount;
                       const cost = parseFloat(rate.amount);
 
                       return (
                         <div
                           key={rate.isFree ? "free-shipping" : rate.object_id}
                           onClick={() => setSelectedRate(rate)}
-                          className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 ${
-                            isSelected 
-                              ? 'border-blue-500 bg-blue-50' 
-                              : 'border-gray-200 hover:border-gray-300'
-                          }`}
+                          className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 ${isSelected
+                            ? 'border-blue-500 bg-blue-50'
+                            : 'border-gray-200 hover:border-gray-300'
+                            }`}
                         >
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-3">
@@ -751,8 +749,8 @@ export default function BorderfreeStyleCheckout() {
                                   )}
                                 </div>
                                 <div className="text-sm text-gray-500">
-                                  {rate.estimated_days 
-                                    ? `${rate.estimated_days} business days` 
+                                  {rate.estimated_days
+                                    ? `${rate.estimated_days} business days`
                                     : 'Standard delivery'}
                                 </div>
                               </div>
@@ -788,19 +786,19 @@ export default function BorderfreeStyleCheckout() {
                     <div className="space-y-3 mb-4 max-h-60 overflow-y-auto">
                       {cartItems.map((item, idx) => (
                         <div key={idx} className="flex justify-between items-start py-2 border-b border-gray-100 last:border-b-0">
-                        <div className="w-16 h-16 flex-shrink-0 border border-gray-200 mr-2">
-                        {item.images && item.images[0] ? (
-                          <img
-                            src={item.images[0]}
-                            alt={item.title}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="flex items-center justify-center w-full h-full bg-gray-100">
-                            <span className="text-xs text-gray-500">No Image</span>
+                          <div className="w-16 h-16 flex-shrink-0 border border-gray-200 mr-2">
+                            {item.images && item.images[0] ? (
+                              <img
+                                src={item.images[0]}
+                                alt={item.title}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <div className="flex items-center justify-center w-full h-full bg-gray-100">
+                                <span className="text-xs text-gray-500">No Image</span>
+                              </div>
+                            )}
                           </div>
-                        )}
-                      </div>
                           <div className="flex-1">
                             <h4 className="text-sm font-medium text-gray-900">{item.title}</h4>
                             <p className="text-xs text-gray-500 mt-1">Qty: {item.quantity}</p>
@@ -819,14 +817,14 @@ export default function BorderfreeStyleCheckout() {
                           <strong>🚚 Free Shipping Available!</strong>
                         </p>
                         <p className="text-xs text-yellow-700 mt-1">
-                          Spend ${(parseFloat(envData.offer_price) - itemSubtotal).toFixed(2)} more 
+                          Spend ${(parseFloat(envData.offer_price) - itemSubtotal).toFixed(2)} more
                           to get free shipping!
                         </p>
                         <div className="w-full bg-yellow-200 rounded-full h-2 mt-2">
-                          <div 
+                          <div
                             className="bg-yellow-600 h-2 rounded-full transition-all duration-300"
-                            style={{ 
-                              width: `${Math.min((itemSubtotal / parseFloat(envData.offer_price)) * 100, 100)}%` 
+                            style={{
+                              width: `${Math.min((itemSubtotal / parseFloat(envData.offer_price)) * 100, 100)}%`
                             }}
                           ></div>
                         </div>
@@ -862,12 +860,11 @@ export default function BorderfreeStyleCheckout() {
                     {/* Checkout button */}
                     <button
                       onClick={handleProceedToPayment}
-                      disabled={!isFormValid() || isCreatingShipment}
-                      className={`w-full mt-6 py-3 px-4 rounded-lg font-semibold text-white transition-all duration-200 ${
-                        isFormValid() && !isCreatingShipment
-                          ? 'bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-200'
-                          : 'bg-gray-400 cursor-not-allowed'
-                      }`}
+                      disabled={isCreatingShipment}
+                      className={`w-full mt-6 py-3 px-4 rounded-lg font-semibold text-white transition-all duration-200 ${!isCreatingShipment
+                        ? 'bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-200'
+                        : 'bg-gray-400 cursor-not-allowed'
+                        }`}
                     >
                       {isCreatingShipment ? (
                         <div className="flex items-center justify-center gap-2">
@@ -909,7 +906,7 @@ export default function BorderfreeStyleCheckout() {
                 <FaShippingFast className="mr-2 text-blue-600" />
                 Fast & Secure Delivery
               </div>
-             
+
               <div className="flex items-center">
                 <FaRegAddressBook className="mr-2 text-purple-600" />
                 Address Validation
