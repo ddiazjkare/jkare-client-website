@@ -41,7 +41,8 @@ export const POST = async (req) => {
           shipping_rate_data: {
             type: "fixed_amount",
             fixed_amount: {
-              amount: total_amount < threshold ? shippingAmount : 0, 
+              // amount: total_amount < threshold ? shippingAmount : 0, 
+              amount: selectedRate.isFree ? 0 : shippingAmount, 
               currency: "usd",
             },
             display_name: selectedRate.servicelevel.display_name ?? "Shipping", // Shipping method name (e.g., "UPS® Ground")
