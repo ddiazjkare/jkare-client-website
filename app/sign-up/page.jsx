@@ -7,7 +7,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const SignUpForm = () => {
- const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
     phone: '',
@@ -17,16 +18,92 @@ const SignUpForm = () => {
   const [error, setError] = useState(null)
   const router = useRouter()
   const pageTitle = 'SignUp';
+  
   useEffect(() => {
     document.title = pageTitle;
   }, [pageTitle]);
+
+  // Validation functions
+  const validateUsername = (username) => {
+    if (!username.trim()) return "Username is required";
+    if (username.includes(' ')) return "Username cannot contain spaces";
+    if (username.length < 3) return "Username must be at least 3 characters long";
+    if (!/^[a-zA-Z0-9_]+$/.test(username)) return "Username can only contain letters, numbers, and underscores";
+    return null;
+  };
+
+  const validateEmail = (email) => {
+    if (!email.trim()) return "Email is required";
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) return "Please enter a valid email address";
+    return null;
+  };
+
+  const validatePhone = (phone) => {
+    if (!phone.trim()) return "Phone number is required";
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(phone)) return "Phone number must be exactly 10 digits";
+    return null;
+  };
+
+  const validatePassword = (password) => {
+    if (!password) return "Password is required";
+    if (password.length < 6) return "Password must be at least 6 characters long";
+    return null;
+  };
+
   const formHandler = ({ target }) => {
-    setFormData({ ...formData, [target.name]: target.value })
+    let value = target.value;
+    
+    // Special handling for username - remove spaces and convert to lowercase
+    if (target.name === 'username') {
+      value = value.replace(/\s/g, '').toLowerCase();
+    }
+    
+    // Special handling for phone - only allow numbers
+    if (target.name === 'phone') {
+      value = value.replace(/\D/g, '').slice(0, 10);
+    }
+    
+    setFormData({ ...formData, [target.name]: value });
   }
+
+  const validateForm = () => {
+    const usernameError = validateUsername(formData.username);
+    const emailError = validateEmail(formData.email);
+    const phoneError = validatePhone(formData.phone);
+    const passwordError = validatePassword(formData.password);
+
+    if (usernameError) {
+      toast.error(usernameError);
+      return false;
+    }
+    if (emailError) {
+      toast.error(emailError);
+      return false;
+    }
+    if (phoneError) {
+      toast.error(phoneError);
+      return false;
+    }
+    if (passwordError) {
+      toast.error(passwordError);
+      return false;
+    }
+    return true;
+  };
 
   const submitHandler = async e => {
     try {
       e.preventDefault();
+      
+      // Validate form before submission
+      if (!validateForm()) {
+        return;
+      }
+
+      setIsLoading(true);
+      
       const res = await fetch(`/api/user/signup`, {
         method: 'POST',
         body: JSON.stringify(formData),
@@ -59,7 +136,9 @@ const SignUpForm = () => {
       });
       router.push("/verify/user_created");
     } catch (err) {
-      toast.error("username must be unique!");
+      toast.error("Username must be unique!");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -108,21 +187,24 @@ const SignUpForm = () => {
             <input
               type="text"
               className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
-              placeholder="Enter your Username"
+              placeholder="Enter your Username (no spaces)"
               name="username"
               value={formData.username}
               onChange={(e) => formHandler(e)}
+              disabled={isLoading}
             />
           </div>
           <div className="mb-4">
             <label className="block text-white">Phone Number</label>
             <input
-              type="number"
+              type="tel"
               className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
-              placeholder="Enter your Phone Number"
+              placeholder="Enter your 10-digit Phone Number"
               name="phone"
               value={formData.phone}
               onChange={(e) => formHandler(e)}
+              maxLength="10"
+              disabled={isLoading}
             />
           </div>
           <div className="mb-4">
@@ -134,6 +216,7 @@ const SignUpForm = () => {
               name="email"
               value={formData.email}
               onChange={(e) => formHandler(e)}
+              disabled={isLoading}
             />
           </div>
           <div className="mb-4 relative">
@@ -141,10 +224,11 @@ const SignUpForm = () => {
             <input
               type={showPassword ? "text" : "password"}
               className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 pr-10"
-              placeholder="Enter your Password"
+              placeholder="Enter your Password (min 6 characters)"
               name="password"
               value={formData.password}
               onChange={(e) => formHandler(e)}
+              disabled={isLoading}
             />
             <div
               className="absolute inset-y-0 right-3 top-9 flex items-center cursor-pointer text-gray-600"
@@ -155,10 +239,21 @@ const SignUpForm = () => {
             </div>
           </div>
           <button
-            className="bg-transparent hover:bg-customBlue text-white hover:text-white font-bold py-2 px-4 rounded border border-white hover:border-transparent focus:outline-none focus:shadow-outline w-full"
+            className="bg-transparent hover:bg-customBlue text-white hover:text-white font-bold py-2 px-4 rounded border border-white hover:border-transparent focus:outline-none focus:shadow-outline w-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
             type="submit"
+            disabled={isLoading}
           >
-            Sign Up
+            {isLoading ? (
+              <>
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Signing Up...
+              </>
+            ) : (
+              "Sign Up"
+            )}
           </button>
         </form>
       </div>
