@@ -298,22 +298,25 @@ export default function BorderfreeStyleCheckout() {
   // =========================================================
   // 6) Input Handlers
   // =========================================================
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+const handleInputChange = (e) => {
+  const { name, value } = e.target;
 
-    // For phone, only allow numbers
-    if (name === 'phone') {
-      const numbersOnly = value.replace(/\D/g, '');
-      setReceiver(prev => ({ ...prev, [name]: numbersOnly }));
-    } else {
-      setReceiver(prev => ({ ...prev, [name]: value }));
-    }
+  // For phone, only allow numbers
+  if (name === 'phone') {
+    const numbersOnly = value.replace(/\D/g, '');
+    setReceiver(prev => ({ ...prev, [name]: numbersOnly }));
+  } else if (name === 'email') {
+    // Force lowercase for email input
+    setReceiver(prev => ({ ...prev, [name]: value.toLowerCase() }));
+  } else {
+    setReceiver(prev => ({ ...prev, [name]: value }));
+  }
 
-    // Clear validation error when user starts typing
-    if (validationErrors[name]) {
-      setValidationErrors(prev => ({ ...prev, [name]: '' }));
-    }
-  };
+  // Clear validation error when user starts typing
+  if (validationErrors[name]) {
+    setValidationErrors(prev => ({ ...prev, [name]: '' }));
+  }
+};
 
   const handleAddressInput = async (e) => {
     const { name, value } = e.target;

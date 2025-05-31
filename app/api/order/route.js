@@ -121,7 +121,6 @@ export const POST = async (req) => {
 
     const ship = orderParams.shipping_address;
     const bill = orderParams.billing_address;
-
     console.log("ornder", orderNumber);
 
     const html = `<!DOCTYPE html>
@@ -187,7 +186,6 @@ export const POST = async (req) => {
 </html>`;
 
     await sendMail(customer.email, "Order Booked", html);
-
     return NextResponse.json({ message: "order created" }, { status: 201 });
   } catch (error) {
     console.error(error);
