@@ -7,11 +7,13 @@ export const generateMetadata = () => {
 };
 
 const apiCall = async () => {
-  const response = await fetch("/api/ship-env");
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ship-env`, { cache: "no-store" });
   if (!response.ok) {
     throw new Error("Failed to fetch environment data (/api/ship-env).");
   }
-  return await response.json();
+  const data = await response.json();
+  console.log("Response from /ship-env:", data);
+  return data;
 };
 
 const Shipment = async () => {
