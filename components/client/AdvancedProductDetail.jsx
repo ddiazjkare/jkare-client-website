@@ -9,28 +9,14 @@ import Link from "next/link";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const AdvancedProductDetail = ({ data }) => {
+const AdvancedProductDetail = ({ data, env }) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [thumbnailIndex, setThumbnailIndex] = useState(0);
   const [, setCartItems] = useContext(CartContext);
   const { data: session } = useSession();
-  const [shippingOffer, setShippingOffer] = useState(null);
   const [isFavorited, setIsFavorited] = useState(false);
-  
-  useEffect(() => {
-    async function fetchShippingOffer() {
-      try {
-        const response = await fetch("/api/ship-env");
-        const data = await response.json();
-        setShippingOffer(data.offer_price);
-      } catch (error) {
-        console.error("Failed to fetch shipping offer:", error);
-      }
-    }
-    fetchShippingOffer();
-  }, []);
 
   const warrantyYears = (() => {
     const key = Object.keys(data.product.key_features)
@@ -379,7 +365,7 @@ const AdvancedProductDetail = ({ data }) => {
                     alt="Free Shipping"
                   />
                   <span className="text-xs text-center text-gray-700 font-medium">
-                    Free Shipping Over ${shippingOffer !== null ? shippingOffer : "99"}
+                    Free Shipping Over ${env !== null ? env.offer_price : "99"}
                   </span>
                 </div>
               )}
