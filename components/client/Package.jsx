@@ -6,8 +6,11 @@ import "react-toastify/dist/ReactToastify.css";
 import Confetti from "react-confetti";
 import { FaShippingFast, FaShoppingCart, FaRegAddressBook, FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
 import { MdOutlineLocalShipping } from "react-icons/md";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
-export default function Package({env}) {
+export default function Package({ env }) {
   const [showConfetti, setShowConfetti] = useState(false);
   const router = useRouter();
 
@@ -56,9 +59,13 @@ export default function Package({env}) {
     return emailRegex.test(email);
   };
 
+  // const validatePhone = (phone) => {
+  //   const phoneRegex = /^\d{10,15}$/; // Only numbers, 10-15 digits
+  //   return phoneRegex.test(phone.replace(/\s/g, ''));
+  // };
   const validatePhone = (phone) => {
-    const phoneRegex = /^\d{10,15}$/; // Only numbers, 10-15 digits
-    return phoneRegex.test(phone.replace(/\s/g, ''));
+    if (!phone || typeof phone !== "string" || phone.trim() === "") return false;
+    return isValidPhoneNumber(phone);
   };
 
   const validateForm = () => {
@@ -523,14 +530,13 @@ export default function Package({env}) {
                         <FaPhone className="inline mr-1" />
                         Phone Number *
                       </label>
-                      <input
-                        type="tel"
-                        name="phone"
+                      <PhoneInput
+                        international
+                        defaultCountry="US"
                         value={receiver.phone}
-                        onChange={handleInputChange}
-                        className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${validationErrors.phone ? 'border-red-500' : 'border-gray-300'
-                          }`}
-                        placeholder="1234567890"
+                        onChange={value => setReceiver(prev => ({ ...prev, phone: value || "" }))}
+                        className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${validationErrors.phone ? 'border-red-500' : 'border-gray-300'}`}
+                        disabled={isCreatingShipment}
                       />
                       {validationErrors.phone && (
                         <p className="text-red-500 text-xs mt-1">{validationErrors.phone}</p>

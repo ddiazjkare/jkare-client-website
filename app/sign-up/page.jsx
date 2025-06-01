@@ -5,6 +5,11 @@ import { useRouter } from "next/navigation";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+import { isValidPhoneNumber } from "react-phone-number-input";
+
+
 
 const SignUpForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -18,7 +23,7 @@ const SignUpForm = () => {
   const [error, setError] = useState(null)
   const router = useRouter()
   const pageTitle = 'SignUp';
-  
+
   useEffect(() => {
     document.title = pageTitle;
   }, [pageTitle]);
@@ -32,6 +37,12 @@ const SignUpForm = () => {
     return null;
   };
 
+  const validatePhone = (phone) => {
+    if (!phone || typeof phone !== "string" || phone.trim() === "") return "Phone number is required";
+    if (!isValidPhoneNumber(phone)) return "Please enter a valid phone number";
+    return null;
+  };
+
   const validateEmail = (email) => {
     if (!email.trim()) return "Email is required";
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -39,12 +50,12 @@ const SignUpForm = () => {
     return null;
   };
 
-  const validatePhone = (phone) => {
-    if (!phone.trim()) return "Phone number is required";
-    const phoneRegex = /^[0-9]{10}$/;
-    if (!phoneRegex.test(phone)) return "Phone number must be exactly 10 digits";
-    return null;
-  };
+  // const validatePhone = (phone) => {
+  //   if (!phone.trim()) return "Phone number is required";
+  //   const phoneRegex = /^[0-9]{10}$/;
+  //   if (!phoneRegex.test(phone)) return "Phone number must be exactly 10 digits";
+  //   return null;
+  // };
 
   const validatePassword = (password) => {
     if (!password) return "Password is required";
@@ -54,17 +65,17 @@ const SignUpForm = () => {
 
   const formHandler = ({ target }) => {
     let value = target.value;
-    
+
     // Special handling for username - remove spaces and convert to lowercase
     if (target.name === 'username') {
       value = value.replace(/\s/g, '').toLowerCase();
     }
-    
+
     // Special handling for phone - only allow numbers
     if (target.name === 'phone') {
       value = value.replace(/\D/g, '').slice(0, 10);
     }
-    
+
     setFormData({ ...formData, [target.name]: value });
   }
 
@@ -96,14 +107,14 @@ const SignUpForm = () => {
   const submitHandler = async e => {
     try {
       e.preventDefault();
-      
+
       // Validate form before submission
       if (!validateForm()) {
         return;
       }
 
       setIsLoading(true);
-      
+
       const res = await fetch(`/api/user/signup`, {
         method: 'POST',
         body: JSON.stringify(formData),
@@ -196,14 +207,12 @@ const SignUpForm = () => {
           </div>
           <div className="mb-4">
             <label className="block text-white">Phone Number</label>
-            <input
-              type="tel"
-              className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
-              placeholder="Enter your 10-digit Phone Number"
-              name="phone"
+            <PhoneInput
+              international
+              defaultCountry="IN"
               value={formData.phone}
-              onChange={(e) => formHandler(e)}
-              maxLength="10"
+              onChange={value => setFormData({ ...formData, phone: value || "" })}
+              className="w-full px-4 py-2 mt-2 border border-none rounded-md focus:border-none focus:outline-none focus:ring-1 bg-white focus:ring-blue-600"
               disabled={isLoading}
             />
           </div>
@@ -220,11 +229,11 @@ const SignUpForm = () => {
             />
           </div>
           <div className="mb-4 relative">
-            <label className="block text-white">Password</label>
+            <label className="block text-white"> Create Password</label>
             <input
               type={showPassword ? "text" : "password"}
               className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 pr-10"
-              placeholder="Enter your Password (min 6 characters)"
+              placeholder="Create your Password (min 6 characters)"
               name="password"
               value={formData.password}
               onChange={(e) => formHandler(e)}
