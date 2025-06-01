@@ -24,10 +24,10 @@ function PrescriptionModal({ cart, isModalOpen, setIsModalOpen, email }) {
 const checkDisabled = (later, sameForAll) => {
   const perItemReady =
     prescriptionItems.length > 0 &&
-    prescriptionItems.every((item) => !!item.file);
-  const sameFileReady = sameForAll && !!sameFile;
+    prescriptionItems.every((item) => item.file);
+  const sameFileReady = sameForAll && sameFile;
   setIsCheckoutDisabled(
-    !(perItemReady || sameFileReady || later || prescriptionItems.length === 0)
+    !(perItemReady || sameFileReady || later)
   );
 };
 
@@ -60,7 +60,7 @@ const handleFileChange = (index, e) => {
         },
       };
       // Call checkDisabled after state update
-     setTimeout(() => checkDisabled(uploadLater, sameFileForAll), 0);
+    //  setTimeout(() => checkDisabled(uploadLater, sameFileForAll), 0);
       return updated;
     });
   };
