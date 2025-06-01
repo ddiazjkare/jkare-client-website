@@ -54,7 +54,7 @@ const UserSchema = new mongoose.Schema(
         phone: {
             type: String,
             required: true,
-            match: [/^\d{10,15}$/, 'Invalid phone number format']
+            // match: [/^\d{10,15}$/, 'Invalid phone number format']
         },
         verified: {
             type: Boolean,
