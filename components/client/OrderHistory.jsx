@@ -425,7 +425,7 @@ function OrderHistory({ orders = [], email }) {
                     <table className="w-full">
                       <thead>
                         <tr className="border-b-2 border-gray-100">
-                          <th className="text-left pb-3 font-semibold text-gray-700">#</th>
+                          <th className="text-left pb-3 font-semibold text-gray-700">S.No.</th>
                           <th className="text-left pb-3 font-semibold text-gray-700">Product</th>
                           <th className="text-left pb-3 font-semibold text-gray-700">Details</th>
                           <th className="text-center pb-3 font-semibold text-gray-700">Qty</th>
@@ -525,10 +525,29 @@ function OrderHistory({ orders = [], email }) {
                         </svg>
                         Order Summary
                       </h4>
+                      {order.prescription_status === "Pending" && order.order_status === "Pending" && (
+                        <div className="mb-4">
+                          <span className="text-xs text-yellow-700 bg-yellow-100 px-3 py-2 rounded block">
+                            <strong>Note:</strong> To track your order, please wait until your prescription and order are both approved by JKARE. Once approved, you will be able to track your package.
+                          </span>
+                        </div>
+                      )}
                       <div className="space-y-2 text-sm mb-4">
                         <div className="flex justify-between">
                           <span className="text-gray-600">Subtotal:</span>
-                          <span className="font-semibold">${order.items.reduce((sum, item) => sum + item.quantity * item.price, 0).toFixed(2)}</span>
+                          <span className="font-semibold">
+                            ${order.items.reduce((sum, item) => sum + item.quantity * item.price, 0).toFixed(2)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Shipping:</span>
+                          <span className="font-semibold">
+                            {order.shipping_amount === 0 || order.shipping_amount === "0" ? (
+                              <span className="ml-2 inline-block px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">FREE</span>
+                            ) : (
+                              `$${Number(order.shipping_amount).toFixed(2)}`
+                            )}
+                          </span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-600">Price Discount:</span>
@@ -537,7 +556,10 @@ function OrderHistory({ orders = [], email }) {
                         <div className="flex justify-between text-lg font-bold text-green-600 pt-2 border-t border-gray-200">
                           <span>Total:</span>
                           <span>
-                            ${order.items.reduce((sum, item) => sum + item.quantity * item.price, 0).toFixed(2)}
+                            ${(
+                              order.items.reduce((sum, item) => sum + item.quantity * item.price, 0) +
+                              Number(order.shipping_amount || 0)
+                            ).toFixed(2)}
                           </span>
                         </div>
                       </div>
