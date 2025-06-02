@@ -49,8 +49,8 @@ const NewArrivals = () => {
         </h2>
         <p className="mt-6 max-w-5xl mx-auto text-md sm:text-lg lg:text-lg text-gray-700">
           Explore our advanced medical equipment collection, designed for
-          precision and reliability. From diagnostic tools to surgical
-          instruments, ensure optimal patient care with our state‑of‑the‑art
+          precision and reliability. We have Diagnostic tools and
+          instruments to ensure optimal patient care with our state‑of‑the‑art
           solutions. Quality you can trust.
         </p>
         <div className="relative mt-8">
