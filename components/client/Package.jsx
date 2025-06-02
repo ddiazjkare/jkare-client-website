@@ -135,12 +135,12 @@ export default function Package({ env }) {
       const massUnit = item.parcel_info?.mass_unit ?? "lb";
       const distUnit = item.parcel_info?.distance_unit ?? "in";
       return {
-        length,
-        width,
-        height,
-        weight,
-        mass_unit: massUnit,
-        distance_unit: distUnit,
+        length: String(length),
+        width: String(width),
+        height: String(height),
+        weight: String(weight),
+        mass_unit: String(massUnit),
+        distance_unit: String(distUnit),
       };
     });
     setParcels(formattedParcels);
@@ -208,7 +208,7 @@ export default function Package({ env }) {
         carrier_accounts: null,
         shipment_date: new Date().toISOString().replace("Z", "+00:00"),
       };
-
+       console.log("parcels payload", parcels);
       const response = await fetch("/api/shipment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
