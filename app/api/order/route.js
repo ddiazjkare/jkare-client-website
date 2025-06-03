@@ -45,7 +45,7 @@ export const POST = async (req) => {
     const productItems = checkout_session.line_items.data;
     const date = new Date();
 
-    console.log("carrier: ", checkout_session.metadata.carrier);
+    // console.log("carrier: ", checkout_session.metadata.carrier);
 
     const orderNumber = `ORD-${generateOrderString()}`;
     const orderParams = {
@@ -102,7 +102,7 @@ export const POST = async (req) => {
       );
 
       const product = await prodResp.json();
-
+      // console.log("product", product);
       orderParams.items.push({
         product_id: product.product._id,
         product_name: product.product.prod_name,
@@ -118,10 +118,10 @@ export const POST = async (req) => {
     }
 
     await Order.create(orderParams);
-
+    
     const ship = orderParams.shipping_address;
     const bill = orderParams.billing_address;
-    console.log("ornder", orderNumber);
+    // console.log("ornder", orderNumber);
 
     const html = `<!DOCTYPE html>
 <html lang="en">

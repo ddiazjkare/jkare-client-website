@@ -14,7 +14,7 @@ const apiCall = async () => {
     throw new Error("Failed to fetch environment data (/api/ship-env).");
   }
   const data = await response.json();
-  console.log("Response from /ship-env:", data);
+  // console.log("Response from /ship-env:", data);
   return data;
 };
 

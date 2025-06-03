@@ -25,7 +25,7 @@ function Page() {
     }, 1500000);
   }, []);
 
-  console.log("session :", session);
+  // console.log("session :", session);
 
   // Update login state based on session email
   useEffect(() => {
@@ -42,7 +42,7 @@ function Page() {
       if (session_id) {
         const response = await fetch(`/api/stripe/checkout/${session_id}`, { mode: "cors" });
         const data = await response.json();
-        console.log("data", data);
+        // console.log("data", data);
         setPaymentDetails(data);
         setLoading(false);
       }

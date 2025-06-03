@@ -60,7 +60,7 @@ const OrderSchema = new mongoose.Schema(
     tax_amount: { type: Number, default: 0.0 },
     total_amount: { type: Number, required: true },
     tracking_number: { type: String, default: "SHIPPO_TRANSIT" },
-    carrier: { type: String, default: "shippo" },
+    carrier: { type: String },
     checkout_session: { type: String },
     shipping_rate: { type: String },
   },

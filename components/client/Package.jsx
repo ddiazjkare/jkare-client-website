@@ -208,7 +208,7 @@ export default function Package({ env }) {
         carrier_accounts: null,
         shipment_date: new Date().toISOString().replace("Z", "+00:00"),
       };
-       console.log("parcels payload", parcels);
+      //  console.log("parcels payload", parcels);
       const response = await fetch("/api/shipment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
