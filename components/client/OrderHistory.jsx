@@ -557,7 +557,7 @@ function OrderHistory({ orders = [], email }) {
                           <span>Total:</span>
                           <span>
                             ${(
-                              order.items.reduce((sum, item) => sum + item.quantity * item.price, 0) +
+                              order.items.reduce((sum, item) => sum +  item.price, 0) +
                               Number(order.shipping_amount || 0)
                             ).toFixed(2)}
                           </span>
