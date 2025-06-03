@@ -6,7 +6,9 @@ import Image from "next/image";
 import { LoadScript, GoogleMap, Marker } from "@react-google-maps/api";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { useSession } from "next-auth/react";
-
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+import { isValidPhoneNumber } from "react-phone-number-input";
 const containerStyle = {
   width: "100%",
   height: "100%",
@@ -21,7 +23,7 @@ export default function Contact() {
   const { data: session } = useSession();
   let localUser = typeof window !== "undefined" && window.localStorage.getItem("nextUser");
   localUser = localUser ? JSON.parse(localUser) : null;
-  
+
   const userEmail = (localUser && localUser.email) || (session && session.user && session.user.email) || "";
 
   const [form, setForm] = useState({ name: "", phone: "", email: "", comment: "" });
@@ -51,6 +53,7 @@ export default function Contact() {
       return () => clearTimeout(timer);
     }
   }, [showToast]);
+
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -118,14 +121,14 @@ export default function Contact() {
               
               <div style="margin-top: 30px; padding: 15px; background-color: #e3f2fd; border-radius: 8px; text-align: center;">
                 <p style="margin: 0; color: #1976d2; font-style: italic;">
-                  📅 Received on ${new Date().toLocaleDateString('en-US', { 
-                    weekday: 'long', 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                  })}
+                  📅 Received on ${new Date().toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      })}
                 </p>
               </div>
             </div>
@@ -148,7 +151,7 @@ export default function Contact() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            to: form.email ,
+            to: form.email,
             subject: `🌟 New Contact Form Submission from ${form.name} - JKARE`,
             mailBody: htmlBody,
           }),
@@ -232,14 +235,13 @@ export default function Contact() {
                   required
                   disabled={isLoading}
                 />
-                <input
-                  type="text"
-                  name="phone"
+                
+                <PhoneInput
+                  international
+                  defaultCountry="US"
                   value={form.phone}
-                  onChange={handleChange}
-                  placeholder="Phone Number"
+                  onChange={value => setForm({ ...form, phone: value || "" })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-customPink/60"
-                  required
                   disabled={isLoading}
                 />
               </div>

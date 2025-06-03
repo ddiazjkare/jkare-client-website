@@ -14,12 +14,10 @@ const FAQ_DATA = {
     label: 'General Question',
     icon: FiHelpCircle,
     qa: [
-      ["What's JKARE?", 'JKARE is a licensed and certified provider of respiratory care services and medical equipment.'],
       ['Are CPAP machines ventilators?', 'No. CPAP delivers constant airway pressure for sleep-apnea therapy, whereas a ventilator actively breathes for you.'],
       ['Will my machine be brand new?', 'Yes, every CPAP or BiPAP machine we ship is factory-new, never refurbished.'],
       ["I'm a new user, what do I need to buy?", 'Typically you need a CPAP device, a heated humidifier, a compatible mask, and replacement filters/tubing.'],
       ['Do I need to use CPAP all night, every night?', 'For best results you should use it whenever you sleep, including naps.'],
-      ['What maintenance do CPAP machines require?', 'Wash the mask & tubing weekly, replace filters monthly, and schedule an annual inspection.'],
       ['Do I need a prescription to buy a CPAP?', 'Yes. FDA regulations require a valid prescription for PAP devices and masks.'],
       ['How long is the product warranty?', 'Most machines include a 2-year manufacturer warranty; extended coverage is available.'],
     ],

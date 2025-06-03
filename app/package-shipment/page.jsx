@@ -13,12 +13,15 @@ const apiCall = async () => {
   if (!response.ok) {
     throw new Error("Failed to fetch environment data (/api/ship-env).");
   }
-  return await response.json();
+  const data = await response.json();
+  console.log("Response from /ship-env:", data);
+  return data;
 };
 
 const Shipment = async () => {
   const data = await apiCall();
   return <Package env={data} />;
 };
+
 
 export default Shipment;

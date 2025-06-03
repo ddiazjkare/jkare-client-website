@@ -116,7 +116,7 @@ export default function Footer() {
             title="Shop & Resources"
             links={[
               ['Shop All Products', '/product'],
-              ['News & Media', '/'],
+              ['News & Media', '/news-media'],
               ['Return Policy', '/'],
               // ['Submit Prescription', '/'],
               ['Patient Resources', '/Safety&Emergency'],

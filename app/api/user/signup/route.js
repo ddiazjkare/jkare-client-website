@@ -12,8 +12,8 @@ export const POST = async (req) => {
     const exUser = await Users.findOne({
       $or: [{ username: userData.username }, { email: userData.email }],
     });
-
-    if (!exUser?.message)
+    // console.log("exUser : ", exUser)
+    if (exUser)
       return NextResponse.json(
         { error: "Username or email already taken" },
         { status: 400 }

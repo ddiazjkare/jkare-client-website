@@ -6,8 +6,11 @@ import "react-toastify/dist/ReactToastify.css";
 import Confetti from "react-confetti";
 import { FaShippingFast, FaShoppingCart, FaRegAddressBook, FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
 import { MdOutlineLocalShipping } from "react-icons/md";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
-export default function Package({env}) {
+export default function Package({ env }) {
   const [showConfetti, setShowConfetti] = useState(false);
   const router = useRouter();
 
@@ -56,9 +59,13 @@ export default function Package({env}) {
     return emailRegex.test(email);
   };
 
+  // const validatePhone = (phone) => {
+  //   const phoneRegex = /^\d{10,15}$/; // Only numbers, 10-15 digits
+  //   return phoneRegex.test(phone.replace(/\s/g, ''));
+  // };
   const validatePhone = (phone) => {
-    const phoneRegex = /^\d{10,15}$/; // Only numbers, 10-15 digits
-    return phoneRegex.test(phone.replace(/\s/g, ''));
+    if (!phone || typeof phone !== "string" || phone.trim() === "") return false;
+    return isValidPhoneNumber(phone);
   };
 
   const validateForm = () => {
@@ -128,12 +135,12 @@ export default function Package({env}) {
       const massUnit = item.parcel_info?.mass_unit ?? "lb";
       const distUnit = item.parcel_info?.distance_unit ?? "in";
       return {
-        length,
-        width,
-        height,
-        weight,
-        mass_unit: massUnit,
-        distance_unit: distUnit,
+        length: String(length),
+        width: String(width),
+        height: String(height),
+        weight: String(weight),
+        mass_unit: String(massUnit),
+        distance_unit: String(distUnit),
       };
     });
     setParcels(formattedParcels);
@@ -201,7 +208,7 @@ export default function Package({env}) {
         carrier_accounts: null,
         shipment_date: new Date().toISOString().replace("Z", "+00:00"),
       };
-
+       console.log("parcels payload", parcels);
       const response = await fetch("/api/shipment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -524,14 +531,13 @@ export default function Package({env}) {
                         <FaPhone className="inline mr-1" />
                         Phone Number *
                       </label>
-                      <input
-                        type="tel"
-                        name="phone"
+                      <PhoneInput
+                        international
+                        defaultCountry="US"
                         value={receiver.phone}
-                        onChange={handleInputChange}
-                        className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${validationErrors.phone ? 'border-red-500' : 'border-gray-300'
-                          }`}
-                        placeholder="1234567890"
+                        onChange={value => setReceiver(prev => ({ ...prev, phone: value || "" }))}
+                        className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${validationErrors.phone ? 'border-red-500' : 'border-gray-300'}`}
+                        disabled={isCreatingShipment}
                       />
                       {validationErrors.phone && (
                         <p className="text-red-500 text-xs mt-1">{validationErrors.phone}</p>

@@ -49,20 +49,23 @@ export default function GuidesSection({ heroTitle, heroImage, guides }) {
               </div>
 
               {/* TEXT + BUTTON */}
+              {/* TEXT + BUTTON */}
               <div className="w-full md:w-1/2 space-y-4 font-montserrat">
                 <h2 className="text-customPink text-2xl sm:text-3xl font-medium ">
                   {g.title}
                 </h2>
                 <p className="text-base sm:text-lg">{g.blurb}</p>
-                <Link
-                  href={g.link}
-                  className="inline-block rounded-full bg-customButtonHover px-6 py-2
-                             text-sm sm:text-base font-semibold text-black hover:text-white
-                             hover:bg-customPink focus-visible:ring
-                             focus-visible:ring-offset-2 focus-visible:ring-customPink"
-                >
-                  Learn&nbsp;More
-                </Link>
+                {g.link && g.link.trim() !== "" && (
+                  <Link
+                    href={g.link}
+                    className="inline-block rounded-full bg-customButtonHover px-6 py-2
+                 text-sm sm:text-base font-semibold text-black hover:text-white
+                 hover:bg-customPink focus-visible:ring
+                 focus-visible:ring-offset-2 focus-visible:ring-customPink"
+                  >
+                    Learn&nbsp;More
+                  </Link>
+                )}
               </div>
             </div>
           );
