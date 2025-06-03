@@ -29,6 +29,7 @@ const ImageModal = ({
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
+      
     }
 
     return () => {
