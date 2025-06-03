@@ -57,6 +57,7 @@ export const POST = async (req) => {
       order_status: JSON.parse(checkout_session.metadata.prescription_required)
         ? "Pending"
         : "Completed",
+      carrier: checkout_session.metadata.carrier,
       comment: "",
       customer_email: customer.email,
       customer_name: customer.name,

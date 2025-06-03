@@ -255,6 +255,7 @@ export default function Package({env}) {
           metadata: {
             ...checkoutObj.metadata,
             shipping_rate: selectedRate.object_id,
+            carrier: selectedRate.provider
           },
           name: receiver.name.trim(),
           address: {
