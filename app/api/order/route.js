@@ -45,14 +45,13 @@ export const POST = async (req) => {
     const productItems = checkout_session.line_items.data;
     const date = new Date();
 
-    // const trans = await transaction(checkout_session.metadata.shipping_rate);
+    console.log("carrier: ", checkout_session.metadata.carrier);
+
     const orderNumber = `ORD-${generateOrderString()}`;
     const orderParams = {
       order_id: orderNumber,
       checkout_session: body.sessionID,
       shipping_rate: checkout_session.metadata.shipping_rate,
-      // carrier: trans.carrier,
-      // tracking_number: trans.tracking_number,
       total_amount: checkout_session.amount_total,
       order_status: JSON.parse(checkout_session.metadata.prescription_required)
         ? "Pending"

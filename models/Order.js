@@ -63,7 +63,6 @@ const OrderSchema = new mongoose.Schema(
     carrier: { type: String, default: "shippo" },
     checkout_session: { type: String },
     shipping_rate: { type: String },
-    carrier: { type: String },
   },
   { timestamps: true }
 );
