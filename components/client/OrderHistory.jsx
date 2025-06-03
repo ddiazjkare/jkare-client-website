@@ -461,9 +461,9 @@ function OrderHistory({ orders = [], email }) {
                                 {product.quantity}
                               </span>
                             </td>
-                            <td className="py-4 font-semibold text-gray-700">${product.price}</td>
+                            <td className="py-4 font-semibold text-gray-700">${(product.price / product.quantity) }</td>
                             <td className="py-4 font-bold text-green-600">
-                              ${(product.quantity * product.price).toFixed(2)}
+                              ${product.price}
                             </td>
                             <td className="py-4 text-center">
                               {product.prescription_file && (
@@ -536,7 +536,7 @@ function OrderHistory({ orders = [], email }) {
                         <div className="flex justify-between">
                           <span className="text-gray-600">Subtotal:</span>
                           <span className="font-semibold">
-                            ${order.items.reduce((sum, item) => sum + item.quantity * item.price, 0).toFixed(2)}
+                            ${order.items.reduce((sum, item) => sum + item.price, 0).toFixed(2)}
                           </span>
                         </div>
                         <div className="flex justify-between">
