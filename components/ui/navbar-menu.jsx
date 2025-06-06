@@ -20,7 +20,7 @@ export const MenuItem = ({ setActive, active, item, children }) => {
     }, 1200);
   };
   return (
-    <div onMouseEnter={() => setActive(item)} onMouseLeave={() => setActive(null)} className='relative '>
+    <div onMouseEnter={() => setActive(item)} className='relative '>
       <motion.p
         transition={{ duration: 0.3 }}
         // Navbar styling Properties
@@ -61,7 +61,7 @@ export const Menu = ({ setActive, children }) => {
   return (
     <nav
       // resets the state
-      onMouseLeave={() => setActive(null)}
+      // onMouseLeave={() => setActive(null)}
       className='relative w-full
       shadow-input flex justify-center space-x-6 px-8 py-2 '
     >{children}</nav>

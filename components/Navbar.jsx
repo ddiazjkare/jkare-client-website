@@ -11,6 +11,7 @@ import Cart from "./client/Cart";
 import { FaArrowRight } from "react-icons/fa";
 import { CartContext } from "./SessionProVider";
 
+
 const Navbar = () => {
   const [active, setActive] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -30,10 +31,22 @@ const Navbar = () => {
   const searchRefDesktop = useRef();
   const searchRefMobile = useRef();
   const cartRef = useRef();
+  const closeMenuTimer = useRef(null);
   const delayedCloseMobileMenu = () => {
     setTimeout(() => {
       setIsMobileMenuOpen(false);
     }, 800);
+  };
+
+    // Delayed close for desktop dropdowns
+  const handleMenuMouseLeave = () => {
+    closeMenuTimer.current = setTimeout(() => setActive(null), 800); // 2.2s delay
+  };
+  const handleMenuMouseEnter = () => {
+    if (closeMenuTimer.current) {
+      clearTimeout(closeMenuTimer.current);
+      closeMenuTimer.current = null;
+    }
   };
 
   // Fetch product search results
@@ -186,7 +199,8 @@ const Navbar = () => {
         </div>
 
         {/* Center: Secondary Nav (desktop) */}
-        <div className="hidden lg:flex">
+        <div className="hidden lg:flex" onMouseLeave={handleMenuMouseLeave} onMouseEnter={handleMenuMouseEnter}>
+          {/* Navbar Menu */}
           <div className="flex items-center space-x-6 font-semibold text-sm px-5 rounded-3xl font-montserrat">
             <Menu setActive={setActive}>
               <Link href="/">

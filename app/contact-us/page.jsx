@@ -4,7 +4,7 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { LoadScript, GoogleMap, Marker } from "@react-google-maps/api";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin , Printer } from "lucide-react";
 import { useSession } from "next-auth/react";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
@@ -292,7 +292,7 @@ export default function Contact() {
       {/* INFO STRIP */}
       {/* -------------------------------------------------- */}
       <section className="bg-white py-12 px-6 md:px-10 lg:px-16 xl:px-20 font-montserrat">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-10">
           <div className="flex md:flex-col md:items-start items-center gap-4">
             <MapPin className="h-10 w-10 text-customBlue flex-shrink-0" />
             <div>
@@ -315,6 +315,13 @@ export default function Contact() {
             <Phone className="h-10 w-10 text-customBlue flex-shrink-0" />
             <div>
               <h4 className="text-lg font-semibold text-customBlue">Phone</h4>
+              <p className="text-gray-700 leading-snug">305‑248‑1003</p>
+            </div>
+          </div>
+          <div className="flex md:flex-col md:items-start items-center gap-4">
+            <Printer className="h-10 w-10 text-customBlue flex-shrink-0" />
+            <div>
+              <h4 className="text-lg font-semibold text-customBlue">Fax</h4>
               <p className="text-gray-700 leading-snug">305‑248‑1003</p>
             </div>
           </div>
