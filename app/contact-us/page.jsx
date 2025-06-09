@@ -322,7 +322,7 @@ export default function Contact() {
             <Printer className="h-10 w-10 text-customBlue flex-shrink-0" />
             <div>
               <h4 className="text-lg font-semibold text-customBlue">Fax</h4>
-              <p className="text-gray-700 leading-snug">305‑248‑1003</p>
+              <p className="text-gray-700 leading-snug">305‑248‑1009</p>
             </div>
           </div>
         </div>

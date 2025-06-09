@@ -107,8 +107,8 @@ export default function Footer() {
               ['About Us', '/about-us'],
               ['Services', '/our-services'],
               ['Contact', '/contact-us'],
-              ['Privacy Policy', '#'],
-              ['Cookie Policy', '#'],
+              ['Privacy Policy', '/privacy-policy'],
+              ['Return Policy', '/return-policy'],
             ]}
           />
 
