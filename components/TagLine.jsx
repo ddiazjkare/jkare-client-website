@@ -14,9 +14,7 @@ export default function TagLine() {
           Attentive Care Right at&nbsp;Your&nbsp;Home
         </h3>
         <p className="mt-5 max-w-3xl mx-auto text-sm sm:text-base lg:text-lg text-gray-600">
-          Providing expert in‑home respiratory services, reliable oxygen medical
-          supplies, and a full range of medical equipment to support your health
-          and independence.
+          We offer the latest in medical technology, combined with expert care, to provide the best respiratory therapy solutions in Miami. we are dedicated to improving your quality of life through advanced respiratory devices, personalized service, and ongoing support.
         </p>
 
         {/* -------------- card grid --------------- */}

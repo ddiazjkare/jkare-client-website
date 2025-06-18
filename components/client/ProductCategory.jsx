@@ -72,15 +72,18 @@ export default function ShopByCategoryAndBrand() {
 
         {/* gradient sidebar / header */}
         <aside className="rounded-xl overflow-hidden shadow-lg">
-          <div className="h-full bg-gradient-to-b from-[#702D6E] via-[#702D6E]/90 to-purple-200/50
+          <div className="h-full bg-gradient-to-b from-[#702D6E] via-[#702D6E]/90 to-purple-200/90
                           p-6 sm:p-8 text-center lg:text-left">
             <h2 className="text-white text-xl sm:text-3xl font-light leading-snug mb-4 sm:mb-6">
               SHOP&nbsp;BY<br />CATEGORY
             </h2>
-            <p className="text-white text-sm sm:text-base leading-normal">
+            {/* <p className="text-white text-sm sm:text-base leading-normal">
               Explore our advanced medical equipment collection, designed for precision and reliability.
               From diagnostic tools to therapeutic devices, ensure optimal patient care with our
               state-of-the-art solutions. Quality you can trust.
+            </p> */}
+            <p className="text-white text-sm sm:text-base leading-normal">
+             Find the Right Medical Equipment for Your Needs.
             </p>
           </div>
         </aside>

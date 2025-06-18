@@ -56,13 +56,13 @@ export default function Footer() {
               alt="JKARE logo"
               className="w-36 sm:w-36 mx-auto lg:mx-0 mb-2"
             />
-            <h3 className="text-purple-700 sm:text-white/95  sm:text-lg text-2xl font-semibold">
+            {/* <h3 className="text-purple-700 sm:text-white/95  sm:text-lg text-2xl font-semibold">
               “Oxygen for Life,&nbsp;Care for&nbsp;You”
             </h3>
             <p className="mt-2 text-[16px] sm:text-sm italic sm:not-italic text-black sm:text-white/90 leading-relaxed">
               Reflects <span className="font-semibold">JKARE’s</span> mission to
               provide vital oxygen services with compassionate, personalized care.
-            </p>
+            </p> */}
           </div>
 
           {/* newsletter */}
@@ -117,7 +117,6 @@ export default function Footer() {
             links={[
               ['Shop All Products', '/product'],
               ['News & Media', '/news-media'],
-              ['Return Policy', '/'],
               // ['Submit Prescription', '/'],
               ['Patient Resources', '/Safety&Emergency'],
               ['Blogs', '/blog'],

@@ -17,8 +17,11 @@ const FAQ_DATA = {
       ['Are CPAP machines ventilators?', 'No. CPAP delivers constant airway pressure for sleep-apnea therapy, whereas a ventilator actively breathes for you.'],
       ['Will my machine be brand new?', 'Yes, every CPAP or BiPAP machine we ship is factory-new, never refurbished.'],
       ["I'm a new user, what do I need to buy?", 'Typically you need a CPAP device, a heated humidifier, a compatible mask, and replacement filters/tubing.'],
-      ['Do I need to use CPAP all night, every night?', 'For best results you should use it whenever you sleep, including naps.'],
-      ['Do I need a prescription to buy a CPAP?', 'Yes. FDA regulations require a valid prescription for PAP devices and masks.'],
+      // ['Do I need to use CPAP all night, every night?', 'For best results you should use it whenever you sleep, including naps.'],
+      [
+        'Do I need a prescription to buy a CPAP?', 'Yes—all CPAP-related devices require a prescription. FDA regulations mandate a valid prescription not just for machines, but also for masks and humidifiers. No CPAP device can be legally purchased or rented in the U.S. without one—only non‑PAP accessories like tubing, cushions, filters, and headgear are exempt.'
+      ],
+
       ['How long is the product warranty?', 'Most machines include a 2-year manufacturer warranty; extended coverage is available.'],
     ],
   },
@@ -28,7 +31,7 @@ const FAQ_DATA = {
     qa: [
       ['Which payment methods do you accept?', 'We accept all major credit cards, HSA/FSA cards, and PayPal.'],
       ['Can I pay in installments?', 'Yes! We offer Affirm and Afterpay at checkout for qualified orders.'],
-      ['Do you charge sales tax?', 'Sales tax is applied automatically based on your shipping address.'],
+      ['Do you charge sales tax?', 'We do not collect sales, GST, VAT, or any other tax at checkout. Your order total is the final amount—no additional taxes will be added based on your shipping or billing address.'],
       ['Is there a financing fee?', 'No additional fees—only the cost shown by the financing provider during checkout.'],
       ['How do I get a copy of my invoice?', 'Log in to “My Account → Orders” and click “Download Invoice.”'],
     ],
@@ -38,7 +41,11 @@ const FAQ_DATA = {
     icon: FiShield,
     qa: [
       ['Is my personal data secure?', 'Absolutely. We use 256-bit SSL encryption and do not store payment details on our servers.'],
-      ['Are your products FDA-approved?', 'All devices that require FDA clearance are sourced only from FDA-approved manufacturers.'],
+      [
+        "Are your products FDA‑approved?",
+        "Yes—we only sell **fully FDA‑approved or FDA‑cleared medical equipment**. Every device we offer has been formally reviewed and authorized through the FDA’s appropriate pathway—whether via 510(k) clearance or rigorous PMA approval—ensuring it meets stringent safety and efficacy standards before it reaches you."
+      ],
+
       ['How do you ship fragile equipment?', 'We use custom foam inserts and double-boxed packaging to prevent damage.'],
       ['What happens if my package is lost?', 'Contact support within 10 days and we will file a claim and reship at no cost.'],
     ],
@@ -124,9 +131,8 @@ export default function FaqSection() {
                   <span className="font-medium text-gray-800">{q}</span>
                   <FiChevronDown
                     size={20}
-                    className={`text-customPink transition-transform duration-300 ${
-                      open ? 'rotate-180' : ''
-                    }`}
+                    className={`text-customPink transition-transform duration-300 ${open ? 'rotate-180' : ''
+                      }`}
                   />
                 </button>
 

@@ -30,8 +30,8 @@ const NewArrivals = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       const urls = [
-        `/api/product/67e1389c121b72710a9d756b`,
-        `/api/product/67e1389c121b72710a9d756c`,
+        `/api/product/67e1389c121b72710a9d7576`,
+        `/api/product/6842972db7792cde9b5e02f4`,
         `/api/product/67e1389c121b72710a9d756d`,
       ];
       const results = await Promise.all(urls.map((u) => fetch(u).then((r) => r.json())));
@@ -47,12 +47,12 @@ const NewArrivals = () => {
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-gray-900">
           OUR&nbsp;BEST&nbsp;SELLERS
         </h2>
-        <p className="mt-6 max-w-5xl mx-auto text-md sm:text-lg lg:text-lg text-gray-700">
+        {/* <p className="mt-6 max-w-5xl mx-auto text-md sm:text-lg lg:text-lg text-gray-700">
           Explore our advanced medical equipment collection, designed for
           precision and reliability. We have Diagnostic tools and
           instruments to ensure optimal patient care with our state‑of‑the‑art
           solutions. Quality you can trust.
-        </p>
+        </p> */}
         <div className="relative mt-8">
           <div className="hidden lg:block absolute -left-10 top-1/2 -translate-y-1/2">
             <FiChevronLeft size={42} className="text-gray-600" />

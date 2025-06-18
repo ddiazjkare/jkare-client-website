@@ -16,7 +16,7 @@ const guides = [
       'JKARE provides warranty coverage on all eligible medical equipment as per manufacturer terms. We ensure prompt support for repairs or replacements, helping patients receive reliable and worry-free care with every product delivered.',
     imgAlt: 'Woman using nebulizer',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/medical-doctors-at-the-conference-2024-10-21-09-48-40-utc.jpg',
-    link: "",
+    link: "https://s3.ap-south-1.amazonaws.com/jkare.data/patient+resources+files/JKARE+DME+-++WARRANTY+INFORMATION.pdf",
   },
   {
     id: 3,
@@ -31,20 +31,20 @@ const guides = [
     id: 4,
     title: 'Prescription Requirements',
     blurb:
-      "Certain medical equipment and supplies require a valid prescription. At JKARE, we ensure all prescriptions meet federal and insurance guidelines, helping you receive the right products safely, efficiently, and in full compliance.",
+      "All medical equipment and supplies require a valid prescription. At JKARE, we ensure all prescriptions meet federal and insurance guidelines, helping you receive the right products safely, efficiently, and in full compliance.",
     imgAlt: 'Woman using nebulizer',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/prescription.jpg',
     link: "",
   },
-  {
-    id: 5,
-    title: 'Medicare Support',
-    blurb:
-      "JKARE provides dedicated Medicare support, assisting with coverage, claims, and eligibility. Our team guides you through the process to ensure you receive the benefits you're entitled to for medical equipment and services.",
-    imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/medicare+support.jpg',
-    link: "",
-  },
+  // {
+  //   id: 5,
+  //   title: 'Medicare Support',
+  //   blurb:
+  //     "JKARE provides dedicated Medicare support, assisting with coverage, claims, and eligibility. Our team guides you through the process to ensure you receive the benefits you're entitled to for medical equipment and services.",
+  //   imgAlt: 'Woman using nebulizer',
+  //   imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/medicare+support.jpg',
+  //   link: "",
+  // },
 ];
 
 export default function PatientRights() {
