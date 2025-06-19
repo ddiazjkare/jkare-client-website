@@ -4,7 +4,7 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { LoadScript, GoogleMap, Marker } from "@react-google-maps/api";
-import { Mail, Phone, MapPin , Printer } from "lucide-react";
+import { Mail, Phone, MapPin, Printer } from "lucide-react";
 import { useSession } from "next-auth/react";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
@@ -55,7 +55,15 @@ export default function Contact() {
   }, [showToast]);
 
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "email") {
+      // Allow only valid email characters
+      const emailRegex = /^[a-zA-Z0-9@._-]*$/;
+      if (!emailRegex.test(value)) return;
+    }
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -151,7 +159,8 @@ export default function Contact() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            to: form.email,
+            // to: form.email,
+            to: "support@jkare.com",
             subject: `🌟 New Contact Form Submission from ${form.name} - JKARE`,
             mailBody: htmlBody,
           }),
@@ -235,7 +244,7 @@ export default function Contact() {
                   required
                   disabled={isLoading}
                 />
-                
+
                 <PhoneInput
                   international
                   defaultCountry="US"
@@ -250,7 +259,7 @@ export default function Contact() {
                 name="email"
                 value={form.email}
                 onChange={handleChange}
-                placeholder="Email Address"
+                placeholder="Your Email Address"
                 className="w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-customPink/60"
                 required
                 disabled={isLoading}
