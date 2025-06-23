@@ -18,7 +18,13 @@ const FAQ_DATA = {
       ['Will my machine be brand new?', 'Yes, every CPAP or BiPAP machine we ship is factory-new, never refurbished.'],
       ["I'm a new user, what do I need to buy?", 'Typically you need a CPAP device, a heated humidifier, a compatible mask, and replacement filters/tubing.'],
       [
-        'Do I need a prescription to buy a CPAP?', 'Yes—all CPAP-related devices require a prescription. FDA regulations mandate a valid prescription not just for machines, but also for masks and humidifiers. No CPAP device can be legally purchased or rented in the U.S. without one—only non‑PAP accessories like tubing, cushions, filters, and headgear are exempt.'
+        'Do I need a prescription to buy a Medical Equipment and Supplies?', 'Yes— all medical equipment and supplies require doctor’s prescription.'
+      ],
+      [
+        'Do We accept insurance?', 'Yes, we do all the major insurance companies.'
+      ],
+      [
+        'How long does it take for shipping the product?', 'Since all the products are shipped within the US. It could be between 1-7 days depending upon the shipper selection.'
       ],
 
       ['How long is the product warranty?', 'Most machines come with a standard manufacturer’s warranty, covering defects in parts and workmanship, and extended coverage options (through the manufacturer or third‑party) are also available.'],
@@ -28,11 +34,11 @@ const FAQ_DATA = {
     label: 'Payment & Billing',
     icon: FiCreditCard,
     qa: [
-      ['Which payment methods do you accept?', 'We accept all major credit cards, HSA/FSA cards, and PayPal.'],
-      ['Can I pay in installments?', 'Yes! We offer Affirm and Afterpay at checkout for qualified orders.'],
-      ['Do you charge sales tax?', 'We do not collect sales, GST, VAT, or any other tax at checkout. Your order total is the final amount—no additional taxes will be added based on your shipping or billing address.'],
-      ['Is there a financing fee?', 'No additional fees—only the cost shown by the financing provider during checkout.'],
-      ['How do I get a copy of my invoice?', 'Log in to “My Account → Orders” and click “Download Invoice.”'],
+      ['Which payment methods do you accept?', 'We accept all major credit cards, Apple Pay, Bank Transfer, eCheck and PayPal.'],
+      // ['Can I pay in installments?', 'Yes! We offer Affirm and Afterpay at checkout for qualified orders.'],
+      // ['Do you charge sales tax?', 'We do not collect sales, GST, VAT, or any other tax at checkout. Your order total is the final amount—no additional taxes will be added based on your shipping or billing address.'],
+      // ['Is there a financing fee?', 'No additional fees—only the cost shown by the financing provider during checkout.'],
+      // ['How do I get a copy of my invoice?', 'Log in to “My Account → Orders” and click “Download Invoice.”'],
     ],
   },
   safety: {
@@ -56,7 +62,7 @@ const FAQ_DATA = {
       ['How do I reset my password?', 'Click “Forgot Password” on the login page and follow the emailed instructions.'],
       ['Can I update my prescription online?', 'Yes. Go to “My Account → Prescriptions” and upload a new PDF or photo.'],
       ['How do I change my shipping address?', 'Navigate to “My Account → Addresses” and edit or add a new address.'],
-      ['How do I delete my account?', 'Please email privacy@jkare.com and our team will process the deletion within 48 hours.'],
+      ['How do I delete my account?', 'Please email support@jkare.com and our team will process the deletion within 48 hours.'],
     ],
   },
 };

@@ -130,8 +130,8 @@ export default function Footer() {
               links={[
                 ['In-home Clinical Respiratory Services', '/our-services'],
                 ['Medical Equipment and Supplies', '/our-services'],
-                ['Medical Oxygen and Supplies', '/our-services'],
-                ['Healthcare Recruitment Staffing', '/our-services'],
+                // ['Medical Oxygen and Supplies', '/our-services'],
+                ['Healthcare Recruitment Staffing', '/Recruitment-Staffing'],
               ]}
             />
 

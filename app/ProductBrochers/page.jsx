@@ -9,15 +9,15 @@ const guides = [
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/AffloVest%2BTween%2B(4)edit.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/jkare.data/patient+resources+files/AfflovestEnglish_FINAL.pdf",
   },
-  {
-    id: 2,
-    title: "Biwaze Airway Clearance System User Manual",
-    blurb:
-      'The Biwaze Airway Clearance System is designed to improve lung health through high-frequency chest wall oscillation. This user manual provides step-by-step instructions for safe and effective use, including setup, maintenance, and troubleshooting tips for optimal performance.',
-    imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/BiWaze-Cough-with-bag-and-circuit-scaled.jpg',
-    link: "https://s3.ap-south-1.amazonaws.com/jkare.data/patient+resources+files/ABMRC+BiWaze+Airway+Clearance+System+brochure.pdf",
-  },
+  // {
+  //   id: 2,
+  //   title: "Biwaze Airway Clearance System User Manual",
+  //   blurb:
+  //     'The Biwaze Airway Clearance System is designed to improve lung health through high-frequency chest wall oscillation. This user manual provides step-by-step instructions for safe and effective use, including setup, maintenance, and troubleshooting tips for optimal performance.',
+  //   imgAlt: 'Woman using nebulizer',
+  //   imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/BiWaze-Cough-with-bag-and-circuit-scaled.jpg',
+  //   link: "https://s3.ap-south-1.amazonaws.com/jkare.data/patient+resources+files/ABMRC+BiWaze+Airway+Clearance+System+brochure.pdf",
+  // },
   {
     id: 3,
     title: "Biwaze Clear Quick Hits",

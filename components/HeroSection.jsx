@@ -4,9 +4,9 @@ import Link from 'next/link';
 
 /* ───────────────────────── data ────────────────────────── */
 const TAGLINES = [
-  'Our Delivering personalized home respiratory therapy and innovative medical equipment for better breathing.',
-  'We delivers high-quality respiratory therapy, advanced equipment, and essential medical supplies, bringing care and comfort to your home.',
-  'We provides specialized respiratory therapy, advanced equipment, and reliable medical supplies, enhancing lives one breath at a time.',
+  'Our delivering of home respiratory therapy and modern medical equipment is focused on one goal: better breathing.',
+  "We deliver's high-quality respiratory therapy, advanced equipment, and essential medical supplies, bringing care and comfort to your home.",
+  "We provide's specialized respiratory therapy, advanced equipment, and reliable medical supplies, enhancing lives one breath at a time.",
   'Empowering patients through exceptional home respiratory care, equipment, and medical supplies; ',
   'We are your partner in health.',
 ];

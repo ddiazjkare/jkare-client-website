@@ -275,11 +275,11 @@ const AdvancedProductDetail = ({ data, env }) => {
                   }`}>
                     {isOutOfStock ? "Out of Stock" : "In Stock"}
                   </span>
-                  {!isOutOfStock && (
+                  {/* {!isOutOfStock && (
                     <span className="text-sm text-gray-500">
                       {data.product.stockQuantity} available
                     </span>
-                  )}
+                  )} */}
                 </div>
                 <span className="text-sm text-gray-500">PUI: {data.product.prod_id}</span>
               </div>

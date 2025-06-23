@@ -32,7 +32,7 @@ const NewArrivals = () => {
       const urls = [
         `/api/product/67e1389c121b72710a9d7576`,
         `/api/product/6842972db7792cde9b5e02f4`,
-        `/api/product/67e1389c121b72710a9d756d`,
+        `/api/product/67e1389c121b72710a9d7575`,
       ];
       const results = await Promise.all(urls.map((u) => fetch(u).then((r) => r.json())));
       setProducts(results.map((r) => r.product));

@@ -18,15 +18,15 @@ const guides = [
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/respiratory+therapist.jpg',
     link: "",
   },
-  {
-    id: 3,
-    title: 'Medical Equipments and Supplies',
-    blurb:
-      "JKARE provides a comprehensive range of high-quality medical equipment, respiratory devices, and healthcare consumables designed to support patient care at home. We specialize in advanced respiratory solutions and durable medical equipment (DME) tailored to meet the unique needs of each patient. Our team ensures timely delivery, personalized setup, and ongoing support to promote safety, independence, and better health outcomes.",
-    imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/medicalinstrument.jpeg',
-    link: "",
-  },
+  // {
+  //   id: 3,
+  //   title: 'Medical Equipments and Supplies',
+  //   blurb:
+  //     "JKARE provides a comprehensive range of high-quality medical equipment, respiratory devices, and healthcare consumables designed to support patient care at home. We specialize in advanced respiratory solutions and durable medical equipment (DME) tailored to meet the unique needs of each patient. Our team ensures timely delivery, personalized setup, and ongoing support to promote safety, independence, and better health outcomes.",
+  //   imgAlt: 'Woman using nebulizer',
+  //   imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/medicalinstrument.jpeg',
+  //   link: "",
+  // },
 
 ];
 
