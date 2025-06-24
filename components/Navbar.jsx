@@ -38,7 +38,7 @@ const Navbar = () => {
     }, 800);
   };
 
-    // Delayed close for desktop dropdowns
+  // Delayed close for desktop dropdowns
   const handleMenuMouseLeave = () => {
     closeMenuTimer.current = setTimeout(() => setActive(null), 800); // 2.2s delay
   };
@@ -316,29 +316,25 @@ const Navbar = () => {
                     </h4>
                     <hr className="border-gray-300 mb-2" />
                     <div className="flex flex-col space-y-1 text-sm">
-                      <HoveredLink href="/ProductBrochers">Afflovest (English)</HoveredLink>
-                      {/* <HoveredLink href="/ProductBrochers">
-                        Biwaze Airway Clearance System User Manual
-                      </HoveredLink> */}
-                      <HoveredLink href="/ProductBrochers">
-                        BiWaze Clear Lung Expansion Device for Home Care
-                      </HoveredLink>
-                      <HoveredLink href="/ProductBrochers">
-                        Biwaze Cough For Home Care (English)
-                      </HoveredLink>
-                      {/* <HoveredLink href="/ProductBrochers">
-                        Biwaze Cough User Manual (Spanish)
-                      </HoveredLink> */}
-                      <HoveredLink href="/ProductBrochers">
-                        Oxlife Liberty User Manual
-                      </HoveredLink>
-                      <HoveredLink href="/ProductBrochers">
-                        MyAirvo Use and Care Guide
-                      </HoveredLink>
+                      <HoveredLink href={`/ProductBrochers#${encodeURIComponent(
+                        "afflovest-english"
+                      )}`}>Afflovest (English)</HoveredLink>
+                      <HoveredLink href={`/ProductBrochers#${encodeURIComponent(
+                        "biwaze-clear-lung-expansion-device-for-home-care"
+                      )}`}>BiWaze Clear Lung Expansion Device for Home Care</HoveredLink>
+                      <HoveredLink href={`/ProductBrochers#${encodeURIComponent(
+                        "biwaze-cough-for-home-care-english"
+                      )}`}>Biwaze Cough For Home Care (English)</HoveredLink>
+                      <HoveredLink href={`/ProductBrochers#${encodeURIComponent(
+                        "oxlife-liberty-user-manual"
+                      )}`}>Oxlife Liberty User Manual</HoveredLink>
+                      <HoveredLink href={`/ProductBrochers#${encodeURIComponent(
+                        "myairvo-use-and-care-guide"
+                      )}`}>MyAirvo Use and Care Guide</HoveredLink>
                     </div>
                   </div>
                 </div>
-                
+
 
               </MenuItem>
               <Link href="/blog">

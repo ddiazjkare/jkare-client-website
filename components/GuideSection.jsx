@@ -25,9 +25,11 @@ export default function GuidesSection({ heroTitle, heroImage, guides }) {
       <section className="mx-auto max-w-6xl space-y-20 py-24 px-6 md:px-10">
         {guides.map((g, idx) => {
           const reverse = idx % 2 !== 0;                 // flip every other row
+          const sectionId = g.title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
           return (
             <div
               key={g.id}
+              id={sectionId} 
               className={`flex flex-col md:flex-row
                           ${reverse ? 'md:flex-row-reverse' : ''}
                           items-center gap-10`}
