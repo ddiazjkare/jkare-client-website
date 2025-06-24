@@ -312,23 +312,23 @@ const Navbar = () => {
                   {/* 5th Column */}
                   <div>
                     <h4 className="text-base font-semibold mb-1">
-                      Product Brochures
+                      Product Information
                     </h4>
                     <hr className="border-gray-300 mb-2" />
                     <div className="flex flex-col space-y-1 text-sm">
                       <HoveredLink href="/ProductBrochers">Afflovest (English)</HoveredLink>
-                      <HoveredLink href="/ProductBrochers">
+                      {/* <HoveredLink href="/ProductBrochers">
                         Biwaze Airway Clearance System User Manual
+                      </HoveredLink> */}
+                      <HoveredLink href="/ProductBrochers">
+                        BiWaze Clear Lung Expansion Device for Home Care
                       </HoveredLink>
                       <HoveredLink href="/ProductBrochers">
-                        Biwaze Clear Quick Hits
+                        Biwaze Cough For Home Care (English)
                       </HoveredLink>
-                      <HoveredLink href="/ProductBrochers">
-                        Biwaze Cough User Manual (English)
-                      </HoveredLink>
-                      <HoveredLink href="/ProductBrochers">
+                      {/* <HoveredLink href="/ProductBrochers">
                         Biwaze Cough User Manual (Spanish)
-                      </HoveredLink>
+                      </HoveredLink> */}
                       <HoveredLink href="/ProductBrochers">
                         Oxlife Liberty User Manual
                       </HoveredLink>
@@ -625,8 +625,8 @@ const Navbar = () => {
                   Nebulizer/Compressor Therapy & Cleaning Instructions
                 </Link>
 
-                {/* ——— 5. Product Brochures ——— */}
-                <span className="block font-semibold mt-3">Product Brochures</span>
+                {/* ——— 5. Product Information ——— */}
+                <span className="block font-semibold mt-3">Product Information</span>
                 <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Afflovest (English)
                 </Link>

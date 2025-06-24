@@ -20,31 +20,31 @@ const guides = [
   // },
   {
     id: 3,
-    title: "Biwaze Clear Quick Hits",
+    title: "BiWaze Clear Lung Expansion Device for Home Care",
     blurb:
       'Biwaze Clear Quick Hits are designed to deliver fast, effective airway clearance for patients with chronic respiratory conditions. These quick bursts of high-frequency oscillation help loosen mucus and improve lung function, providing rapid relief and enhancing daily breathing.',
     imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/porta-medical-clear-section-1.jpg',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/BiWaze-Cough-with-bag-and-circuit-scaled.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/jkare.data/patient+resources+files/BiWaze+-+Clear-Quick+Hits.pdf",
   },
   {
     id: 4,
-    title: "Biwaze Cough User Manual (English)",
+    title: "Biwaze Cough For Home Care (English)",
     blurb:
       'The Biwaze Cough device is designed to assist with effective airway clearance by simulating a natural cough. This user manual provides detailed instructions for proper use, maintenance, and troubleshooting to ensure optimal device performance and patient comfort.',
     imgAlt: 'Woman using nebulizer',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/porta-medical-produkte-cough-header.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/jkare.data/patient+resources+files/BiWaze+-+Cough+-User+Manual_US_English.pdf",
   },
-  {
-    id: 5,
-    title: "Biwaze Cough User Manual (Spanish)",
-    blurb:
-      "El dispositivo BiWaze® Cough ayuda a eliminar las secreciones broncopulmonares del sistema respiratorio mediante una terapia que imita la tos. La terapia consta de tres fases que imitan una tos: fase de inhalación, fase de exhalación y fase de pausa.  ",
-    imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/porta-medical-produkte-cough-header.jpg',
-    link: "https://s3.ap-south-1.amazonaws.com/jkare.data/patient+resources+files/BiWaze+-+Cough+-User+Manual_US_Spanish.pdf",
-  },
+  // {
+  //   id: 5,
+  //   title: "Biwaze Cough User Manual (Spanish)",
+  //   blurb:
+  //     "El dispositivo BiWaze® Cough ayuda a eliminar las secreciones broncopulmonares del sistema respiratorio mediante una terapia que imita la tos. La terapia consta de tres fases que imitan una tos: fase de inhalación, fase de exhalación y fase de pausa.  ",
+  //   imgAlt: 'Woman using nebulizer',
+  //   imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/porta-medical-produkte-cough-header.jpg',
+  //   link: "https://s3.ap-south-1.amazonaws.com/jkare.data/patient+resources+files/BiWaze+-+Cough+-User+Manual_US_Spanish.pdf",
+  // },
   {
     id: 6,
     title: "Oxlife Liberty User Manual",
