@@ -6,7 +6,7 @@ const guides = [
     blurb:
       'Our Respiratory Therapy team delivers specialized, high-quality in-home care to patients of all ages with complex pulmonary conditions. We provide clinical expertise in managing and optimizing respiratory function through advanced therapeutic techniques, state-of-the-art equipment, and a compassionate, patient-centered approach. Our licensed therapists work collaboratively with physicians and families to ensure safety, comfort, and improved quality of life for every patient we serve.',
     imgAlt: 'Man pointing to CPAP screen',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/Respiratory-Therapy.jpg',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/Clinical+Respiratory+Services.webp',
     link: '',
   },
   {
@@ -15,7 +15,7 @@ const guides = [
     blurb:
       'Certified by the Agency for Healthcare Administration (AHCA) as a Healthcare Service Pool, we provide licensed respiratory therapists for in-home care and as temporary staff for residential facilities.',
     imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/respiratory+therapist.jpg',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/Health+Care+Services.webp',
     link: "",
   },
   // {
