@@ -65,10 +65,10 @@ export default function HeroSection() {
       <div className="sm:hidden font-montserrat">
         {/* hero image with bottom fade */}
         <div
-          className="relative h-[32vh] mt-20 w-full bg-cover bg-center"
+          className="relative h-[32vh] mt-12 w-full bg-cover bg-center"
           style={{
             backgroundImage:
-              "url('https://s3.ap-south-1.amazonaws.com/jkare.data/hero+background+image+without+bg.png')",
+              "url('https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/hero+background+mobile.png')",
           }}
         >
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-white via-white/60 to-transparent" />
@@ -117,10 +117,11 @@ export default function HeroSection() {
       {/* ──────────────  DESKTOP / TABLET (≥640 px) ────────────── */}
       <div className="hidden sm:block">
         <div
-          className="relative flex h-[90vh] w-full items-center justify-center sm:justify-start bg-cover bg-center"
+          className="relative flex h-[90vh]  w-full items-center justify-center sm:justify-start bg-cover bg-center"
           style={{
             backgroundImage:
-              "url('https://s3.ap-south-1.amazonaws.com/jkare.data/hero+section+background+.jpg')",
+              "url('https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/Hero+Banner.webp')",
+              backgroundPositionY: 'top',
           }}
         >
           {/* bottom fade */}
