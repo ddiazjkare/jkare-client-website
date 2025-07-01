@@ -12,7 +12,7 @@ export default function GuidesSection({ heroTitle, heroImage, guides }) {
       {/* HERO ---------------------------------------------------------- */}
       <div className="relative h-[420px] w-full">
         <Image src="https://s3.ap-south-1.amazonaws.com/jkare.data/banner+image.jpg" alt={heroTitle} fill priority className="object-cover" />
-        <div className="absolute inset-0 bg-black/40 font-montserrat" />
+        <div className="absolute inset-0 bg-black/50 font-montserrat" />
         <div className="absolute inset-0 grid place-items-center text-center">
           <h1 className="mx-4 max-w-6xl text-3xl sm:text-4xl md:text-5xl
                          font-bold tracking-wide text-white">
@@ -38,19 +38,18 @@ export default function GuidesSection({ heroTitle, heroImage, guides }) {
               <div
                 className="relative shrink-0
                            w-full md:w-[420px] lg:w-[480px]
-                           h-[280px] md:h-[320px] lg:h-[360px]
+                           h-[256px] md:h-[320px] lg:h-[360px]
                            rounded-2xl overflow-hidden shadow-lg"
               >
                 <Image
                   src={g.imgSrc || '/placeholder.jpg'}
                   alt={g.imgAlt}
                   fill
-                  className="object-cover"
+                  className="object-contain"
                   sizes="(max-width:768px) 100vw, 480px"
                 />
               </div>
 
-              {/* TEXT + BUTTON */}
               {/* TEXT + BUTTON */}
               <div className="w-full md:w-1/2 space-y-4 font-montserrat">
                 <h2 className="text-customPink text-2xl sm:text-3xl font-medium ">
