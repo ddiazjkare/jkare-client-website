@@ -38,18 +38,18 @@ export default function AboutUs() {
 
         {/* ──────────── IMAGE CARD (right) ──────────── */}
         <div className="w-full lg:w-1/2 flex justify-center">
-          <div className="relative rounded-3xl overflow-hidden shadow-lg">
+          <div className="relative rounded-3xl overflow-hidden ">
             {/* optional decorative dots / plus background */}
-            <img
+            {/* <img
               src="https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/Compassionate+Care+for+Every+Breath%2C+Every+Life.webp"
               alt=""
               className="absolute -left-8 -top-8 w-32 opacity-20 select-none pointer-events-none hidden lg:block"
-            />
+            /> */}
             {/* foreground photo */}
             <img
               src="https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/Compassionate+Care+for+Every+Breath%2C+Every+Life.webp"
               alt="JKARE facility exterior"
-              className="relative z-10 h-[340px] w-[440px] object-cover"
+              className="relative z-10 h-[290px] w-[440px] object-contain "
             />
           </div>
         </div>
