@@ -117,7 +117,7 @@ const latestPosts = [
       'RTs decode common abbreviations so you know exactly what the doctor ordered.',
     imgAlt: 'Respiratory therapist reviewing physician order',
     imgSrc:
-      'https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      'https://images.pexels.com/photos/3845125/pexels-photo-3845125.jpeg?auto=compress&cs=tinysrgb&w=1200',
     href: '/blog',
     category: 'Education',
     date: '2024-02-28',

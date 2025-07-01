@@ -50,7 +50,6 @@ export default function AboutUs() {
               src="https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/Compassionate+Care+for+Every+Breath%2C+Every+Life.webp"
               alt="JKARE facility exterior"
               className="relative z-10 h-[340px] w-[440px] object-cover"
-
             />
           </div>
         </div>

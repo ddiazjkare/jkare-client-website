@@ -11,7 +11,7 @@ export default function GuidesSection({ heroTitle, heroImage, guides }) {
 
       {/* HERO ---------------------------------------------------------- */}
       <div className="relative h-[420px] w-full">
-        <Image src={heroImage} alt={heroTitle} fill priority className="object-cover" />
+        <Image src="https://s3.ap-south-1.amazonaws.com/jkare.data/banner+image.jpg" alt={heroTitle} fill priority className="object-cover" />
         <div className="absolute inset-0 bg-black/40 font-montserrat" />
         <div className="absolute inset-0 grid place-items-center text-center">
           <h1 className="mx-4 max-w-6xl text-3xl sm:text-4xl md:text-5xl
