@@ -48,7 +48,7 @@ const topPosts = [
       'Certified respiratory therapists clear up the biggest misconceptions about CPAP therapy.',
     imgAlt: 'CPAP machine on a bedside table',
     imgSrc:
-      'https://images.pexels.com/photos/6845832/pexels-photo-6845832.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      'https://images.pexels.com/photos/935777/pexels-photo-935777.jpeg?_gl=1*6zbadb*_ga*MTQ0NjAzNDEzOC4xNzE4NjkzMDU1*_ga_8JE65Q40S6*czE3NTEzNjk4NTUkbzY5JGcxJHQxNzUxMzY5OTQ1JGo1NiRsMCRoMA..',
     href: '/blog',
     category: 'Sleep',
     date: '2023-12-08',
@@ -141,7 +141,7 @@ export default function Blog() {
   return (
     <BlogPage
       heroTitle="Blog"
-      heroImage="https://images.pexels.com/photos/4065146/pexels-photo-4065146.jpeg?auto=compress&cs=tinysrgb&w=1600"
+      heroImage="https://s3.ap-south-1.amazonaws.com/jkare.data/banner+image.jpg"
       topPosts={topPosts}
       latestPosts={latestPosts}
     />
