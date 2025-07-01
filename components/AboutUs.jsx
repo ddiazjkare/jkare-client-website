@@ -41,13 +41,13 @@ export default function AboutUs() {
           <div className="relative rounded-3xl overflow-hidden shadow-lg">
             {/* optional decorative dots / plus background */}
             <img
-              src="https://s3.ap-south-1.amazonaws.com/medicom.hexerve/plus+image.png"
+              src="https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/Compassionate+Care+for+Every+Breath%2C+Every+Life.webp"
               alt=""
               className="absolute -left-8 -top-8 w-32 opacity-20 select-none pointer-events-none hidden lg:block"
             />
             {/* foreground photo */}
             <img
-              src="https://s3.ap-south-1.amazonaws.com/jkare.data/WhatsApp+Image+2025-05-22+at+14.12.20_3017a96a.jpg"
+              src="https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/Compassionate+Care+for+Every+Breath%2C+Every+Life.webp"
               alt="JKARE facility exterior"
               className="relative z-10 h-[340px] w-[440px] object-cover"
 
