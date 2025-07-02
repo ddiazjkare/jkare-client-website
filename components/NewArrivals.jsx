@@ -1,13 +1,11 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { AiFillStar } from 'react-icons/ai';
 
 const SkeletonCard = () => (
-  <article
-    className="w-full sm:w-[320px] lg:w-[340px] bg-white rounded-xl shadow-xl animate-pulse"
-  >
+  <article className="w-full sm:w-[320px] lg:w-[340px] bg-white rounded-xl shadow-xl animate-pulse">
     <div className="relative border-b border-gray-100 p-6 flex items-center justify-center">
       <div className="h-48 w-full bg-gray-200 rounded-md" />
     </div>
@@ -23,23 +21,8 @@ const SkeletonCard = () => (
   </article>
 );
 
-const NewArrivals = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const urls = [
-        `/api/product/67e1389c121b72710a9d7576`,
-        `/api/product/6842972db7792cde9b5e02f4`,
-        `/api/product/67e1389c121b72710a9d7575`,
-      ];
-      const results = await Promise.all(urls.map((u) => fetch(u).then((r) => r.json())));
-      setProducts(results.map((r) => r.product));
-      setLoading(false);
-    };
-    fetchProducts();
-  }, []);
+const NewArrivals = ({ bestSellers = [] }) => {
+  const loading = !bestSellers || bestSellers.length === 0;
 
   return (
     <section className="font-montserrat bg-gradient-to-b from-white via-customLightBlue/60 to-white">
@@ -47,12 +30,6 @@ const NewArrivals = () => {
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-gray-900">
           OUR&nbsp;BEST&nbsp;SELLERS
         </h2>
-        {/* <p className="mt-6 max-w-5xl mx-auto text-md sm:text-lg lg:text-lg text-gray-700">
-          Explore our advanced medical equipment collection, designed for
-          precision and reliability. We have Diagnostic tools and
-          instruments to ensure optimal patient care with our state‑of‑the‑art
-          solutions. Quality you can trust.
-        </p> */}
         <div className="relative mt-8">
           <div className="hidden lg:block absolute -left-10 top-1/2 -translate-y-1/2">
             <FiChevronLeft size={42} className="text-gray-600" />
@@ -63,7 +40,7 @@ const NewArrivals = () => {
           <div className="flex flex-wrap justify-center gap-10">
             {loading
               ? [1, 2, 3].map((i) => <SkeletonCard key={i} />)
-              : products.map((p) => (
+              : bestSellers.map((p) => (
                 <article
                   key={p._id}
                   className="w-full sm:w-[320px] lg:w-[340px] bg-white rounded-xl
@@ -72,7 +49,7 @@ const NewArrivals = () => {
                 >
                   <div className="relative border-b border-gray-100 p-6">
                     <img
-                      src={p.prod_images[0]}
+                      src={p.prod_images && p.prod_images[0]}
                       alt={p.prod_name}
                       className="h-48 w-full object-contain mx-auto"
                     />

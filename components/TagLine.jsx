@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
-export default function TagLine() {
+export default function TagLine({services}) {
   return (
     <section className="font-montserrat bg-gradient-to-t from-white via-[#fdf5ff] to-white lg:py-20 py-0">
       <div className="mx-auto max-w-7xl px-6 text-center">
@@ -11,33 +11,22 @@ export default function TagLine() {
           OUR&nbsp;SERVICES
         </h2>
         <h3 className="mt-3 text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-800">
-          Attentive Care Right at&nbsp;Your&nbsp;Home
+            {services?.title}
         </h3>
         <p className="mt-5 max-w-3xl mx-auto text-sm sm:text-base lg:text-lg text-gray-600">
-          We offer the latest in medical technology, combined with expert care, to provide the best respiratory therapy solutions in Miami. we are dedicated to improving your quality of life through advanced respiratory devices, personalized service, and ongoing support.
+          {services?.content}
         </p>
 
         {/* -------------- card grid --------------- */}
         <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {/* Card 1 */}
-          <ServiceCard
-            title="In‑home & Clinical Respiratory Services"
-            desc="Our Respiratory Therapy team delivers specialized, high-quality in-home care to patients of all ages with complex pulmonary conditions. We provide clinical expertise in managing and optimizing respiratory function through advanced therapeutic techniques, state-of-the-art equipment, and a compassionate, patient-centered approach. Our licensed therapists work collaboratively with physicians and families to ensure safety, comfort, and improved quality of life for every patient we serve."
-            href="/our-services"
-          />
-          {/* Card 2 */}
-          <ServiceCard
-            title="Health Care Services Pool"
-            desc="Certified by the Agency for Healthcare Administration (AHCA) as a Healthcare Service Pool, we provide licensed respiratory therapists for in-home care and as temporary staff for residential facilities."
-            href="/our-services"
-          />
-
-          {/* Card 3 */}
-          <ServiceCard
-            title="Medical Equipments and Supplies"
-            desc="JKARE provides a comprehensive range of high-quality medical equipment, respiratory devices, and healthcare consumables designed to support patient care at home. We specialize in advanced respiratory solutions and durable medical equipment (DME) tailored to meet the unique needs of each patient. Our team ensures timely delivery, personalized setup, and ongoing support to promote safety, independence, and better health outcomes."
-            href="/our-services"
-          />
+         {services?.cards?.map(card => (
+            <ServiceCard
+              key={card._id}
+              title={card.title}
+              desc={card.content}
+              href="/our-services"
+            />
+          ))}
         </div>
       </div>
     </section>

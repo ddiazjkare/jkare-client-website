@@ -8,76 +8,49 @@ import {
   FiChevronDown,
 } from 'react-icons/fi';
 
-/* ---------- DATA ---------- */
-const FAQ_DATA = {
-  general: {
+// Map API category keys to labels and icons
+const CATEGORY_MAP = {
+  generalquestion: {
     label: 'General Question',
     icon: FiHelpCircle,
-    qa: [
-      ['Are CPAP machines ventilators?', 'No. CPAP delivers constant airway pressure for sleep-apnea therapy, whereas a ventilator actively breathes for you.'],
-      ['Will my machine be brand new?', 'Yes, every CPAP or BiPAP machine we ship is factory-new, never refurbished.'],
-      ["I'm a new user, what do I need to buy?", 'Typically you need a CPAP device, a heated humidifier, a compatible mask, and replacement filters/tubing.'],
-      [
-        'Do I need a prescription to buy a Medical Equipment and Supplies?', 'Yes— all medical equipment and supplies require doctor’s prescription.'
-      ],
-      [
-        'Do We accept insurance?', 'Yes, we do all the major insurance companies.'
-      ],
-      [
-        'How long does it take for shipping the product?', 'Since all the products are shipped within the US. It could be between 1-7 days depending upon the shipper selection.'
-      ],
-
-      ['How long is the product warranty?', 'Most machines come with a standard manufacturer’s warranty, covering defects in parts and workmanship, and extended coverage options (through the manufacturer or third‑party) are also available.'],
-    ],
   },
-  billing: {
+  'payment&billing': {
     label: 'Payment & Billing',
     icon: FiCreditCard,
-    qa: [
-      ['Which payment methods do you accept?', 'We accept all major credit cards, Apple Pay, Bank Transfer, eCheck and PayPal.'],
-      // ['Can I pay in installments?', 'Yes! We offer Affirm and Afterpay at checkout for qualified orders.'],
-      // ['Do you charge sales tax?', 'We do not collect sales, GST, VAT, or any other tax at checkout. Your order total is the final amount—no additional taxes will be added based on your shipping or billing address.'],
-      // ['Is there a financing fee?', 'No additional fees—only the cost shown by the financing provider during checkout.'],
-      // ['How do I get a copy of my invoice?', 'Log in to “My Account → Orders” and click “Download Invoice.”'],
-    ],
   },
-  safety: {
+  'safety&security': {
     label: 'Safety & Security',
     icon: FiShield,
-    qa: [
-      ['Is my personal data secure?', 'Absolutely. We use 256-bit SSL encryption and do not store payment details on our servers.'],
-      [
-        "Are your products FDA‑approved?",
-        "Yes—we only sell **fully FDA‑approved or FDA‑cleared medical equipment**. Every device we offer has been formally reviewed and authorized through the FDA’s appropriate pathway—whether via 510(k) clearance or rigorous PMA approval—ensuring it meets stringent safety and efficacy standards before it reaches you."
-      ],
-
-      ['How do you ship fragile equipment?', 'We use custom foam inserts and double-boxed packaging to prevent damage.'],
-      ['What happens if my package is lost?', 'Contact support within 10 days and we will file a claim and reship at no cost.'],
-    ],
   },
-  account: {
+  'account&update': {
     label: 'Account & Update',
     icon: FiUserCheck,
-    qa: [
-      ['How do I reset my password?', 'Click “Forgot Password” on the login page and follow the emailed instructions.'],
-      ['Can I update my prescription online?', 'Yes. Go to “My Account → Prescriptions” and upload a new PDF or photo.'],
-      ['How do I change my shipping address?', 'Navigate to “My Account → Addresses” and edit or add a new address.'],
-      ['How do I delete my account?', 'Please email support@jkare.com and our team will process the deletion within 48 hours.'],
-    ],
   },
 };
 
-/* ---------- COLORS ---------- */
 const activeBox =
   'bg-gradient-to-b from-[#7e3bf3] to-[#b63bd8] text-white shadow-lg';
 const inactiveBox =
   'bg-[#F2F5F8] text-gray-500 hover:shadow-md transition-colors';
 
-/* ---------- COMPONENT ---------- */
-export default function FaqSection() {
-  const [activeCat, setActiveCat] = useState('general');
+export default function FaqSection({ faqs = [] }) {
+  // Transform API faqs array to an object for easier access
+  const faqData = {};
+  faqs.forEach((cat) => {
+    const map = CATEGORY_MAP[cat.category];
+    if (map) {
+      faqData[cat.category] = {
+        label: map.label,
+        icon: map.icon,
+        qa: cat.qna.map(q => [q.question, q.answer]),
+      };
+    }
+  });
+
+  // Default to first available category
+  const categories = Object.keys(faqData);
+  const [activeCat, setActiveCat] = useState(categories[0] || '');
   const [openIdx, setOpenIdx] = useState(null);
-  const { qa } = FAQ_DATA[activeCat];
   const [fadeKey, setFadeKey] = useState(0);
 
   const switchCategory = (key) => {
@@ -86,6 +59,17 @@ export default function FaqSection() {
     setOpenIdx(null);
     setActiveCat(key);
   };
+
+  if (!categories.length) {
+    return (
+      <section className="py-20 text-center">
+        <h2 className="text-3xl font-extrabold text-gray-900">FAQ's</h2>
+        <p className="mt-8 text-gray-500">No FAQs available at this time.</p>
+      </section>
+    );
+  }
+
+  const { qa, label, icon: Icon } = faqData[activeCat];
 
   return (
     <section className="font-montserrat bg-gradient-to-t from-white via-[#fdf5ff] to-white py-20 pt-0">
@@ -99,24 +83,26 @@ export default function FaqSection() {
           className="mt-14 flex flex-nowrap justify-center gap-2 sm:gap-6
                      overflow-x-auto scrollbar-hide"
         >
-          {Object.entries(FAQ_DATA).map(([key, { label, icon: Icon }]) => (
-            <button
-              key={key}
-              onClick={() => switchCategory(key)}
-              className={`flex flex-col items-center
-                          w-20 p-3 text-[10px]
-                          sm:w-32 sm:p-6 sm:text-xs
-                          rounded-2xl transition-all duration-300
-                          ${activeCat === key ? activeBox : inactiveBox}`}
-            >
-              {/* smaller icon on phones, original on larger screens */}
-              <Icon size={22} className="sm:hidden" />
-              <Icon size={32} className="hidden sm:block" />
-              <span className="mt-2 sm:mt-4 font-medium leading-tight">
-                {label}
-              </span>
-            </button>
-          ))}
+          {categories.map((key) => {
+            const { label, icon: Icon } = faqData[key];
+            return (
+              <button
+                key={key}
+                onClick={() => switchCategory(key)}
+                className={`flex flex-col items-center
+                            w-20 p-3 text-[10px]
+                            sm:w-32 sm:p-6 sm:text-xs
+                            rounded-2xl transition-all duration-300
+                            ${activeCat === key ? activeBox : inactiveBox}`}
+              >
+                <Icon size={22} className="sm:hidden" />
+                <Icon size={32} className="hidden sm:block" />
+                <span className="mt-2 sm:mt-4 font-medium leading-tight">
+                  {label}
+                </span>
+              </button>
+            );
+          })}
         </div>
 
         {/* ---------- ACCORDION ---------- */}
