@@ -21,7 +21,7 @@ const AdvancedProductDetail = ({ data, env }) => {
   const warrantyYears = (() => {
     const key = Object.keys(data.product.key_features)
       .find(k => /^\d+_year(s)?_warranty$/.test(k) && data.product.key_features[k]);
-    return key ? key.split('_')[0] : null ; 
+    return key ? key.split('_')[0] : null;
   })();
 
   const handleImageClick = () => {
@@ -185,16 +185,15 @@ const AdvancedProductDetail = ({ data, env }) => {
                   onClick={handleImageClick}
                 />
               </div>
-              
+
               {/* Action buttons overlay */}
               <div className="absolute top-4 right-4 flex space-x-2">
-                <button 
+                <button
                   onClick={() => setIsFavorited(!isFavorited)}
-                  className={`p-2 rounded-full backdrop-blur-sm border transition-all duration-200 ${
-                    isFavorited 
-                      ? 'bg-red-500 text-white border-red-500' 
-                      : 'bg-white/80 text-gray-600 border-white/20 hover:bg-white'
-                  }`}
+                  className={`p-2 rounded-full backdrop-blur-sm border transition-all duration-200 ${isFavorited
+                    ? 'bg-red-500 text-white border-red-500'
+                    : 'bg-white/80 text-gray-600 border-white/20 hover:bg-white'
+                    }`}
                 >
                   <FaHeart size={16} />
                 </button>
@@ -213,18 +212,17 @@ const AdvancedProductDetail = ({ data, env }) => {
               >
                 <FaChevronLeft size={16} />
               </button>
-              
+
               <div className="flex space-x-2 overflow-hidden">
                 {data?.product.prod_images
                   .slice(thumbnailIndex, thumbnailIndex + 4)
                   .map((image, index) => (
                     <div
                       key={index}
-                      className={`relative rounded-lg overflow-hidden cursor-pointer transition-all duration-200 ${
-                        selectedImage === thumbnailIndex + index
-                          ? "ring-2 ring-blue-500 ring-offset-2"
-                          : "hover:ring-2 hover:ring-gray-300 hover:ring-offset-1"
-                      }`}
+                      className={`relative rounded-lg overflow-hidden cursor-pointer transition-all duration-200 ${selectedImage === thumbnailIndex + index
+                        ? "ring-2 ring-blue-500 ring-offset-2"
+                        : "hover:ring-2 hover:ring-gray-300 hover:ring-offset-1"
+                        }`}
                       onClick={() => handleThumbnailClick(thumbnailIndex + index)}
                     >
                       <img
@@ -235,7 +233,7 @@ const AdvancedProductDetail = ({ data, env }) => {
                     </div>
                   ))}
               </div>
-              
+
               <button
                 onClick={handleRightArrowClick}
                 className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200 disabled:opacity-50"
@@ -261,28 +259,48 @@ const AdvancedProductDetail = ({ data, env }) => {
                   <span className="text-sm text-gray-500 ml-2">(4.8)</span>
                 </div>
               </div>
-              
+
               <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 leading-tight">
                 {data.product.prod_name}
               </h1>
-              
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                    isOutOfStock 
-                      ? "bg-red-100 text-red-800" 
-                      : "bg-green-100 text-green-800"
-                  }`}>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+                {/* Left Section: Stock + Info Badges */}
+                <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-3 space-y-2 sm:space-y-0">
+
+                  {/* Stock Badge */}
+                  <span
+                    className={`w-fit inline-flex items-center px-3 py-1 rounded-full text-xs sm:text-sm font-medium ${isOutOfStock ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800"
+                      }`}
+                  >
                     {isOutOfStock ? "Out of Stock" : "In Stock"}
                   </span>
-                  {/* {!isOutOfStock && (
-                    <span className="text-sm text-gray-500">
-                      {data.product.stockQuantity} available
-                    </span>
-                  )} */}
+
+                  {/* Info Row (Dimensions + PUI in separate backgrounds) */}
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                    {/* Dimensions */}
+                    {/* Dimensions */}
+                    <div className="flex items-center gap-x-2 text-xs sm:text-sm text-gray-600 bg-gray-100 px-3 py-1 rounded-full w-fit">
+                      <span className="font-semibold text-gray-700">Dimensions:</span>
+                      <span className="text-gray-700 font-medium">
+                        {data.product.parcel.length} × {data.product.parcel.width} × {data.product.parcel.height} in
+                      </span>
+                      <span className="text-gray-400 font-medium">|</span>
+                      <span className="text-gray-700 font-medium">
+                        Weight: {data.product.parcel.weight} lb
+                      </span>
+                    </div>
+
+
+                    {/* PUI */}
+                    <div className="text-xs sm:text-sm text-gray-600 bg-gray-100 px-3 py-1 rounded-full font-medium w-fit">
+                      PUI: <span className="text-gray-700">{data.product.prod_id}</span>
+                    </div>
+                  </div>
                 </div>
-                <span className="text-sm text-gray-500">PUI: {data.product.prod_id}</span>
               </div>
+
+
+
             </div>
 
             {/* Highlights */}
@@ -318,7 +336,7 @@ const AdvancedProductDetail = ({ data, env }) => {
                   </div>
                 )}
               </div>
-              
+
               <div className="flex items-center space-x-2 text-sm">
                 <FaPhone className="text-blue-600" size={14} />
                 <span className="text-gray-600">Questions about this product?</span>
@@ -341,7 +359,7 @@ const AdvancedProductDetail = ({ data, env }) => {
                   </span>
                 </div>
               )}
-              
+
               {warrantyYears && (
                 <div className="flex flex-col items-center p-3 bg-white border border-gray-200 rounded-lg">
                   <img
@@ -369,7 +387,7 @@ const AdvancedProductDetail = ({ data, env }) => {
                   </span>
                 </div>
               )}
-              
+
               {data.product.key_features["pay_over_time"] && (
                 <div className="flex flex-col items-center p-3 bg-white border border-gray-200 rounded-lg">
                   <img
@@ -407,14 +425,13 @@ const AdvancedProductDetail = ({ data, env }) => {
                     <FaPlus size={14} />
                   </button>
                 </div>
-                
+
                 <button
                   onClick={cartHandler}
-                  className={`flex-1 flex items-center justify-center px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${
-                    isOutOfStock
-                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      : "bg-customPink hover:bg-customBlue text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                  }`}
+                  className={`flex-1 flex items-center justify-center px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${isOutOfStock
+                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    : "bg-customPink hover:bg-customBlue text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                    }`}
                   disabled={isOutOfStock}
                 >
                   <FaShoppingCart className="mr-2" />
@@ -429,12 +446,12 @@ const AdvancedProductDetail = ({ data, env }) => {
         <div className="mt-16 space-y-8">
           <div className="border-t border-gray-200 pt-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Product Description</h2>
-            
+
             <div className="prose max-w-none">
               <p className="text-gray-700 text-lg leading-relaxed mb-8">
                 {data.product.prod_desc}
               </p>
-              
+
               <div className="space-y-6">
                 {data.product.prod_detailed_desc.map((detail, i) => (
                   <div key={i} className="bg-gray-50 rounded-xl p-6">
@@ -461,7 +478,7 @@ const AdvancedProductDetail = ({ data, env }) => {
         {data?.relatedProducts.length > 0 && (
           <div className="mt-16 border-t border-gray-300 pt-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-8">Related Products</h2>
-            
+
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
               {data.relatedProducts.map((product) => (
                 <Link
@@ -476,7 +493,7 @@ const AdvancedProductDetail = ({ data, env }) => {
                       className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-200"
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
                     <h3 className="text-sm font-medium text-gray-900 line-clamp-2">
                       {product.prod_name}
@@ -502,7 +519,7 @@ const AdvancedProductDetail = ({ data, env }) => {
         selectedImageIndex={selectedImage}
         setSelectedImage={setSelectedImage}
       />
-      
+
       <ToastContainer />
     </div>
   );
