@@ -55,7 +55,11 @@ export default function GuidesSection({ heroTitle, heroImage, guides }) {
                 <h2 className="text-customPink text-2xl sm:text-3xl font-medium ">
                   {g.title}
                 </h2>
-                <p className="text-base sm:text-lg">{g.blurb}</p>
+                {g.details ? (
+                  <div className="text-base sm:text-lg">{g.details}</div>
+                ) : (
+                  <p className="text-base sm:text-lg">{g.blurb}</p>
+                )}
                 {g.link && g.link.trim() !== "" && (
                   <Link
                     href={g.link}
