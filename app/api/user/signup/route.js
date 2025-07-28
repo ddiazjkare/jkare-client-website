@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import sendMail from "../../../../lib/sendMail";
-import { getBaseURL } from "../../utils";
+// import { getBaseURL } from "../../utils";
 import bcrypt from "bcrypt";
 import Users from "../../../../models/Users";
 
@@ -9,14 +9,13 @@ export const POST = async (req) => {
   try {
     const userData = await req.json();
 
-    let exUser = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/info/${userData.username}`
-    );
-    exUser = await exUser.json();
-
-    if (!exUser?.message)
+    const exUser = await Users.findOne({
+      $or: [{ username: userData.username }, { email: userData.email }],
+    });
+    // console.log("exUser : ", exUser)
+    if (exUser)
       return NextResponse.json(
-        { error: "Username already taken" },
+        { error: "Username or email already taken" },
         { status: 400 }
       );
 
@@ -36,27 +35,32 @@ export const POST = async (req) => {
       process.env.SECRET_KEY,
       { expiresIn: "1h" }
     );
-    const baseURL = getBaseURL(req);
+    // const baseURL = getBaseURL(req);
+    const baseURL = process.env.NEXTAUTH_URL;
     const html = `<!DOCTYPE html>
 <html>
 <head>
   <title>Email Verification</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body>
-  <div style="text-align: center; padding: 20px;">
-    <h1>Verify Your Email Address</h1>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif;">
+  <div style="text-align: center; padding: 20px; max-width: 600px; margin: 0 auto;">
+    <h1 style="color: #333;">Verify Your Email Address</h1>
 
-    <p>Thank you for signing up! To complete your registration, please click the button below to verify your email address:</p>
+    <p style="color: #555; line-height: 1.5;">Thank you for signing up! To complete your registration, please click the button below to verify your email address:</p>
 
-    <button type="button" onclick="location.href='${baseURL}/api/auth/verify?for=email&token=${token}'" style="background-color: #007bff; color: white; padding: 10px 20px; border: none; cursor: pointer;">
+    <a href="${baseURL}/api/auth/verify?for=email&token=${token}" style="display: inline-block; background-color: #007bff; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 4px; font-weight: bold;">
       Verify Now
-    </button>
+    </a>
 
-    <p>If the button doesn't work, you can copy and paste the following link into your browser:</p>
+    <p style="color: #555; line-height: 1.5; margin-top: 20px;">If the button doesn't work, you can copy and paste the following link into your browser:</p>
 
-    <p>This link will expire in 24 hours.</p>
+    <p style="word-break: break-all;"><a href="${baseURL}/api/auth/verify?for=email&token=${token}" style="color: #007bff;">${baseURL}/api/auth/verify?for=email&token=${token}</a></p>
 
-    <p>If you did not sign up for an account, you can ignore this email.</p>
+    <p style="color: #555; line-height: 1.5;">This link will expire in 24 hours.</p>
+
+    <p style="color: #555; line-height: 1.5;">If you did not sign up for an account, you can ignore this email.</p>
   </div>
 </body>
 </html>

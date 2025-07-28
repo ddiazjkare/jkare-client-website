@@ -1,6 +1,5 @@
-import AdvancedProductDetail from '../../../components/client/AdvancedProductDetail'
-export const dynamic = 'force-dynamic';
-
+import AdvancedProductDetail from "../../../components/client/AdvancedProductDetail";
+export const dynamic = "force-dynamic";
 export const generateMetadata = () => {
   return {
     title: "Product Detail",
@@ -9,21 +8,23 @@ export const generateMetadata = () => {
 
 const fetchApi = async (id) => {
   let data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product/${id}`, {
-    next: { revalidate: 60 }, // Revalidate every 60 seconds
+    cache: "no-store",
   });
+
   return await data.json();
 };
 
-async function ProductDetailPage({ params }) {
-  const data = await fetchApi(params.id);
-
-  return <AdvancedProductDetail data={data} />
+async function fetchShippingOffer() {
+  const response = await fetch("http://13.201.44.76/api/ship-env", {
+    cache: "no-store",
+  });
+  return await response.json();
 }
 
-// export async function generateStaticParams() {
-//   let data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product`);
-//   data = await data.json();
-//   return data.map((p) => ({ id: p.prod_id.toString() }));
-// }
+async function ProductDetailPage({ params }) {
+  const data = await fetchApi(params.id);
+  const env = await fetchShippingOffer();
 
+  return <AdvancedProductDetail data={data} env={env} />;
+}
 export default ProductDetailPage;

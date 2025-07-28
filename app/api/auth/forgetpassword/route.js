@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import sendMail from '../../../../lib/sendMail'
 import { NextResponse } from 'next/server'
-import { getBaseURL } from '../../utils'
+// import { getBaseURL } from '../../utils'
 
 export const POST = async (req) => {
   try {
@@ -18,7 +18,8 @@ export const POST = async (req) => {
       );
 
     const token = jwt.sign({ email }, process.env.SECRET_KEY, { expiresIn: '2h' })
-    const baseURL = getBaseURL(req)
+    // const baseURL = getBaseURL(req)
+    const baseURL = process.env.NEXTAUTH_URL;
     const html = `<!DOCTYPE html>
 <html>
 <head>

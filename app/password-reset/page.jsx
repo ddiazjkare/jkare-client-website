@@ -31,7 +31,7 @@ const Reset = () => {
         return
       }
 
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/resetpassword`, {
+      await fetch(`/api/auth/resetpassword`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -1,5 +1,4 @@
 import Category from '../../components/client/Category'
-
 // Ensure the page is always dynamic
 export const dynamic = 'force-dynamic';
 

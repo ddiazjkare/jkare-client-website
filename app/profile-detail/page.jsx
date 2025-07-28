@@ -188,9 +188,7 @@ const EditProfile = () => {
           </div>
         </div>
 
-
         {/* Edit Profile Section */}
-
         <div className="max-w-4xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden col-span-1 lg:col-span-3 border-2 border-customPink">
           <div className="grid grid-cols-1 lg:grid-cols-3">
             {/* Profile Photo Section */}

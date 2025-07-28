@@ -14,12 +14,17 @@ const transition = {
 }
 
 export const MenuItem = ({ setActive, active, item, children }) => {
+    const handleDelayedClose = () => {
+    setTimeout(() => {
+      setActive(null);
+    }, 1200);
+  };
   return (
     <div onMouseEnter={() => setActive(item)} className='relative '>
       <motion.p
         transition={{ duration: 0.3 }}
         // Navbar styling Properties
-        className='cursor-pointer text-white hover:text-customPink lg:text-lg lg:font-normal md:font-light'
+        className='cursor-pointer text-black hover:text-customPink lg:text-base lg:font-normal md:font-light font-montserrat '
       >
         {item}
       </motion.p>
@@ -42,7 +47,7 @@ export const MenuItem = ({ setActive, active, item, children }) => {
                   layout
                   className='w-max h-full p-4 '
                 >
-                  {children}
+                  <div onClick={handleDelayedClose}>{children}</div>
                 </motion.div>
               </motion.div>
             </div>
@@ -52,20 +57,16 @@ export const MenuItem = ({ setActive, active, item, children }) => {
     </div>
   )
 }
-
 export const Menu = ({ setActive, children }) => {
   return (
     <nav
       // resets the state
-      onMouseLeave={() => setActive(null)}
+      // onMouseLeave={() => setActive(null)}
       className='relative w-full
-      shadow-input flex justify-center space-x-8 px-8 py-2  '
-    >
-      {children}
-    </nav>
+      shadow-input flex justify-center space-x-6 px-8 py-2 '
+    >{children}</nav>
   )
 }
-
 export const ProductItem = ({ title, description, href, src }) => {
   return (
     <Link href={href} className='flex space-x-2'>
@@ -90,7 +91,7 @@ export const ProductItem = ({ title, description, href, src }) => {
 
 export const HoveredLink = ({ children, ...rest }) => {
   return (
-    <Link {...rest} className='text-black  hover:text-customPink'>
+    <Link {...rest} className='text-black text-sm font-normal hover:text-customPink py-2'>
       {children}
     </Link>
   )

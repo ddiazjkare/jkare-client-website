@@ -1,18 +1,19 @@
-// Add this directive at the top
 "use client"
-import { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
-import { FaGoogle, FaFacebook, FaXTwitter } from "react-icons/fa6"
+import { FaGoogle, FaFacebook, FaXTwitter, FaEye, FaEyeSlash, FaSpinner } from "react-icons/fa6"
 import { useRouter } from "next/navigation"
 import { signIn } from 'next-auth/react'
 import Alert from "../../components/ui/Alert"
-import { CartContext } from "../../components/SessionProVider"
+// import { CartContext } from "../../components/SessionProVider"
 
 const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [errMsg, setErrMsg] = useState(null)
-  const [, setCartItems] = useContext(CartContext)
+  const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  // const [, setCartItems] = useContext(CartContext)
   const router = useRouter()
 
   const pageTitle = 'Login';
@@ -23,6 +24,7 @@ const Login = () => {
 
   const submitHandler = async e => {
     e.preventDefault()
+    setLoading(true)
     const result = await signIn("credentials", {
       redirect: false,
       username,
@@ -30,39 +32,48 @@ const Login = () => {
     });
 
     if (!result?.error) {
-      const res = await fetch(`/api/user/info/${username}`)
-      const dbUser = await res.json()
-      window.localStorage.setItem("nextUser", JSON.stringify(dbUser))
-      const resp = await fetch(`/api/cart/${dbUser.email}`)
-      const myCart = await resp.json()
-      setCartItems(myCart.length)
-      window.localStorage.removeItem("medCart");
-      window.localStorage.setItem("medCart", JSON.stringify(myCart))
-      // Successfully signed in
-      router.push("/"); // Redirect to the home page (or any other page)
+      // const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/info/${username}`)
+      // const dbUser = await res.json()
+
+      router.push("/"); 
       return
     }
-    // Handle errors, e.g., display an error message to the user
     if (result?.error) {
       setErrMsg(result.error)
       setTimeout(() => {
         setErrMsg(null)
       }, 3000)
     }
+    setLoading(false)
   }
 
   return (
     <div
-      className="flex min-h-screen items-center justify-end bg-cover bg-center overflow-hidden"
-      style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/medicom.hexerve/login2.png')" }}
+      className="flex min-h-screen items-center justify-center bg-cover bg-center overflow-hidden"
+      style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/jkare.data/admin+login+background.jpg')" }}
     >
+       {/* Logo */}
+    <img
+      src="https://s3.ap-south-1.amazonaws.com/jkare.data/jkarelogo.png"
+      alt="JKare Logo"
+      className="absolute top-6 left-6 h-16 w-auto z-20 lg:top-8 lg:left-8
+        lg:block
+        hidden
+        "
+    />
+    {/* Mobile logo */}
+    <img
+      src="https://s3.ap-south-1.amazonaws.com/jkare.data/jkarelogo.png"
+      alt="JKare Logo"
+      className="absolute top-10 left-1/2 -translate-x-1/2 h-16 w-auto z-20 block lg:hidden"
+    />
       {errMsg && <Alert message={errMsg} closeHandler={() => setErrMsg(null)} />}
       {/* Background image for mobiles */}
       <div
         className="lg:hidden absolute inset-0 z-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/medicom.hexerve/login.png')" }}
+        style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/jkare.data/admin+login+background.jpg')" }}
       ></div>
-      <div className="relative p-8 mx-8 rounded-lg max-w-md w-full z-10 lg:mr-32 border-2 border-white shadow-xl  onject-center">
+      <div className="relative p-8 mx-8 rounded-lg max-w-md w-full z-10 lg:mr-32 border-2 border-white shadow-2xl bg-black/10 backdrop-blur-sm transition-transform duration-500 ease-out transform hover:scale-105">
         <h2 className="text-4xl font-bold mb-6 text-center text-white">
           Log in
         </h2>
@@ -79,39 +90,41 @@ const Login = () => {
               placeholder="Enter your Username"
             />
           </div>
-          <div className="flex flex-col mb-4">
+          <div className="flex flex-col mb-4 relative">
             <label className="text-white text-sm font-bold" htmlFor="password">
               Password
             </label>
             <input
-              className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded py-2 px-3 pr-10 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               onChange={({ target }) => setPassword(target.value)}
               placeholder="Enter your Password"
             />
-          </div>
-          <div className="flex items-center justify-between mb-4">
-            <label
-              className="flex items-center text-white text-sm font-bold"
-              htmlFor="remember"
+            <div
+              className="absolute inset-y-0 right-0 pr-3 mt-6 flex items-center cursor-pointer text-gray-600"
+              onClick={() => setShowPassword(!showPassword)}
             >
-              <input
-                className="mr-2 h-8 w-6 leading-tight"
-                type="checkbox"
-                id="remember"
-              />
-              <span className="text-white text-sm">Remember me?</span>
-            </label>
+              {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+            </div>
           </div>
           <div>
-            <input
-              className="bg-transparent hover:bg-customBlue text-white hover:text-white font-bold py-2 px-4 rounded border border-white hover:border-transparent focus:outline-none focus:shadow-outline w-full"
+            <button
               type="submit"
-              value="Log in"
-            />
+              disabled={loading}
+              className="bg-transparent hover:bg-customBlue text-white font-bold py-2 px-4 rounded border border-white hover:border-transparent focus:outline-none focus:shadow-outline w-full flex items-center justify-center"
+            >
+              {loading ? (
+                <>
+                  <FaSpinner className="animate-spin mr-2" size={20} />
+                  Logging in...
+                </>
+              ) : (
+                "Log in"
+              )}
+            </button>
             <Link
-              className="inline-block align-baseline font-bold text-sm text-white hover:text-customBlue"
+              className="inline-block align-baseline font-bold text-sm text-white hover:text-customBlue mt-2 block"
               href="/password-forget"
             >
               Forgot Password?
@@ -137,7 +150,7 @@ const Login = () => {
           >
             <FaGoogle size={20} color="#DB4437" />
           </button>
-          <button
+          {/* <button
             className="bg-white hover:bg-gray-100 text-gray-800 font-bold p-3 rounded-full border border-gray-400 shadow flex items-center"
             type="button"
             onClick={() => signIn("facebook")}
@@ -150,7 +163,7 @@ const Login = () => {
             onClick={() => signIn("twitter")}
           >
             <FaXTwitter size={20} color="#1DA1F2" />
-          </button>
+          </button> */}
         </div>
 
         {/* Sign up link */}
@@ -164,4 +177,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default Login;

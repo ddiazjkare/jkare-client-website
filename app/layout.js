@@ -13,17 +13,18 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   title: "Home",
   description: "Medical Equipment Commerce",
+  cache: "no-cache",
 };
 
 export default async function RootLayout({ children }) {
   const session = await getServerSession(authOptions);
   return (
     <>
-      <html lang="en" className="">
+      <html lang="en" className="font-montserrat">
         <body className={inter.className}>
           <SessionProVider session={session}>
             <DataProvider>
-              <ClientProvider>
+              <ClientProvider >
                 <Navbar />
               </ClientProvider>
               {children}

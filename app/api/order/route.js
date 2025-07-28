@@ -1,19 +1,40 @@
 import { NextResponse } from "next/server";
 import sendMail from "../../../lib/sendMail";
 import Order from "../../../models/Order";
-
+import Stripe from "stripe";
+// import { transaction } from "../../../lib/shippo";
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+function generateOrderString() {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let result = "";
+  for (let i = 0; i < 8; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+}
 export const POST = async (req) => {
   try {
     const body = await req.json();
-    let checkout_session = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/stripe/checkout/${body.sessionID}`
+    // let checkout_session = await fetch(
+    //   `${process.env.NEXT_PUBLIC_API_URL}/stripe/checkout/${body.sessionID}`
+    // );
+    // checkout_session = await checkout_session.json();
+
+    const checkout_session = await stripe.checkout.sessions.retrieve(
+      body.sessionID,
+      {
+        expand: ["line_items"],
+      }
     );
-    checkout_session = await checkout_session.json();
     const customer = checkout_session.customer_details;
     let user_info = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/user/info/${customer.email}`
     );
     const user = await user_info.json();
+
+    const paymentIntent = await stripe.paymentIntents.retrieve(
+      checkout_session.payment_intent
+    );
 
     if (user.message == "Not Found") {
       await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/create`, {
@@ -24,17 +45,25 @@ export const POST = async (req) => {
     const productItems = checkout_session.line_items.data;
     const date = new Date();
 
+    // console.log("carrier: ", checkout_session.metadata.carrier);
+
+    const orderNumber = `ORD-${generateOrderString()}`;
     const orderParams = {
+      order_id: orderNumber,
+      checkout_session: body.sessionID,
+      shipping_rate: checkout_session.metadata.shipping_rate,
       total_amount: checkout_session.amount_total,
       order_status: JSON.parse(checkout_session.metadata.prescription_required)
         ? "Pending"
         : "Completed",
+      carrier: checkout_session.metadata.carrier,
       comment: "",
       customer_email: customer.email,
       customer_name: customer.name,
       customer_phone: customer.phone,
       order_date: date.toLocaleString(),
-      shipping_address: checkout_session.shipping_details.address,
+      // shipping_address: checkout_session.shipping_details.address,
+      shipping_address: paymentIntent.shipping.address,
       billing_address: customer.address,
       total_amount: (checkout_session.amount_total / 100).toFixed(2),
       sub_amount: (checkout_session.amount_subtotal / 100).toFixed(2),
@@ -61,33 +90,38 @@ export const POST = async (req) => {
     const parsedProdList = JSON.parse(checkout_session.metadata.products);
     for (const item of productItems) {
       const prodResp = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/product/${parsedProdList[item.description]}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/product/${
+          parsedProdList[item.description]
+        }`,
         {
           method: "PUT",
           body: JSON.stringify({
-            quantity: Number(item.quantity)
+            quantity: Number(item.quantity),
           }),
         }
       );
 
       const product = await prodResp.json();
-
+      // console.log("product", product);
       orderParams.items.push({
-        product_id: product.product.prod_id,
+        product_id: product.product._id,
         product_name: product.product.prod_name,
         description: product.product.prod_desc,
         image: product.product.prod_images[0],
         quantity: item.quantity,
         price: (item.amount_total / 100).toFixed(2),
-        prescription_required: product.product.prod_id in presItems || presItems[product.product.prod_id] == "",
-        prescription_file: presItems[product.product.prod_id] ?? "",
+        prescription_required:
+          product.product._id in presItems ||
+          presItems[product.product._id] == "",
+        prescription_file: presItems[product.product._id] ?? "",
       });
     }
 
-    const orderCrt = await Order.create(orderParams);
+    await Order.create(orderParams);
     
     const ship = orderParams.shipping_address;
     const bill = orderParams.billing_address;
+    // console.log("ornder", orderNumber);
 
     const html = `<!DOCTYPE html>
 <html lang="en">
@@ -108,13 +142,13 @@ export const POST = async (req) => {
     <p class="mb-4">Hi ${customer.name},</p>
 
     <p class="mb-4">
-      This email confirms that your order (#${orderCrt._id}) has been
+      This email confirms that your order (#${orderNumber}) has been
       successfully processed and is now complete.
     </p>
 
     <h2 class="text-xl font-semibold mb-2">Order Summary:</h2>
     <ul class="list-disc list-inside mb-4">
-      <li>Order Number: #${orderCrt._id}</li>
+      <li>Order Number: #${orderNumber}</li>
       <li>Order Date: ${orderParams.order_date}</li>
       <li>Shipping Address: ${ship.line1}, ${
       ship.line2 ? `${ship.line2},` : ""
@@ -131,10 +165,12 @@ export const POST = async (req) => {
           </ul>
       </li>
       <li>Subtotal: ${orderParams.sub_amount}</li>
-      <li>Shipping: 0</li>
+      <li>Shipping: ${orderParams.shipping_amount}</li>
       <li><strong>Total: ${orderParams.total_amount}</strong></li>
     </ul>
-    <p>you can view your order history by clicking on this <a href=${process.env.NEXTAUTH_URL}/order-history>link<a/></p>
+    <p>you can view your order history by clicking on this <a href=${
+      process.env.NEXTAUTH_URL
+    }/order-history>link<a/></p>
 
     <p class="mb-4">
       Thank you for your order! If you have any questions, please don't
@@ -150,7 +186,6 @@ export const POST = async (req) => {
 </html>`;
 
     await sendMail(customer.email, "Order Booked", html);
-
     return NextResponse.json({ message: "order created" }, { status: 201 });
   } catch (error) {
     console.error(error);

@@ -1,12 +1,7 @@
 import { NextResponse } from "next/server";
 import Product from "../../../models/Product";
-function capitalize(str) {
-  if (typeof str !== "string" || str.length === 0) {
-    return str; // Handle empty or non-string input
-  }
-  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-}
 
+export const dynamic = 'force-dynamic';
 export const GET = async (req) => {
   try {
     const { searchParams } = new URL(req.url);
@@ -16,17 +11,17 @@ export const GET = async (req) => {
     const category = searchParams.get("category");
     const query = searchParams.get("query");
     const num = searchParams.get("num");
-    let filter = {};
+    let filter = {
+      isFeatured: true,
+    };
 
     if (category) {
-      filter.category = category;
+      filter.category = { $regex: new RegExp(`^${category}$`, "i") };
     }
 
     if (price) {
       const parsedPrice = JSON.parse(price);
-      console.log("parsedPrice", parsedPrice, typeof(Object.values(parsedPrice)[0]));
- 
-      filter.prod_value = parsedPrice; // Assuming price is a single number
+      filter.prod_value = parsedPrice;
     }
 
     if (prescription) {
@@ -34,17 +29,17 @@ export const GET = async (req) => {
     }
 
     if (brand) {
-      const brandArray = brand.split(",");
-      filter.brand_name = { $in: brandArray };
+      const brandArray = brand.split(",").map((b) => b.trim());
+      filter.brand_name = { $in: brandArray.map((b) => new RegExp(`^${atob(b)}$`, "i")) };
     }
 
     if (query) {
-      filter.prod_name = { $regex: new RegExp(capitalize(query), "i") }; // Case-insensitive search
+      filter.prod_name = { $regex: new RegExp(query, "i") };
     }
 
-    console.log("filter", filter);
-    const productList = await Product.find(filter)
-      .limit(num ? parseInt(num) : 0);
+    const productList = await Product.find(filter).limit(
+      num ? parseInt(num) : 0
+    );
 
     return NextResponse.json(productList, { status: 200 });
   } catch (error) {

@@ -1,231 +1,160 @@
-"use client";
-import React, { useState, useContext } from "react";
-import { Button } from "../ui/moving-border";
-import Link from "next/link";
-import { fetcher } from "../../lib/helperFunction";
-import { DataContext } from "./DataContextProvider";
+'use client';
+import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
-const ProductCategory = ({ prod }) => {
-  const [products, setProducts] = useState(prod);
-  const [category, setCategory] = useState("Oxygen Therapy Devices");
-  const data = useContext(DataContext);
+const brands = [
+  { name: 'ReactHealth', logo: 'https://www.reacthealth.com/images/logo.jpg' },
+  { name: 'Fisher & Paykel Healthcare', logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa-cLefRJBviWevw-tHOvGUyrUyrLQs4b-pelpY0BzwmSOJV4ntg&s=10&ec=72940545' },
+  { name: 'ABM Respiratory Care', logo: 'https://abmrc.com/wp-content/uploads/2021/02/ABM-Logo-08.png' },
+  { name: 'Percussionaire', logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5kRz6HKcS3W6GHg0_9h2FpUVtGNNPJjZOTw&s' },
+  { name: 'AffloVest', logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeWQ-I6yTCCMLMlub13OcVid3xIMUzrMoksVWfYDcQ1A&s&ec=72940545' },
+];
 
-  // Track the active category
-  const [activeCategory, setActiveCategory] = useState(category);
+/* ---------- COMPONENT ---------- */
+export default function ProductCategory({ categories = [] }) {
+  /* --- determine how many logos fit on the screen --- */
+  const [visibleCount, setVisibleCount] = useState(4);
+  useEffect(() => {
+    const update = () => {
+      if (window.innerWidth < 640) setVisibleCount(1);
+      else if (window.innerWidth < 1024) setVisibleCount(2);
+      else setVisibleCount(4);
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
 
-  const handleCategoryChange = async (cat) => {
-    try {
-      const res = await fetcher(`/api/product?category=${cat}&num=6`);
-      setCategory(cat);
-      setActiveCategory(cat); // Set the active category
-      setProducts(res);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  /* --- carousel state --- */
+  const [index, setIndex] = useState(0);
+  const total = brands.length;
+  const next = () => setIndex(i => (i + 1) % total);
+  const prev = () => setIndex(i => (i - 1 + total) % total);
 
-  const brands = [
-    { name: "ReactHealth", logo: "https://www.reacthealth.com/images/logo.jpg" },
-    { name: "ResMed", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/ResMed_logo.svg/800px-ResMed_logo.svg.png" },
-    { name: "Rhythm Healthcare", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT07F7mfZp98yQZi4NpX7TJemK2oHVos7wPxg&s" },
-    { name: "Fisher & Paykel Healthcare", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRm7A27QJxK1JAXhvJq7e_0Q_-vIjOvk6dxg&s" },
-    { name: "Sentec", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5kRz6HKcS3W6GHg0_9h2FpUVtGNNPJjZOTw&s" },
-  ];
+  /* --- slice visible brands --- */
+  const visibleBrands = useMemo(() => {
+    return Array.from({ length: Math.min(visibleCount, total) }, (_, k) => (
+      brands[(index + k) % total]
+    ));
+  }, [index, visibleCount, total]);
 
   return (
-    <div>
-      <section className="text-black body-font md:flex md:justify-center font-montserrat">
-        <div className="container px-5 lg:py-12 lg:pb-0 sm:py-4 lg:mx-auto md:mx-0 flex flex-col items-center justify-center">
-          {/* Title Section */}
-          <div className="lg:w-3/4 sm:w-full product-title flex flex-col justify-center items-center mb-5">
-            <h1 className="text-center lg:text-5xl sm:text-3xl font-bold mb-3 font-montserrat tracking-tighter">
-              Shop By Category
-            </h1>
-            <p className="text-center lg:text-xl sm:text-md my-2 font-montserrat">
-              Explore our advanced medical equipment collection, designed for
-              precision and reliability. From diagnostic tools to surgical
-              instruments, ensure optimal patient care with our state-of-art
-              solutions. Quality you can trust.
+    <section className="font-montserrat bg-gradient-to-t from-white via-[#F3F9FF] to-white  lg:py-16 py-12 pt-0">
+      {/* ---------- SHOP BY CATEGORY ---------- */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8
+                      grid lg:grid-cols-[300px_1fr] gap-4 lg:gap-6">
+
+        {/* gradient sidebar / header */}
+        <aside className="rounded-xl overflow-hidden shadow-lg">
+          <div className="h-full bg-gradient-to-b from-[#702D6E] via-[#702D6E]/90 to-purple-200/90
+                          p-6 sm:p-8 text-center lg:text-left">
+            <h2 className="text-white text-xl sm:text-3xl font-light leading-snug mb-4 sm:mb-6">
+              SHOP&nbsp;BY<br />CATEGORY
+            </h2>
+            {/* <p className="text-white text-sm sm:text-base leading-normal">
+              Explore our advanced medical equipment collection, designed for precision and reliability.
+              From diagnostic tools to therapeutic devices, ensure optimal patient care with our
+              state-of-the-art solutions. Quality you can trust.
+            </p> */}
+            <p className="text-white text-sm sm:text-base leading-normal">
+              Find the Right Medical Equipment for Your Needs.
             </p>
           </div>
+        </aside>
 
-          {/* Category Buttons */}
-          {/* <div className="flex justify-evenly flex-wrap w-[90%] gap-2 px-4">
-            {data?.map((d) => (
-              <div key={d.name} className="button">
-                <button
-                  className={`group relative inline-flex items-center overflow-hidden rounded-full border-2 px-12 py-3 text-lg font-medium 
-                    ${
-                      activeCategory === d.name
-                        ? "border-white text-white bg-customPink" 
-                        : "border-customPink text-customPink hover:bg-gray-50 hover:text-white"
-                    }`}
-                  onClick={() => handleCategoryChange(d.name)}
-                >
-                  <span
-                    className={`duration-400 ease absolute left-0 top-1/2 block h-0 w-full bg-customPink opacity-100 transition-all 
-                      ${
-                        activeCategory === d.name
-                          ? "top-0 h-full" 
-                          : "group-hover:top-0 group-hover:h-full"
-                      }`}
-                  ></span>
-                  <span
-                    className={`ease absolute right-0 flex h-10 w-10 translate-x-full transform items-center justify-start duration-500 
-                      ${activeCategory === d.name ? "-translate-x-2" : "group-hover:-translate-x-2"}`}
-                  >
-                    <svg
-                      className="h-5 w-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M14 5l7 7m0 0l-7 7m7-7H3"
-                      ></path>
-                    </svg>
-                  </span>
-                  <span
-                    className={`relative transform duration-700 ${
-                      activeCategory === d.name ? "-translate-x-3" : "group-hover:-translate-x-3"
-                    }`}
-                  >
-                    {d.name}
-                  </span>
-                </button>
-              </div>
-            ))}
-          </div> */}
+        {/* 2×2 grid (same at every breakpoint) */}
+        <div className="grid grid-cols-2 gap-4 sm:gap-6">
+          {categories.map(({ name, image }) => {
+            // Fixed hrefs for each category name
+            let href = "#";
+            if (name === "Pap Devices") href = "/category/Pap%20Devices";
+            else if (name === "CPAP Masks") href = "/category/CPAP%20Masks";
+            else if (name === "Oxygen Concentrators") href = "/category/Oxygen%20Concentrators";
+            else if (name === "Respiratory Therapy Devices") href = "/category/Respiratory%20Therapy%20Devices";
 
-          {/* <div className="flex justify-around items-center w-[80%] bg-gray-100 p-2 rounded-lg shadow-md">
-  {data?.map((d) => (
-    <div key={d.name} className="button">
-      <button
-        className={`px-6 py-2 text-lg font-semibold rounded-lg transition-all duration-200 
-          ${
-            activeCategory === d.name
-              ? "bg-blue-500 text-white" // Active button style
-              : "bg-white text-black hover:bg-gray-200" // Default button style
-          }`}
-        onClick={() => handleCategoryChange(d.name)}
-      >
-        {d.name}
-      </button>
-    </div>
-  ))}
-</div> */}
-
-
-          {/* Products Section */}
-          <section className="text-gray-600 body-font lg:w-[90%]">
-            <div className="flex flex-wrap lg:justify-around md: justify-center items-center w-full bg-gray-100 p-2 rounded-lg shadow-md">
-              {data?.map((d) => (
-                <div key={d.name} className="m-1"> {/* Small margin for reduced spacing */}
-                  <button
-                    className={`px-4 py-2 text-base md:text-lg font-medium rounded-lg transition-all duration-200 
-          ${activeCategory === d.name
-                        ? "bg-blue-500 text-white"
-                        : "bg-white text-black hover:bg-gray-200"
-                      }`}
-                    onClick={() => handleCategoryChange(d.name)}
-                  >
-                    {d.name}
-                  </button>
-                </div>
-              ))}
-            </div>
-
-            <div className="container px-5 py-12 mx-auto">
-              <div className="flex flex-wrap -m-4">
-                {products?.map((prod) => (
-                  <Link
-                    href={`/product/${prod.prod_id}`}
-                    className="p-4 lg:w-1/3 sm:w-1/2 transition-transform duration-200 transform hover:scale-105"
-                    key={prod.prod_id}
-                  >
-                    <div className="bg-white h-full border shadow-xl hover:shadow-customPink/20 hover:border-customPink rounded-lg overflow-hidden">
-                      <img
-                        className="lg:h-56 md:h-36 lg:w-full object-contain object-center p-4 border-b border-black"
-                        src={prod.prod_images[0]}
-                        alt={prod.prod_name}
-                      />
-                      <div className="p-6">
-                        <h1 className="title-font text-lg font-medium text-gray-900 mb-3 line-clamp-1">
-                          {prod.prod_name}
-                        </h1>
-                        <div className="flex items-center flex-wrap">
-                          <div className="text-customBlue inline-flex items-center md:mb-2 lg:mb-0">
-                            View Product
-                            <svg
-                              className="w-4 h-4 ml-2"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              fill="none"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <path d="M5 12h14"></path>
-                              <path d="M12 5l7 7-7 7"></path>
-                            </svg>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* Shop All Button */}
-          <div className="button">
-            <Link href={`/product`}>
-              <Button
-                borderRadius="1rem"
-                className="text-white bg-black-800/30 font-semibold text-lg"
+            return (
+              <div
+                key={name}
+                className="flex flex-col items-center text-center
+                 bg-[#EEF7FD] rounded-lg sm:rounded-xl shadow
+                 px-3 sm:px-6 py-5 sm:py-6
+                 hover:shadow-lg hover:bg-[#e0eefe] transition-all duration-200"
               >
-                Shop All
-              </Button>
-            </Link>
-          </div>
-
-          {/* Shop By Brand Section */}
-          <section>
-            <div className="bg-white py-8 px-4 rounded-2xl my-12">
-              <h2 className="text-center text-xl md:text-2xl font-bold text-black mb-6">
-                SHOP BY BRAND
-              </h2>
-              <div className="flex flex-wrap justify-center gap-8 items-center">
-                {brands.map((brand, index) => (
-                  <div key={index} className="flex flex-col items-center">
-                    <img
-                      src={brand.logo}
-                      alt={brand.name}
-                      className="h-12 md:h-16 object-contain"
-                    />
-                    <p className="text-sm text-gray-700 mt-2">{brand.name}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-6 text-center">
-                <a
-                  href="#"
-                  className="text-blue-600 hover:underline font-medium lg:text-2xl"
+                <img
+                  src={image}
+                  alt={name}
+                  className="h-24 sm:h-36 w-auto object-contain mb-3 sm:mb-4"
+                />
+                <h3 className="text-[11px] sm:text-sm font-semibold uppercase
+                     tracking-wide text-gray-900 mb-2 sm:mb-4">
+                  {name}
+                </h3>
+                <Link
+                  href={href}
+                  className="inline-block rounded-full bg-customButton hover:bg-customButtonHover
+                   text-[11px] sm:text-sm px-5 sm:px-8 py-2 sm:py-3
+                   font-semibold text-gray-900 transition-colors shadow-sm"
                 >
-                  View All
-                </a>
+                  Shop&nbsp;All
+                </Link>
               </div>
-            </div>
-          </section>
+            );
+          })}
         </div>
-      </section>
-    </div>
-  );
-};
+      </div>
 
-export default ProductCategory;
+      {/* ---------- SHOP BY BRAND ---------- */}
+      <div className="mt-8 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8
+                      flex flex-col gap-4 lg:grid lg:grid-cols-[300px_1fr] lg:gap-6">
+
+        {/* purple banner (always visible) */}
+        <div className="rounded-xl overflow-hidden shadow-lg">
+          <div className="bg-gradient-to-b from-[#702D6E] via-[#702D6E]/80 to-[#702D6E]/50
+                          p-4 sm:p-6 text-center lg:text-left">
+            <h3 className="text-white text-lg sm:text-3xl font-light leading-tight">
+              SHOP&nbsp;BY<br />BRAND
+            </h3>
+          </div>
+        </div>
+
+        {/* carousel */}
+        <div className="relative bg-white rounded-xl shadow-md
+                        px-6 sm:px-12 py-6 sm:py-8">
+
+          {/* chevrons */}
+          <button aria-label="Previous brand"
+            onClick={prev}
+            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2
+                             text-gray-500 hover:text-gray-800">
+            <FiChevronLeft size={20} />
+          </button>
+          <button aria-label="Next brand"
+            onClick={next}
+            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2
+                             text-gray-500 hover:text-gray-800">
+            <FiChevronRight size={20} />
+          </button>
+
+          <div className="flex gap-6 sm:gap-10 justify-center flex-wrap">
+            {visibleBrands.map(({ name, logo }) => (
+              <Link key={name}
+                href={{ pathname: '/brands', query: { brand: btoa(name) } }}
+                className="flex flex-col items-center justify-center shrink-0
+                               cursor-pointer max-w-[180px]">
+                <img src={logo}
+                  alt={name}
+                  className="h-10 sm:h-8 w-auto object-contain
+                                hover:scale-105 transition-transform" />
+                <span className="text-[12px] sm:text-xs text-gray-700
+                                 mt-1 sm:mt-2 text-center leading-tight">
+                  {name}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

@@ -133,7 +133,7 @@ const ProductByCategoryPage = ({ productList, category, brandList }) => {
   );
 
   return (
-    <div className="text-black mt-32 lg:flex lg:mx-20 font-montserrat">
+    <div className="text-black mt-32 mb-14 lg:flex lg:mx-20 font-montserrat">
       {productList.length == 0 ? (
         renderSkeletonFilters()
       ) : (
@@ -288,8 +288,8 @@ const ProductByCategoryPage = ({ productList, category, brandList }) => {
         <div className="rightcontainer lg:h-fit lg:w-3/4 lg:p-9 lg:pt-0 grid gap-4 p-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 ">
           {products.length ? (
             products.map((prod) => (
-              <div className="p-2 flex flex-col" key={prod.prod_id}>
-                <Link href={`/product/${prod.prod_id}`}>
+              <div className="p-2 flex flex-col" key={prod._id}>
+                <Link href={`/product/${prod._id}`}>
                   <div className="border shadow-xl shadow-customBlue/20 border-customBlue hover:shadow-customBlue/40 hover:border-2 rounded-lg overflow-hidden  flex flex-col items-center justify-between cursor-pointer transition-transform transform hover:scale-105">
                     <img
                       className="h-48 w-full object-contain object-center p-4"
@@ -311,7 +311,7 @@ const ProductByCategoryPage = ({ productList, category, brandList }) => {
           ) : (
             <div className="text-center  lg:w-[60vw] lg:h-[50vh] mt-5 flex items-center justify-center">
               <Image
-                src="https://s3.ap-south-1.amazonaws.com/medicom.hexerve/data-search-not-found-concept-vector-36073021_1-removebg-preview.png"
+                src="https://s3.ap-south-1.amazonaws.com/jkare.data/no+orders.jpg"
                 height={600}
                 width={500}
               />

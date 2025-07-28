@@ -7,7 +7,7 @@ function getUniqueObjects(arr) {
   const seenObjects = new Set();
 
   for (const obj of arr) {
-    const serializedObj = JSON.stringify(obj); // Convert object to a string for comparison
+    const serializedObj = JSON.stringify(obj);
 
     if (!seenObjects.has(serializedObj)) {
       uniqueObjects.push(obj);
@@ -20,38 +20,43 @@ function getUniqueObjects(arr) {
 
 export const GET = async (req, ctx) => {
   try {
-    const result = await Product.findOne({prod_id: ctx.params.id})
+    const product = await Product.findOne({ _id: ctx.params.id });
 
-    const jsonRes = await fetch('https://s3.ap-south-1.amazonaws.com/medicom.hexerve/stopWords.json');
-    const stopWords = await jsonRes.json();
-
-    if (Object.keys(result).length > 0) {
-      const product = result;
-      let relatedProducts = [];
-
-      const filteredText = removeStopWords(product.prod_name, stopWords);
-      for (const text of filteredText.trim().split(" ")) {
-        let filterText = text.trim();
-        filterText = filterText[0].toUpperCase() + filterText.substr(1);
-        
-        const query = {
-          prod_id: { $ne: ctx.params.id }, // Exclude a specific prod_id
-          prod_name: { $regex: new RegExp(filterText, "i") } // Case-insensitive search in product name
-        };
-        
-        const products = await Product.find(query);
-        if (products) relatedProducts.push(...products);
-      }
-      relatedProducts = getUniqueObjects(relatedProducts);
-      return NextResponse.json({ product, relatedProducts }, { status: 200 });
-    } else {
-      return NextResponse.json({ message: "Not Found" }, { status: 404 });
+    if (!product) {
+      return NextResponse.json(
+        { message: "Product not found" },
+        { status: 404 }
+      );
     }
+
+    const jsonRes = await fetch(
+      "https://s3.ap-south-1.amazonaws.com/jkare.data/expanded_stopwords.json"
+    );
+    const { stopwords: stopWords } = await jsonRes.json();
+
+    const filteredText = removeStopWords(product.prod_name, stopWords);
+
+    const keywords = filteredText.trim().split(" ").filter(Boolean);
+    const regexPattern = keywords.map((word) => `\\b${word}\\b`).join("|");
+    const query = {
+      _id: { $ne: ctx.params.id }, 
+      prod_name: { $regex: regexPattern, $options: "i" }, 
+    };
+
+    const relatedProducts = await Product.find(query).limit(10); // Limit to avoid excessive results
+
+    const uniqueRelatedProducts = getUniqueObjects(relatedProducts);
+
+    return NextResponse.json(
+      { product, relatedProducts: uniqueRelatedProducts },
+      { status: 200 }
+    );
   } catch (error) {
-    console.error("er", error);
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-    });
+    console.error("Error in GET /products/:id:", error);
+    return NextResponse.json(
+      { error: "Internal server error", details: error.message },
+      { status: 500 }
+    );
   }
 };
 
@@ -69,7 +74,7 @@ export const PUT = async (req, ctx) => {
     }
 
     // Find the product and check stock availability
-    const product = await Product.findOne({ prod_id: productId });
+    const product = await Product.findOne({ _id: productId });
 
     if (!product) {
       return NextResponse.json(
@@ -87,7 +92,7 @@ export const PUT = async (req, ctx) => {
 
     // Update stock quantity by decrementing the given value
     const updatedProduct = await Product.findOneAndUpdate(
-      { prod_id: productId },
+      { _id: productId },
       { $inc: { stockQuantity: -quantity } }, // Reduce stock quantity
       { new: true } // Return updated product
     );

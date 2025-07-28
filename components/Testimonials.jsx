@@ -1,131 +1,186 @@
-"use client"
-import React, { useState, useEffect } from 'react'
-import { FaStar, FaChevronLeft, FaChevronRight } from 'react-icons/fa'
+'use client';
 
+import React, { useState, useEffect } from 'react';
+import { FaStar, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+
+/* ------------------------------------------------------------------ */
+/*  DATA (new sample reviews, no photos)                              */
+/* ------------------------------------------------------------------ */
 const testimonials = [
   {
-    rating: 4.5,
-    text: 'This website made buying medical equipment effortless. The process was incredibly smooth, with a fast and simple checkout. Excellent service and high-quality.',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/testimonials/shivamchokha.jpg',
-    name: 'SHIVAM AWASTHI',
-    role: 'Front end developer'
+    rating: 5,
+    name: 'ANDREA HOLZMANN',
+    text:
+      'Jkare is helping me on my journey with the CPAP machine for almost 6 months now. I am very happy with their service. Joel is very efficient and kind. He solves all my problems and doubts related to the machine and its accessories.',
   },
   {
-    rating: 4.9,
-    text: 'Shopping for medical equipment here was fantastic! The site is easy to navigate, the checkout process was quick, and I received my order in no time. The quality of the products is exceptional.',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/testimonials/akash.jpg',
-    name: 'AKASH SHARMA',
-    role: 'Lead Developer'
+    rating: 4,
+    name: 'Estefani',
+    text:
+      'Joel provided exceptional service by being attentive to my daughter’s needs, responding promptly to our inquiries and going the extra mile to ensure our satisfaction. Thank you!',
   },
   {
-    rating: 4.8,
-    text: 'I had a fantastic experience with this website. The user-friendly design ensured a hassle-free shopping experience, and the quick delivery exceeded my expectations.',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/WhatsApp+Image+2024-10-25+at+10.38.41_488a5962.jpg',
-    name: 'KASHISH SAINI',
-    role: 'WordPress Developer'
+    rating: 5,
+    name: 'Queen Isa', 
+    
+    text:
+      'My mother has been with JKare for a year and they have assisted in so many ways. Joel offers excellent customer service and always helps me get supplies or answers for my mom. A big help!',
   },
   {
-    rating: 4.1,
-    text: 'Shopping for medical equipment here was fantastic! The site is easy to navigate, the checkout process was quick, and I received my order in no time. The quality of the products is exceptional.',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/medicom.hexerve/testimonials/akshay.jpg',
-    name: 'AKSHAY BAIRWA',
-    role: 'UI/UX Designer'
-  }
-]
+    rating: 5,
+    name: 'Kim Decius',
+    text:
+      'Outstanding experience from start to finish. The staff made sure I understood my new CPAP equipment and followed up after delivery. Highly recommend JKare.',
+  },
+];
+export default function Testimonials() {
+  const total = testimonials.length;
+  const [current, setCurrent] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const [touchStartX, setTouchStartX] = useState(null);
 
-const Testimonials = () => {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [isMobile, setIsMobile] = useState(false)
 
+  /* ---------- handle screen size ---------- */
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 640)
-    }
+    const onResize = () => setIsMobile(window.innerWidth < 640);
+    onResize();
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
-    if (typeof window !== 'undefined') {
-      setIsMobile(window.innerWidth < 640)
-      window.addEventListener('resize', handleResize)
-    }
+  /* ---------- navigation helpers ---------- */
+  const prev = () => setCurrent((c) => (c - 1 + total) % total);
+  const next = () => setCurrent((c) => (c + 1) % total);
 
-    return () => {
-      if (typeof window !== 'undefined') {
-        window.removeEventListener('resize', handleResize)
+  /* map absolute idx → relative offset (−N … 0 … +N) */
+  const offset = (idx) => {
+    let d = idx - current;
+    if (d > total / 2) d -= total;
+    if (d < -total / 2) d += total;
+    return d;
+  };
+  const handleTouchStart = (e) => {
+    const touchDown = e.touches[0].clientX;
+    setTouchStartX(touchDown);
+  };
+  
+  const handleTouchMove = (e) => {
+    if (!touchStartX) return;
+    const touchUp = e.touches[0].clientX;
+    const deltaX = touchStartX - touchUp;
+  
+    if (Math.abs(deltaX) > 50) {
+      if (deltaX > 0) {
+        next(); // Swipe left
+      } else {
+        prev(); // Swipe right
       }
+      setTouchStartX(null); // Reset touch start position
     }
-  }, [])
+  };
+  
 
-  const handlePrev = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? testimonials.length - (isMobile ? 1 : 3) : prevIndex - 1
-    )
-  }
-
-  const handleNext = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex >= testimonials.length - (isMobile ? 1 : 3) ? 0 : prevIndex + 1
-    )
-  }
-
-  const currentTestimonials = testimonials.slice(currentIndex, currentIndex + (isMobile ? 1 : 3))
+  /* constants for transform math */
+  const CARD_W = isMobile ? 320 : 350; // width incl. gap
+  const GAP = isMobile ? 0 : 30; // visual gap (px)
 
   return (
-    <section className='py-8'>
-      <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
-        <div className='mb-16 text-center'>
-          <h1 className='lg:text-5xl sm: text-3xl font-bold mb-3 text-center font-montserrat tracking-tighter'>
-            Customer Testimonials
-          </h1>
-          <p className='text-center mb-3 lg:text-xl sm:text-md'>
-            Discover how our top-quality medical equipment has transformed lives. Hear firsthand experiences from our satisfied customers who trust us for their healthcare needs and unparalleled support.
+    <section className=" lg:py-20 py-0  font-montserrat bg-gradient-to-t from-white via-customLightBlue/50 to-white overflow-hidden">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* -------------- heading -------------- */}
+        <header className="mb-16 text-center">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900">
+            TESTIMONIALS
+          </h2>
+          <p className="mt-4 max-w-3xl mx-auto text-gray-600 text-sm sm:text-base lg:text-lg">
+            Hear firsthand experiences from our customers who trust JKare for
+            their respiratory care and CPAP needs.
           </p>
-        </div>
+        </header>
 
-        <div className='flex justify-center items-center'>
-          <button onClick={handlePrev} className='p-2'>
-            <FaChevronLeft size={24} />
-          </button>
-          <div className='flex gap-4'>
-            {currentTestimonials.map((testimonial, index) => (
-              <div
-                key={index}
-                className='group bg-white border-2 hover:border-customPink rounded-xl p-6 transition-all duration-500 w-full max-w-md cursor-pointer'
-              >
-                <div>
-                  <div className='flex items-center mb-7 gap-2 text-amber-500 transition-all duration-500'>
-                    <FaStar />
-                    <span className='text-base font-semibold text-customBlue'>
-                      {testimonial.rating}
-                    </span>
+        {/* -------------- carousel -------------- */}
+        <div className="flex items-center justify-center gap-4">
+          {/* left arrow */}
+          {!isMobile && <ArrowBtn onClick={prev} icon={<FaChevronLeft size={26} />} />}
+
+          {/* rail */}
+          <div className="relative h-[420px] sm:h-[460px] w-[1100px] max-w-full overflow-hidden z-10"  
+          onTouchStart={isMobile ? handleTouchStart : null}
+          onTouchMove={isMobile ? handleTouchMove : null}>
+            {testimonials.map((t, idx) => {
+              const d = offset(idx);
+              const xShift = d * (CARD_W + GAP);
+              const scale = d === 0 ? 1.1 : 0.85;
+              const z = 50 - Math.abs(d);
+              const hide = Math.abs(d) > 2 && !isMobile;
+
+              /* initials if no photo */
+              const initials = t.name
+                .split(' ')
+                .map((w) => w[0])
+                .join('')
+                .toUpperCase();
+
+              return (
+                <article
+                  key={idx}
+                  style={{
+                    transform: `translateX(calc(-50% + ${xShift}px)) scale(${scale})`,
+                    zIndex: z,
+                    opacity: hide ? 0 : 1,
+                    transition: 'transform 600ms ease, opacity 600ms ease',
+                  }}
+                  className="absolute inset-y-0 left-1/2 top-1/4  w-[320px] sm:w-[350px] h-[300px]
+                             bg-[#F7F9FB] rounded-xl shadow-md flex flex-col "
+                >
+                  {/* avatar (initials) */}
+                  <div
+                    className="absolute -top-12 left-1/2 -translate-x-1/2
+                               h-24 w-24 rounded-full ring-4 ring-white
+                               grid place-items-center bg-customPink
+                               text-white text-3xl font-bold shadow-lg"
+                  >
+                    {initials}
                   </div>
-                  <p className='text-base text-gray-600 leading-6 transition-all duration-500 pb-8 group-hover:text-gray-800 line-clamp-5'>
-                    {testimonial.text}
-                  </p>
-                </div>
-                <div className='flex items-center gap-5 border-t border-solid border-customPink/80 pt-5'>
-                  <img
-                    className='rounded-full h-10 w-10'
-                    src={testimonial.imgSrc}
-                    alt='avatar'
-                  />
-                  <div>
-                    <h5 className='text-gray-900 font-medium transition-all duration-500 mb-1'>
-                      {testimonial.name}
-                    </h5>
-                    <span className='text-sm leading-4 text-gray-500'>
-                      {testimonial.role}
-                    </span>
+
+                  {/* body */}
+                  <div className="pt-16 pb-10 px-8 text-center overflow-hidden">
+                    {/* stars */}
+                    <div className="flex justify-center gap-0.5 text-amber-500 mb-6">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <FaStar
+                          key={i}
+                          size={14}
+                          className={i + 1 <= Math.round(t.rating) ? '' : 'opacity-30'}
+                        />
+                      ))}
+                    </div>
+
+                    <h4 className="text-lg font-bold mb-4">{t.name}</h4>
+                    <p className="text-sm text-gray-600 leading-relaxed">{t.text}</p>
                   </div>
-                </div>
-              </div>
-            ))}
+                </article>
+              );
+            })}
           </div>
-          <button onClick={handleNext} className='p-2'>
-            <FaChevronRight size={24} />
-          </button>
+
+          {/* right arrow */}
+          {!isMobile && <ArrowBtn onClick={next} icon={<FaChevronRight size={26} />} />}
         </div>
       </div>
     </section>
-  )
+  );
 }
 
-export default Testimonials
+/* ---------- arrow helper (keeps buttons centred & visible) ---------- */
+function ArrowBtn({ onClick, icon }) {
+  return (
+    <button
+      onClick={onClick}
+      className="grid place-items-center h-12 w-12 rounded-full
+                 bg-white shadow-md hover:bg-gray-50 transition-colors"
+    >
+      {icon}
+    </button>
+  );
+}

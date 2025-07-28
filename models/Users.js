@@ -18,15 +18,15 @@ const UserSchema = new mongoose.Schema(
         address: {
             country: {
                 type: String,
-                required: true
+                required: false
             },
             state: {
                 type: String,
-                required: true
+                required: false
             },
             postal_code: {
                 type: String,
-                required: true
+                required: false
             },
             line2: {
                 type: String,
@@ -34,11 +34,11 @@ const UserSchema = new mongoose.Schema(
             },
             city: {
                 type: String,
-                required: true
+                required: false
             },
             line1: {
                 type: String,
-                required: true
+                required: false
             }
         },
         email: {
@@ -49,12 +49,12 @@ const UserSchema = new mongoose.Schema(
         },
         fullName: {
             type: String,
-            required: true
+            required: false
         },
         phone: {
             type: String,
             required: true,
-            match: [/^\d{10,15}$/, 'Invalid phone number format']
+            // match: [/^\d{10,15}$/, 'Invalid phone number format']
         },
         verified: {
             type: Boolean,
