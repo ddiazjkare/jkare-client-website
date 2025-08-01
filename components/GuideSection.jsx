@@ -26,6 +26,8 @@ export default function GuidesSection({ heroTitle, heroImage, guides }) {
         {guides.map((g, idx) => {
           const reverse = idx % 2 !== 0;                 // flip every other row
           const sectionId = g.title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+          const isInsuranceInfo = g.title === "Insurance Information";
+          const isGuideOrSupport = g.title === "Guide Section" || g.title === "Support Policies";
           return (
             <div
               key={g.id}
@@ -55,21 +57,51 @@ export default function GuidesSection({ heroTitle, heroImage, guides }) {
                 <h2 className="text-customPink text-2xl sm:text-3xl font-medium ">
                   {g.title}
                 </h2>
-                {g.details ? (
-                  <div className="text-base sm:text-lg">{g.details}</div>
-                ) : (
-                  <p className="text-base sm:text-lg">{g.blurb}</p>
+                {/* Remove details section for Guide Section and Support Policies */}
+                {isGuideOrSupport ? null : (
+                  g.details ? (
+                    <div className="text-base sm:text-lg">{g.details}</div>
+                  ) : (
+                    <p className="text-base sm:text-lg">{g.blurb}</p>
+                  )
                 )}
-                {g.link && g.link.trim() !== "" && (
-                  <Link
-                    href={g.link}
-                    className="inline-block rounded-full bg-customButtonHover px-6 py-2
-                 text-sm sm:text-base font-semibold text-black hover:text-white
-                 hover:bg-customPink focus-visible:ring
-                 focus-visible:ring-offset-2 focus-visible:ring-customPink"
-                  >
-                    Learn&nbsp;More
-                  </Link>
+                {/* Buttons */}
+                {isInsuranceInfo ? (
+                  <div className="flex gap-4">
+                    {g.link && g.link.trim() !== "" && (
+                      <Link
+                        href={g.link}
+                        className="inline-block rounded-full bg-customButtonHover px-6 py-2
+                         text-sm sm:text-base font-semibold text-black hover:text-white
+                         hover:bg-customPink focus-visible:ring
+                         focus-visible:ring-offset-2 focus-visible:ring-customPink"
+                      >
+                        DME
+                      </Link>
+                    )}
+                    <Link
+                      href="https://s3.ap-south-1.amazonaws.com/jkare.data/patient+resources+files/Jkare+Accepted+Insurances+for+Respiratory+Therapy.pdf"
+                      className="inline-block rounded-full bg-customButtonHover px-6 py-2
+                       text-sm sm:text-base font-semibold text-black hover:text-white
+                       hover:bg-customPink focus-visible:ring
+                       focus-visible:ring-offset-2 focus-visible:ring-customPink"
+                    >
+                      Therapy
+                    </Link>
+                  </div>
+                ) : (
+                  /* For other sections, keep existing single button if link exists */
+                  g.link && g.link.trim() !== "" && (
+                    <Link
+                      href={g.link}
+                      className="inline-block rounded-full bg-customButtonHover px-6 py-2
+                   text-sm sm:text-base font-semibold text-black hover:text-white
+                   hover:bg-customPink focus-visible:ring
+                   focus-visible:ring-offset-2 focus-visible:ring-customPink"
+                    >
+                      Learn&nbsp;More
+                    </Link>
+                  )
                 )}
               </div>
             </div>

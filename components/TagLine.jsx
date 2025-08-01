@@ -19,12 +19,12 @@ export default function TagLine({services}) {
 
         {/* -------------- card grid --------------- */}
         <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-         {services?.cards?.map(card => (
+         {services?.cards?.map((card, index) => (
             <ServiceCard
               key={card._id}
               title={card.title}
               desc={card.content}
-              href="/our-services"
+              href={index === services.cards.length - 1 ? "/product" : "/our-services"}
             />
           ))}
         </div>

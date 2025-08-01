@@ -23,22 +23,22 @@ const guides = [
     title: 'Insurance Information',
     blurb:
       "JKARE works with most major insurance providers to help cover the cost of your medical equipment and services. Our team assists with verification, billing, and claims to make your experience smooth and stress-free.",
-    details: (
-      <>
-        <p>
-          JKARE works with most major insurance providers to help cover the cost of your medical equipment and services. Our team assists with verification, billing, and claims to make your experience smooth and stress-free.
-          See the list below for some of the insurance companies we have direct contracts with.
-        </p>
-        <h3 className="mt-4 font-semibold">JKARE DIRECT CONTRACT</h3>
-        <ul className="list-disc list-inside">
-          <li>Aetna</li>
-          <li>Medicare - Statewide</li>
-          <li>Medicaid - Statewide</li>
-          <li>APD Waiver – Miami Dade and Broward Counties.....</li>
-        </ul>
+    // details: (
+    //   <>
+    //     <p>
+    //       JKARE works with most major insurance providers to help cover the cost of your medical equipment and services. Our team assists with verification, billing, and claims to make your experience smooth and stress-free.
+    //       See the list below for some of the insurance companies we have direct contracts with.
+    //     </p>
+    //     <h3 className="mt-4 font-semibold">JKARE DIRECT CONTRACT</h3>
+    //     <ul className="list-disc list-inside">
+    //       <li>Aetna</li>
+    //       <li>Medicare - Statewide</li>
+    //       <li>Medicaid - Statewide</li>
+    //       <li>APD Waiver – Miami Dade and Broward Counties.....</li>
+    //     </ul>
 
-      </>
-    ),
+    //   </>
+    // ),
     imgAlt: 'Woman using nebulizer',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/pexels-photo-7163956.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/jkare.data/patient+resources+files/Jkare+HME+Accepted+Insurances+updated.pdf",

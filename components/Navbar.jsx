@@ -331,10 +331,13 @@ const Navbar = () => {
                       <HoveredLink href={`/ProductBrochers#${encodeURIComponent(
                         "myairvo-use-and-care-guide"
                       )}`}>MyAirvo Use and Care Guide</HoveredLink>
+                              <HoveredLink href={`/ProductBrochers#${encodeURIComponent(
+                        "biwaze-clear-lung-expansion-device-for-home-care"
+                      )}`}>BiWaze Products</HoveredLink>
                     </div>
                   </div>
                   {/* 6th Column */}
-                  <div>
+                  {/* <div>
                     <h4 className="text-base font-semibold mb-1">
                       Biwaze Products
                     </h4>
@@ -348,7 +351,7 @@ const Navbar = () => {
                       )}`}>Biwaze Cough For Home Care (English)</HoveredLink>
               
                     </div>
-                  </div>
+                  </div> */}
                 </div>
 
 
@@ -648,6 +651,9 @@ const Navbar = () => {
                 <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Afflovest (English)
                 </Link>
+                <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
+                  Biwaze Products
+                </Link>
                 {/* <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Biwaze Cough User Manual (English)
                 </Link>
@@ -661,7 +667,7 @@ const Navbar = () => {
                   MyAirvo Use and Care Guide
                 </Link>
                 {/* ——— 6.Biwaze Product  ——— */}
-                <span className="block font-semibold mt-3">Biwaze Products</span>
+                {/* <span className="block font-semibold mt-3">Biwaze Products</span>
                  <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Biwaze Airway Clearance System User Manual
                 </Link>
@@ -673,7 +679,7 @@ const Navbar = () => {
                 </Link>
                 <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Biwaze Cough User Manual (Spanish)
-                </Link>
+                </Link> */}
               </div>
             )}
 
