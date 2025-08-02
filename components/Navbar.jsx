@@ -724,13 +724,20 @@ const Navbar = () => {
                 <p className="font-medium">{session.user.name}</p>
                 <p className="text-sm text-gray-600">{session.user.email}</p>
                 <div className="mt-3 flex flex-col space-y-2">
-                  {session.provider === "credentials" && (
+
+                  <Link href="/account-settings">
+                    <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded">
+                      Edit Profile
+                    </button>
+                  </Link>
+
+                  {/* {session.provider === "credentials" && (
                     <Link href="/account-settings">
                       <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded">
                         Edit Profile
                       </button>
                     </Link>
-                  )}
+                  )} */}
                   <Link href="/order-history" onClick={delayedCloseMobileMenu}>
                     <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded">
                       Order History
