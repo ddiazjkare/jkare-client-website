@@ -69,7 +69,6 @@ export default function PatientRights() {
       heroTitle="Support Policies & Information"
       heroImage="https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/patienttakingadvice.jpg"
       guides={guides}
-
     />
   );
 }

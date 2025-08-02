@@ -50,7 +50,7 @@ const Login = () => {
   return (
     <div
       className="flex min-h-screen items-center justify-center bg-cover bg-center overflow-hidden"
-      style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/jkare.data/admin+login+background.jpg')" }}
+      style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/jkare.data/banner+image.jpg')" }}
     >
        {/* Logo */}
     <img
@@ -144,11 +144,12 @@ const Login = () => {
         {/* Social login buttons */}
         <div className="flex items-center justify-center mt-5 space-x-3">
           <button
-            className="bg-white hover:bg-gray-100 text-gray-800 font-bold p-3 rounded-full border border-gray-400 shadow flex items-center"
+            className="bg-white hover:bg-gray-100 text-gray-800 font-bold py-2 px-4 rounded border border-gray-400 shadow flex items-center"
             type="button"
             onClick={() => signIn("google")}
           >
-            <FaGoogle size={20} color="#DB4437" />
+            <FaGoogle size={20} color="#DB4437" className="mr-2" />
+            <span>Login with Google</span>
           </button>
           {/* <button
             className="bg-white hover:bg-gray-100 text-gray-800 font-bold p-3 rounded-full border border-gray-400 shadow flex items-center"

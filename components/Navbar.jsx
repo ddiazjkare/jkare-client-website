@@ -316,7 +316,7 @@ const Navbar = () => {
                     </h4>
                     <hr className="border-gray-300 mb-2" />
                     <div className="flex flex-col space-y-1 text-sm">
-                          {/* <HoveredLink href={`/ProductBrochers#${encodeURIComponent(
+                      {/* <HoveredLink href={`/ProductBrochers#${encodeURIComponent(
                         "biwaze-clear-lung-expansion-device-for-home-care"
                       )}`}>BiWaze Clear Lung Expansion Device for Home Care</HoveredLink>
                       <HoveredLink href={`/ProductBrochers#${encodeURIComponent(
@@ -331,7 +331,7 @@ const Navbar = () => {
                       <HoveredLink href={`/ProductBrochers#${encodeURIComponent(
                         "myairvo-use-and-care-guide"
                       )}`}>MyAirvo Use and Care Guide</HoveredLink>
-                              <HoveredLink href={`/ProductBrochers#${encodeURIComponent(
+                      <HoveredLink href={`/ProductBrochers#${encodeURIComponent(
                         "biwaze-clear-lung-expansion-device-for-home-care"
                       )}`}>BiWaze Products</HoveredLink>
                     </div>
@@ -463,13 +463,18 @@ const Navbar = () => {
                     <p className="text-sm text-gray-600 truncate">
                       {session.user.email}
                     </p>
-                    {session.provider === "credentials" && (
+                    {/* {session.provider === "credentials" && (
                       <Link href="/account-settings">
                         <button className="mt-2 w-full bg-blue-600 text-white py-1 px-2 rounded">
                           Account Setting
                         </button>
                       </Link>
-                    )}
+                    )} */}
+                    <Link href="/account-settings">
+                      <button className="mt-2 w-full bg-blue-600 text-white py-1 px-2 rounded">
+                        Account Setting
+                      </button>
+                    </Link>
                     <Link href="/order-history">
                       <button className="mt-2 w-full bg-blue-600 text-white py-1 px-2 rounded">
                         My Orders
@@ -642,7 +647,7 @@ const Navbar = () => {
 
                 {/* ——— 5. Product Information ——— */}
                 <span className="block font-semibold mt-3">Product Information</span>
-                 {/* <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
+                {/* <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Biwaze Airway Clearance System User Manual
                 </Link>
                 <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">

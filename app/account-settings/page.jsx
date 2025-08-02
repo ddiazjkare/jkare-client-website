@@ -155,7 +155,7 @@ const EditProfile = () => {
       formData.append("address", JSON.stringify(address));
       formData.append("phone", phone);
 
-      const res = await fetch(`/api/user/update/${username}`, {
+      const res = await fetch(`/api/user/update/${userInfo.username || username}`, {
         method: "PUT",
         body: formData,
       });
