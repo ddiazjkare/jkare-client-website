@@ -211,7 +211,7 @@ const PrivacyPolicy = () => {
             </div>
             <div className="p-8">
               <p className="text-gray-700 leading-relaxed">
-                Our services are intended for users above the age of 18. We do not knowingly collect personal data from children under 13. If you believe a child has provided us with personal information, please contact us immediately.
+                We do not knowingly collect personal data from children under 13.
               </p>
             </div>
           </div>

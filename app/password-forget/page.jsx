@@ -38,7 +38,7 @@ const Forgot = () => {
   return (
     <div
       className="flex min-h-screen items-center justify-center bg-cover bg-center overflow-hidden"
-      style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/jkare.data/admin+login+background.jpg')" }}
+      style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/jkare.data/banner+image.jpg')" }}
     >
       {/* Logo */}
     <img

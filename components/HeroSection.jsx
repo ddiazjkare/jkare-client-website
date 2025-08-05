@@ -199,64 +199,64 @@ export default function HeroSection({ heroData = {} }) {
       </div>
       {/* ──────────────  shared animation styles ────────────── */}
       <style jsx>{`
-//        .tagline {
-//   position: absolute;
-//   inset: 0;
-//   display: flex;
-//   align-items: center;       
-//   justify-content: center; 
-//   font-size: 1rem;
-//   line-height: 1.4;
-//   font-weight: 500;
-//   color: #1f2937;
-//   text-align: center;        
-// }
-// @media (min-width: 640px) {
-//   .tagline {
-//     justify-content: start;  
-//     text-align: left;
-//   }
-// }
+.tagline {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;       
+  justify-content: center; 
+  font-size: 1rem;
+  line-height: 1.4;
+  font-weight: 500;
+  color: #1f2937;
+  text-align: center;        
+}
+@media (min-width: 640px) {
+  .tagline {
+    justify-content: start;  
+    text-align: left;
+  }
+}
 
-//         .animate-slideIn {
-//           animation: slideIn 0.8s ease forwards;
-//         }
-//         .animate-slideUp {
-//           animation: slideUp 0.8s ease forwards;
-//         }
-//         @keyframes slideIn {
-//           0% {
-//             opacity: 0;
-//             transform: translateY(40px);
-//           }
-//           100% {
-//             opacity: 1;
-//             transform: translateY(0);
-//           }
-//         }
-//         @keyframes slideUp {
-//           0% {
-//             opacity: 1;
-//             transform: translateY(0);
-//           }
-//           100% {
-//             opacity: 0;
-//             transform: translateY(-40px);
-//           }
-//         }
-//         .animate-cursor {
-//           animation: blink 0.9s steps(1) infinite;
-//         }
-//         @keyframes blink {
-//           0%,
-//           100% {
-//             border-color: transparent;
-//           }
-//           50% {
-//             border-color: var(--customPink);
-//           }
-//         }
-//       `}</style>
+.animate-slideIn {
+  animation: slideIn 0.8s ease forwards;
+}
+.animate-slideUp {
+  animation: slideUp 0.8s ease forwards;
+}
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes slideUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+}
+.animate-cursor {
+  animation: blink 0.9s steps(1) infinite;
+}
+@keyframes blink {
+  0%,
+  100% {
+    border-color: transparent;
+  }
+  50% {
+    border-color: var(--customPink);
+  }
+}
+`}</style>
     </>
   );
 }
