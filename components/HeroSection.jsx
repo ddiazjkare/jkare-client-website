@@ -266,8 +266,7 @@ function HeroBtn({ href, children }) {
   return (
     <Link
       href={href}
-      className="inline-block rounded-full bg-customLightBlue px-10 py-3 sm:px-12 sm:py-4 text-lg md:text-xl font-semibold text-gray-900 bg-customBlue/20 hover:bg-customBlue/40 transition-colors"
-    >
+      className="inline-block rounded-full bg-customLightBlue px-10 py-3 sm:px-12 sm:py-4 text-lg md:text-xl font-semibold text-gray-900 bg-customBlue/20 hover:bg-customBlue/40 transition-colors">
       {children}
     </Link>
   );

@@ -18,10 +18,32 @@ const AdvancedProductDetail = ({ data, env }) => {
   const { data: session } = useSession();
   const [isFavorited, setIsFavorited] = useState(false);
 
-  const warrantyYears = (() => {
-    const key = Object.keys(data.product.key_features)
-      .find(k => /^\d+_year(s)?_warranty$/.test(k) && data.product.key_features[k]);
-    return key ? key.split('_')[0] : null;
+  const warrantyInfo = (() => {
+    // Check for days warranty (30, 45, 60, 90)
+    const daysKey = Object.keys(data.product.key_features)
+      .find(k => /^\d+_days_warranty$/.test(k) && data.product.key_features[k]);
+    if (daysKey) {
+      const days = daysKey.split('_')[0];
+      return { type: 'days', value: days, imageUrl: `https://s3.ap-south-1.amazonaws.com/jkare.data/poduct+details+icons/${days}.svg` };
+    }
+
+    // Check for months warranty (6_months)
+    const monthsKey = Object.keys(data.product.key_features)
+      .find(k => /^\d+_months_warranty$/.test(k) && data.product.key_features[k]);
+    if (monthsKey) {
+      const months = monthsKey.split('_')[0];
+      return { type: 'months', value: months, imageUrl: `https://s3.ap-south-1.amazonaws.com/jkare.data/poduct+details+icons/${months}m.svg` };
+    }
+
+    // Check for years warranty (existing logic)
+    const yearsKey = Object.keys(data.product.key_features)
+      .find(k => /^\d+(?:\.\d+)?_years?_warranty$/.test(k) && data.product.key_features[k]);
+    if (yearsKey) {
+      const years = yearsKey.split('_')[0];
+      return { type: 'years', value: years, imageUrl: `https://s3.ap-south-1.amazonaws.com/jkare.data/poduct+details+icons/${years}.svg` };
+    }
+
+    return null;
   })();
 
   const handleImageClick = () => {
@@ -278,7 +300,6 @@ const AdvancedProductDetail = ({ data, env }) => {
                   {/* Info Row (Dimensions + PUI in separate backgrounds) */}
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
                     {/* Dimensions */}
-                    {/* Dimensions */}
                     <div className="flex items-center gap-x-2 text-xs sm:text-sm text-gray-600 bg-gray-100 px-3 py-1 rounded-full w-fit">
                       <span className="font-semibold text-gray-700">Dimensions:</span>
                       <span className="text-gray-700 font-medium">
@@ -360,16 +381,16 @@ const AdvancedProductDetail = ({ data, env }) => {
                 </div>
               )}
 
-              {warrantyYears && (
+              {warrantyInfo && (
                 <div className="flex flex-col items-center p-3 bg-white border border-gray-200 rounded-lg">
                   <img
                     loading="lazy"
-                    src={`https://s3.ap-south-1.amazonaws.com/jkare.data/poduct+details+icons/${warrantyYears}.svg`}
-                    alt={`${warrantyYears} Year Warranty`}
+                    src={warrantyInfo.imageUrl}
+                    alt={`${warrantyInfo.value} ${warrantyInfo.type === 'days' ? 'Days' : warrantyInfo.type === 'months' ? 'Months' : 'Year' + (warrantyInfo.value === '1' ? '' : 's')} Warranty`}
                     className="w-10 h-10 mb-2"
                   />
                   <span className="text-xs text-center text-gray-700 font-medium">
-                    {warrantyYears} Year{warrantyYears === '1' ? '' : 's'} Warranty
+                    {warrantyInfo.value} {warrantyInfo.type === 'days' ? 'Days' : warrantyInfo.type === 'months' ? 'Months' : 'Year' + (warrantyInfo.value === '1' ? '' : 's')} Warranty
                   </span>
                 </div>
               )}
@@ -487,11 +508,14 @@ const AdvancedProductDetail = ({ data, env }) => {
                   className="group bg-white border border-gray-200 rounded-xl p-4 hover:border-blue-300 hover:shadow-lg transition-all duration-200"
                 >
                   <div className="aspect-square mb-4 overflow-hidden rounded-lg bg-gray-50">
-                    <img
-                      src={product.prod_images[0]}
-                      alt={product.prod_name}
-                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-200"
-                    />
+                    {product?.prod_images?.[0] && (
+                      <img
+                        src={product.prod_images[0]}
+                        alt={product.prod_name}
+                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-200"
+                      />
+                    )}
+
                   </div>
 
                   <div className="space-y-2">
