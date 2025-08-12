@@ -15,7 +15,7 @@ const fetchApi = async (id) => {
 };
 
 async function fetchShippingOffer() {
-  const response = await fetch("http://13.201.44.76/api/ship-env", {
+  const response = await fetch("http://13.201.8.44/api/ship-env", {
     cache: "no-store",
   });
   return await response.json();

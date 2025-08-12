@@ -23,8 +23,8 @@ export default function Package({ env }) {
     phone: "",
     address: "456 Maple St",
     address2: "# 200",
-    postalCode: "94118-1704",
-    city: "San Francisco",
+    postalCode: "33160",
+    city: "Florida",
     region: "CA",
     location: "US",
   });
@@ -44,9 +44,6 @@ export default function Package({ env }) {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isFetchingAddress, setIsFetchingAddress] = useState(false);
   const suggestionsRef = useRef(null);
-
-  // Env data (from /api/ship-env)
-  // const [envData, setEnvData] = useState(null);
 
   // For free shipping
   const [isFreeShipping, setIsFreeShipping] = useState(false);
@@ -169,13 +166,10 @@ export default function Package({ env }) {
   // 4) Automatic shipping-rate fetch
   // =========================================================
   useEffect(() => {
-    // if (envData && cartItems.length > 0) {
     if (cartItems.length > 0) {
       fetchRates();
     }
   }, [cartItems]);
-  // }, [envData, cartItems]);
-
   const fetchRates = async () => {
     if (!env) return;
 
@@ -208,7 +202,7 @@ export default function Package({ env }) {
         carrier_accounts: null,
         shipment_date: new Date().toISOString().replace("Z", "+00:00"),
       };
-      //  console.log("parcels payload", parcels);
+      console.log("parcels payload", env);
       const response = await fetch("/api/shipment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -262,7 +256,8 @@ export default function Package({ env }) {
           metadata: {
             ...checkoutObj.metadata,
             shipping_rate: selectedRate.object_id,
-            carrier: selectedRate.provider
+            carrier: selectedRate.provider,
+            card_limit: env.card_limit
           },
           name: receiver.name.trim(),
           address: {
