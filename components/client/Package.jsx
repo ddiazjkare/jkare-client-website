@@ -317,17 +317,15 @@ export default function Package({ env }) {
 
     try {
       setIsProcessingOfflinePayment(true);
-
-      // Prepare products array with prescription items separation
       const products = cartItems.map(item => ({
-        id: item.id || item._id, // Handle both id formats
+        id: item.id || item.product_id, 
         quantity: item.quantity
       }));
 
       const prescription_items = {};
       cartItems.forEach(item => {
         if (item.prescription_required) {
-          prescription_items[item.id || item._id] = "";
+          prescription_items[item.id || item.product_id] = "";
         }
       });
 
