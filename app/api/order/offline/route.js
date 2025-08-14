@@ -54,7 +54,7 @@ export const POST = async (req) => {
 
         const rx_K = orderParams.items.map(item => item.prescription_required).some(v => v);
         orderParams.prescription_required = rx_K;
-        orderParams.prescription_status = Object.values(prescription_items).every(v => v != "");
+        orderParams.prescription_status = Object.values(prescription_items).every(v => v != "") ? "Recieved" : "Pending";
 
         await Order.create(orderParams);
 
