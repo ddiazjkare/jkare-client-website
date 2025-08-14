@@ -26,8 +26,6 @@ export const POST = async (req) => {
             items: [],
         };
 
-        let rx_required = false;
-
         for (const item of products) {
             const prodResp = await fetch(
                 `${process.env.NEXT_PUBLIC_API_URL}/product/${item.id
@@ -56,6 +54,7 @@ export const POST = async (req) => {
 
         const rx_K = orderParams.items.map(item => item.prescription_required).some(v => v);
         orderParams.prescription_required = rx_K;
+        orderParams.prescription_status = Object.values(prescription_items).every(v => v != "");
 
         await Order.create(orderParams);
 
