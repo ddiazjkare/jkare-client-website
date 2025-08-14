@@ -13,6 +13,7 @@ import AddressInput from "./AddressInput"
 
 export default function Package({ env }) {
   const [showConfetti, setShowConfetti] = useState(false);
+  const [isProcessingOfflinePayment, setIsProcessingOfflinePayment] = useState(false);
   const router = useRouter();
 
   // =========================================================
@@ -299,6 +300,81 @@ export default function Package({ env }) {
       console.error(error);
     } finally {
       setIsCreatingShipment(false);
+    }
+  };
+
+  // Add this function after your handleProceedToPayment function
+  const handleOfflinePayment = async () => {
+    if (!validateForm()) {
+      toast.warn("Please fill in all required fields correctly.");
+      return;
+    }
+
+    if (!selectedRate) {
+      toast.warn("Please select a delivery option before proceeding.");
+      return;
+    }
+
+    try {
+      setIsProcessingOfflinePayment(true);
+
+      // Prepare products array with prescription items separation
+      const products = cartItems.map(item => ({
+        id: item.id || item._id, // Handle both id formats
+        quantity: item.quantity
+      }));
+
+      const prescription_items = {};
+      cartItems.forEach(item => {
+        if (item.prescription_required) {
+          prescription_items[item.id || item._id] = "";
+        }
+      });
+
+      const payload = {
+        selectedRate: {
+          amount: selectedRate.amount,
+          isFree: selectedRate.isFree || false
+        },
+        products,
+        prescription_items,
+        customer_name: receiver.name.trim(),
+        customer_email: receiver.email,
+        customer_phone: receiver.phone,
+        shipping_address: {
+          city: receiver.city,
+          country: receiver.location,
+          line1: receiver.address,
+          line2: receiver.address2,
+          postal_code: receiver.postalCode,
+          state: receiver.region
+        },
+        insurance_pdf: "", // Add if you have this data
+        insurance_company: "", // Add if you have this data
+        total_amount: grandTotal,
+        shipping_rate: selectedRate.object_id,
+        sub_amount: itemSubtotal,
+        carrier: selectedRate.provider || "Unknown"
+      };
+
+      const response = await fetch("/api/order/offline", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to process offline payment.");
+      }
+
+      // Redirect to success page
+      router.push("/success");
+
+    } catch (error) {
+      toast.error("Error processing offline payment: " + error.message);
+      console.error(error);
+    } finally {
+      setIsProcessingOfflinePayment(false);
     }
   };
 
@@ -672,24 +748,57 @@ export default function Package({ env }) {
                       </div>
                     </div>
 
-                    {/* Checkout button */}
-                    <button
-                      onClick={handleProceedToPayment}
-                      disabled={isCreatingShipment}
-                      className={`w-full mt-6 py-3 px-4 rounded-lg font-semibold text-white transition-all duration-200 ${!isCreatingShipment
-                        ? 'bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-200'
-                        : 'bg-gray-400 cursor-not-allowed'
-                        }`}
-                    >
-                      {isCreatingShipment ? (
-                        <div className="flex items-center justify-center gap-2">
-                          <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>
-                          Processing...
-                        </div>
-                      ) : (
-                        `Proceed to Payment - $${grandTotal.toFixed(2)}`
+                    {/* Checkout buttons */}
+                    <div className="mt-6">
+                      <button
+                        onClick={handleProceedToPayment}
+                        disabled={isCreatingShipment || isProcessingOfflinePayment}
+                        className={`w-full py-3 px-4 rounded-lg font-semibold text-white transition-all duration-200 ${!isCreatingShipment && !isProcessingOfflinePayment
+                          ? 'bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-200'
+                          : 'bg-gray-400 cursor-not-allowed'
+                          }`}
+                      >
+                        {isCreatingShipment ? (
+                          <div className="flex items-center justify-center gap-2">
+                            <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>
+                            Processing...
+                          </div>
+                        ) : (
+                          `Proceed to Payment - $${grandTotal.toFixed(2)}`
+                        )}
+                      </button>
+
+                      {/* Show offline payment option if total exceeds card limit */}
+                      {env && env.card_limit && grandTotal > parseFloat(env.card_limit) && (
+                        <>
+                          {/* OR divider */}
+                          <div className="flex items-center my-4">
+                            <div className="flex-grow h-px bg-gray-300"></div>
+                            <span className="px-4 text-sm text-gray-500">or</span>
+                            <div className="flex-grow h-px bg-gray-300"></div>
+                          </div>
+
+                          {/* Pay Later button */}
+                          <button
+                            onClick={handleOfflinePayment}
+                            disabled={isProcessingOfflinePayment || isCreatingShipment}
+                            className={`w-full py-3 px-4 rounded-lg font-semibold border-2 transition-all duration-200 ${!isProcessingOfflinePayment && !isCreatingShipment
+                              ? 'border-gray-400 text-gray-700 hover:border-gray-500 hover:bg-gray-50'
+                              : 'border-gray-300 text-gray-400 cursor-not-allowed'
+                              }`}
+                          >
+                            {isProcessingOfflinePayment ? (
+                              <div className="flex items-center justify-center gap-2">
+                                <div className="animate-spin h-5 w-5 border-2 border-gray-400 border-t-transparent rounded-full"></div>
+                                Processing...
+                              </div>
+                            ) : (
+                              'Pay Later'
+                            )}
+                          </button>
+                        </>
                       )}
-                    </button>
+                    </div>
 
                     {/* Security badges */}
                     <div className="mt-4 pt-4 border-t border-gray-200">
