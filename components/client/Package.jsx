@@ -9,6 +9,7 @@ import { MdOutlineLocalShipping } from "react-icons/md";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { isValidPhoneNumber } from "react-phone-number-input";
+import AddressInput from "./AddressInput"
 
 export default function Package({ env }) {
   const [showConfetti, setShowConfetti] = useState(false);
@@ -30,6 +31,7 @@ export default function Package({ env }) {
   });
 
   const [validationErrors, setValidationErrors] = useState({});
+  const [isAddressValidated, setIsAddressValidated] = useState(false);
   const [parcels, setParcels] = useState([]);
   const [shipment, setShipment] = useState(null);
   const [selectedRate, setSelectedRate] = useState(null);
@@ -39,14 +41,32 @@ export default function Package({ env }) {
   const [isFetchingRates, setIsFetchingRates] = useState(false);
   const [isCreatingShipment, setIsCreatingShipment] = useState(false);
 
-  // For address suggestions
-  const [addressSuggestions, setAddressSuggestions] = useState([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [isFetchingAddress, setIsFetchingAddress] = useState(false);
-  const suggestionsRef = useRef(null);
-
   // For free shipping
   const [isFreeShipping, setIsFreeShipping] = useState(false);
+  const [displayedRates, setDisplayedRates] = useState([]);
+
+  useEffect(() => {
+    if (!shipment?.rates?.length) {
+      setDisplayedRates([]);
+      return;
+    }
+
+    let rates = [...shipment.rates];
+
+    if (isFreeShipping) {
+      const randomIndex = Math.floor(Math.random() * shipment.rates.length);
+      const freeShippingRate = {
+        object_id: shipment.rates[randomIndex].object_id,
+        servicelevel: { display_name: "JKARE Free Shipping" },
+        estimated_days: 7,
+        amount: "0.00",
+        isFree: true,
+      };
+      rates = [freeShippingRate, ...rates];
+    }
+
+    setDisplayedRates(rates);
+  }, [shipment?.rates, isFreeShipping]);
 
   // =========================================================
   // 2) Validation Functions
@@ -55,11 +75,6 @@ export default function Package({ env }) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
-
-  // const validatePhone = (phone) => {
-  //   const phoneRegex = /^\d{10,15}$/; // Only numbers, 10-15 digits
-  //   return phoneRegex.test(phone.replace(/\s/g, ''));
-  // };
   const validatePhone = (phone) => {
     if (!phone || typeof phone !== "string" || phone.trim() === "") return false;
     return isValidPhoneNumber(phone);
@@ -115,6 +130,8 @@ export default function Package({ env }) {
       selectedRate;
   };
 
+
+
   // =========================================================
   // 3) Load cart & fetch env data on mount
   // =========================================================
@@ -149,18 +166,6 @@ export default function Package({ env }) {
   useEffect(() => {
     window.dispatchEvent(new CustomEvent('closeCart'));
   }, [])
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
-        setShowSuggestions(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   // =========================================================
   // 4) Automatic shipping-rate fetch
@@ -216,6 +221,18 @@ export default function Package({ env }) {
         return;
       }
       setShipment(data);
+      // Auto-create and select free shipping if qualified
+      if (isFreeShipping && data.rates?.length > 0) {
+        const randomIndex = Math.floor(Math.random() * data.rates.length);
+        const freeRate = {
+          object_id: data.rates[randomIndex].object_id,
+          servicelevel: { display_name: "JKARE Free Shipping" },
+          estimated_days: 7,
+          amount: "0.00",
+          isFree: true,
+        };
+        setSelectedRate(freeRate);
+      }
     } catch (error) {
       toast.error("Error fetching rates: " + error.message);
       console.error("Error fetching rates:", error);
@@ -252,12 +269,12 @@ export default function Package({ env }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...checkoutObj,
+          card_limit: Number(env.card_limit),
           threshold: parseFloat(env?.offer_price ?? 0),
           metadata: {
             ...checkoutObj.metadata,
             shipping_rate: selectedRate.object_id,
             carrier: selectedRate.provider,
-            card_limit: env.card_limit
           },
           name: receiver.name.trim(),
           address: {
@@ -305,79 +322,6 @@ export default function Package({ env }) {
     }
   };
 
-  const handleAddressInput = async (e) => {
-    const { name, value } = e.target;
-    const updatedReceiver = { ...receiver, [name]: value };
-    setReceiver(updatedReceiver);
-
-    // Clear validation error
-    if (validationErrors[name]) {
-      setValidationErrors(prev => ({ ...prev, [name]: '' }));
-    }
-
-    // Show suggestions
-    setShowSuggestions(true);
-
-    const totalChars =
-      updatedReceiver.address.length +
-      updatedReceiver.address2.length +
-      updatedReceiver.city.length +
-      updatedReceiver.region.length +
-      updatedReceiver.postalCode.length;
-
-    if (totalChars < 3) {
-      setAddressSuggestions([]);
-      setIsFetchingAddress(false);
-      return;
-    }
-
-    setIsFetchingAddress(true);
-    try {
-      const apiUrl = `/api/shippo-validate?address_line_1=${encodeURIComponent(
-        updatedReceiver.address
-      )}&address_line_2=${encodeURIComponent(
-        updatedReceiver.address2
-      )}&city_locality=${encodeURIComponent(
-        updatedReceiver.city
-      )}&state_province=${encodeURIComponent(
-        updatedReceiver.region
-      )}&postal_code=${encodeURIComponent(
-        updatedReceiver.postalCode
-      )}&country_code=${encodeURIComponent(updatedReceiver.location ?? "US")}`;
-
-      const response = await fetch(apiUrl, { method: "GET" });
-      if (!response.ok) {
-        throw new Error("Failed to validate address via /api/shippo-validate.");
-      }
-      const data = await response.json();
-
-      if (data.validation?.shippo_response?.recommended_address) {
-        setAddressSuggestions([data.validation.shippo_response.recommended_address]);
-      } else {
-        setAddressSuggestions([]);
-      }
-    } catch (error) {
-      console.error("Error validating address:", error);
-      setAddressSuggestions([]);
-    } finally {
-      setIsFetchingAddress(false);
-    }
-  };
-
-  const handleSelectSuggestedAddress = (suggestion) => {
-    setReceiver((prev) => ({
-      ...prev,
-      address: suggestion.address_line_1 || prev.address,
-      address2: suggestion.address_line_2 || prev.address2,
-      city: suggestion.city_locality || prev.city,
-      region: suggestion.state_province || prev.region,
-      postalCode: suggestion.postal_code || prev.postalCode,
-      location: suggestion.country_code || prev.location,
-    }));
-    setShowSuggestions(false);
-    fetchRates();
-  };
-
   // =========================================================
   // 7) Free shipping logic
   // =========================================================
@@ -401,29 +345,13 @@ export default function Package({ env }) {
     }
   }, [env, itemSubtotal, isFreeShipping]);
 
-  // Prepare displayed rates with free shipping option
-  let displayedRates = shipment?.rates ? [...shipment.rates] : [];
-  let freeShippingRate = null;
-
-  if (isFreeShipping && shipment?.rates?.length > 0) {
-    const randomIndex = Math.floor(Math.random() * shipment.rates.length);
-    const randomRateId = shipment.rates[randomIndex].object_id;
-    freeShippingRate = {
-      object_id: randomRateId,
-      servicelevel: { display_name: "JKARE Free Shipping" },
-      estimated_days: 7,
-      amount: "0.00",
-      isFree: true,
-    };
-    displayedRates = [freeShippingRate, ...displayedRates];
-  }
 
   // Auto-select free shipping when available
-  useEffect(() => {
-    if (isFreeShipping && freeShippingRate && (!selectedRate || !selectedRate.isFree)) {
-      setSelectedRate(freeShippingRate);
-    }
-  }, [isFreeShipping, shipment]);
+  // useEffect(() => {
+  //   if (isFreeShipping && freeShippingRate && (!selectedRate || !selectedRate.isFree)) {
+  //     setSelectedRate(freeShippingRate);
+  //   }
+  // }, [isFreeShipping, shipment]);
 
   const shippingCost = selectedRate ? parseFloat(selectedRate.amount) : 0;
   const grandTotal = itemSubtotal + shippingCost;
@@ -533,6 +461,7 @@ export default function Package({ env }) {
                         onChange={value => setReceiver(prev => ({ ...prev, phone: value || "" }))}
                         className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${validationErrors.phone ? 'border-red-500' : 'border-gray-300'}`}
                         disabled={isCreatingShipment}
+
                       />
                       {validationErrors.phone && (
                         <p className="text-red-500 text-xs mt-1">{validationErrors.phone}</p>
@@ -548,216 +477,113 @@ export default function Package({ env }) {
                   <FaMapMarkerAlt className="text-blue-600" />
                   Shipping Address
                 </h2>
-
-                <div className="space-y-4" ref={suggestionsRef}>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="relative">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Street Address *
-                      </label>
-                      <input
-                        type="text"
-                        name="address"
-                        value={receiver.address}
-                        onChange={handleAddressInput}
-                        className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${validationErrors.address ? 'border-red-500' : 'border-gray-300'
-                          }`}
-                        placeholder="123 Main Street"
-                      />
-                      {validationErrors.address && (
-                        <p className="text-red-500 text-xs mt-1">{validationErrors.address}</p>
-                      )}
-
-                      {/* Address Suggestions */}
-                      {showSuggestions && (
-                        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg">
-                          {isFetchingAddress ? (
-                            <div className="p-3 text-sm text-gray-500">Validating address...</div>
-                          ) : addressSuggestions.length > 0 ? (
-                            addressSuggestions.map((suggest, idx) => (
-                              <div
-                                key={idx}
-                                className="p-3 text-sm cursor-pointer hover:bg-gray-50"
-                                onClick={() => handleSelectSuggestedAddress(suggest)}
-                              >
-                                {suggest.complete_address || "Suggested address"}
-                              </div>
-                            ))
-                          ) : (
-                            <div className="p-3 text-sm text-gray-500">No suggestions found</div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Apartment/Suite
-                      </label>
-                      <input
-                        type="text"
-                        name="address2"
-                        value={receiver.address2}
-                        onChange={handleAddressInput}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="Apt 123"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        City *
-                      </label>
-                      <input
-                        type="text"
-                        name="city"
-                        value={receiver.city}
-                        onChange={handleAddressInput}
-                        className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${validationErrors.city ? 'border-red-500' : 'border-gray-300'
-                          }`}
-                        placeholder="San Francisco"
-                      />
-                      {validationErrors.city && (
-                        <p className="text-red-500 text-xs mt-1">{validationErrors.city}</p>
-                      )}
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        State/Province *
-                      </label>
-                      <input
-                        type="text"
-                        name="region"
-                        value={receiver.region}
-                        onChange={handleAddressInput}
-                        className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${validationErrors.region ? 'border-red-500' : 'border-gray-300'
-                          }`}
-                        placeholder="CA"
-                      />
-                      {validationErrors.region && (
-                        <p className="text-red-500 text-xs mt-1">{validationErrors.region}</p>
-                      )}
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Postal Code *
-                      </label>
-                      <input
-                        type="text"
-                        name="postalCode"
-                        value={receiver.postalCode}
-                        onChange={handleAddressInput}
-                        className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${validationErrors.postalCode ? 'border-red-500' : 'border-gray-300'
-                          }`}
-                        placeholder="94103"
-                      />
-                      {validationErrors.postalCode && (
-                        <p className="text-red-500 text-xs mt-1">{validationErrors.postalCode}</p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="w-full sm:w-1/3">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Country
-                    </label>
-                    <input
-                      type="text"
-                      name="location"
-                      value={receiver.location}
-                      onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="US"
-                    />
-                  </div>
-                </div>
+                <AddressInput
+                  receiver={receiver}
+                  setReceiver={setReceiver}
+                  validationErrors={validationErrors}
+                  setValidationErrors={setValidationErrors}
+                  onAddressChange={fetchRates}
+                  onValidationStatusChange={setIsAddressValidated}
+                />
               </div>
+              {/* Address validation message */}
+              {!isAddressValidated && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                  <div className="flex items-center justify-center space-x-2 text-blue-700">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                    </svg>
+                    <span className="font-medium">Please validate your shipping address to see delivery options</span>
+                  </div>
+                  <p className="text-sm text-blue-600 text-center mt-2">
+                    Enter your complete address above and select a validated address from the suggestions to continue.
+                  </p>
+                </div>
+              )}
 
               {/* Shipping Options */}
-              <div className="bg-white rounded-lg shadow-sm border p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                    <MdOutlineLocalShipping className="text-blue-600" />
-                    Shipping Options
-                  </h2>
-                  <button
-                    onClick={fetchRates}
-                    disabled={isFetchingRates}
-                    className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
-                  >
-                    {isFetchingRates ? (
-                      <>
-                        <div className="animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full"></div>
-                        Updating...
-                      </>
-                    ) : (
-                      <>
-                        <FaShippingFast />
-                        Refresh Rates
-                      </>
-                    )}
-                  </button>
-                </div>
+              {isAddressValidated && (
+                <div className="bg-white rounded-lg shadow-sm border p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                      <MdOutlineLocalShipping className="text-blue-600" />
+                      Shipping Options
+                    </h2>
+                    <button
+                      onClick={fetchRates}
+                      disabled={isFetchingRates}
+                      className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
+                    >
+                      {isFetchingRates ? (
+                        <>
+                          <div className="animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full"></div>
+                          Updating...
+                        </>
+                      ) : (
+                        <>
+                          <FaShippingFast />
+                          Refresh Rates
+                        </>
+                      )}
+                    </button>
+                  </div>
 
-                {displayedRates.length > 0 ? (
-                  <div className="space-y-3">
-                    {displayedRates.map((rate, idx) => {
-                      const isSelected = selectedRate?.object_id === rate.object_id &&
-                        selectedRate?.amount === rate.amount;
-                      const cost = parseFloat(rate.amount);
+                  {displayedRates.length > 0 ? (
+                    <div className="space-y-3">
+                      {displayedRates.map((rate, idx) => {
+                        const isSelected = selectedRate?.object_id === rate.object_id &&
+                          selectedRate?.amount === rate.amount;
+                        const cost = parseFloat(rate.amount);
 
-                      return (
-                        <div
-                          key={rate.isFree ? "free-shipping" : rate.object_id}
-                          onClick={() => setSelectedRate(rate)}
-                          className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 ${isSelected
-                            ? 'border-blue-500 bg-blue-50'
-                            : 'border-gray-200 hover:border-gray-300'
-                            }`}
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-3">
-                              <input
-                                type="radio"
-                                name="shippingRate"
-                                checked={isSelected}
-                                onChange={() => setSelectedRate(rate)}
-                                className="text-blue-600"
-                              />
-                              <div>
-                                <div className="font-medium text-gray-900">
-                                  {rate.servicelevel?.display_name || 'Standard Shipping'}
-                                  {rate.isFree && (
-                                    <span className="ml-2 inline-block px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">
-                                      FREE
-                                    </span>
-                                  )}
-                                </div>
-                                <div className="text-sm text-gray-500">
-                                  {rate.estimated_days
-                                    ? `${rate.estimated_days} business days`
-                                    : 'Standard delivery'}
+                        return (
+                          <div
+                            key={rate.isFree ? "free-shipping" : rate.object_id}
+                            onClick={() => setSelectedRate(rate)}
+                            className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 ${isSelected
+                              ? 'border-blue-500 bg-blue-50'
+                              : 'border-gray-200 hover:border-gray-300'
+                              }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-3">
+                                <input
+                                  type="radio"
+                                  name="shippingRate"
+                                  checked={isSelected}
+                                  onChange={() => setSelectedRate(rate)}
+                                  className="text-blue-600"
+                                />
+                                <div>
+                                  <div className="font-medium text-gray-900">
+                                    {rate.servicelevel?.display_name || 'Standard Shipping'}
+                                    {rate.isFree && (
+                                      <span className="ml-2 inline-block px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">
+                                        FREE
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="text-sm text-gray-500">
+                                    {rate.estimated_days
+                                      ? `${rate.estimated_days} business days`
+                                      : 'Standard delivery'}
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                            <div className="text-lg font-semibold text-gray-900">
-                              ${cost.toFixed(2)}
+                              <div className="text-lg font-semibold text-gray-900">
+                                ${cost.toFixed(2)}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <div className="text-center py-6 text-gray-500">
-                    {isFetchingRates ? 'Loading shipping options...' : 'No shipping options available'}
-                  </div>
-                )}
-              </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="text-center py-6 text-gray-500">
+                      {isFetchingRates ? 'Loading shipping options...' : 'No shipping options available'}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Right Column - Order Summary */}
