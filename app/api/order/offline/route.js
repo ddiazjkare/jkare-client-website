@@ -2,63 +2,69 @@ import { NextResponse } from "next/server";
 import Order from "../../../../models/Order";
 import sendMail from "../../../../lib/sendMail";
 function generateOrderString() {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    let result = "";
-    for (let i = 0; i < 8; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return result;
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let result = "";
+  for (let i = 0; i < 8; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
 }
 export const POST = async (req) => {
-    try {
-        const { selectedRate, products, prescription_items, ...body } = await req.json();
-        const orderNumber = `ORD-${generateOrderString()}`;
-        const shippingAmount = Math.round(parseFloat(selectedRate.amount) * 100);
+  try {
+    const { selectedRate, products, prescription_items, ...body } =
+      await req.json();
+    const orderNumber = `ORD-${generateOrderString()}`;
+    const shippingAmount = parseFloat(selectedRate.amount);
 
-        const orderParams = {
-            order_id: orderNumber,
-            ...body,
-            amount_paid: 0,
-            comment: "",
-            order_status: "Pending",
-            comment: "",
-            shipping_amount: selectedRate.isFree ? 0 : (shippingAmount).toFixed(2),
-            items: [],
-        };
+    const orderParams = {
+      order_id: orderNumber,
+      ...body,
+      amount_paid: 0,
+      comment: "",
+      order_status: "Pending",
+      comment: "",
+      shipping_amount: selectedRate.isFree ? 0 : shippingAmount.toFixed(2),
+      items: [],
+    };
 
-        for (const item of products) {
-            const prodResp = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/product/${item.id
-                }`,
-                {
-                    method: "PUT",
-                    body: JSON.stringify({
-                        quantity: Number(item.quantity),
-                    }),
-                }
-            );
-
-            const product = await prodResp.json();
-            // console.log("product", product);
-            orderParams.items.push({
-                product_id: product.product._id,
-                product_name: product.product.prod_name,
-                description: product.product.prod_desc,
-                image: product.product.prod_images[0],
-                quantity: item.quantity,
-                price: parseFloat(product.product.prod_value),
-                prescription_required: product.product.key_features.rx_required,
-                prescription_file: prescription_items[product.product._id] ?? "",
-            });
+    for (const item of products) {
+      const prodResp = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/product/${item.id}`,
+        {
+          method: "PUT",
+          body: JSON.stringify({
+            quantity: Number(item.quantity),
+          }),
         }
+      );
 
-        const rx_K = orderParams.items.map(item => item.prescription_required).some(v => v);
-        orderParams.prescription_required = rx_K;
-        orderParams.prescription_status = Object.values(prescription_items).every(v => v != "") ? "Recieved" : "Pending";
+      const product = await prodResp.json();
+      // console.log("product", product);
+      orderParams.items.push({
+        product_id: product.product._id,
+        product_name: product.product.prod_name,
+        description: product.product.prod_desc,
+        image: product.product.prod_images[0],
+        quantity: item.quantity,
+        price: parseFloat(product.product.prod_value),
+        prescription_required: product.product.key_features.rx_required,
+        prescription_file: prescription_items[product.product._id] ?? "",
+      });
+    }
 
-        await Order.create(orderParams);
+    const rx_K = orderParams.items
+      .map((item) => item.prescription_required)
+      .some((v) => v);
+    orderParams.prescription_required = rx_K;
+    orderParams.prescription_status = Object.values(prescription_items).every(
+      (v) => v != ""
+    )
+      ? "Recieved"
+      : "Pending";
 
-        const html = `<!DOCTYPE html>
+    await Order.create(orderParams);
+
+    const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -125,8 +131,10 @@ export const POST = async (req) => {
       <div class="order-details">
         <h3>Order Details</h3>
         <p><strong>Order ID:</strong> ${orderNumber}</p>
-        <p><strong>Date:</strong> ${(new Date()).toLocaleDateString()}</p>
-        <p><strong>Total Amount:</strong> $${body.total_amount} (To be paid later)</p>
+        <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+        <p><strong>Total Amount:</strong> $${
+          body.total_amount
+        } (To be paid later)</p>
       </div>
       <p>We will contact you soon to arrange payment and delivery details. If you have any questions, please feel free to reach out to our support team at support@jkare.com or call us at (123) 456-7890.</p>
       <p>Thank you for trusting Jkare!</p>
@@ -138,15 +146,15 @@ export const POST = async (req) => {
     </div>
   </div>
 </body>
-</html>`
+</html>`;
 
-        await sendMail(body.customer_email, "Order Booked", html);
+    await sendMail(body.customer_email, "Order Booked", html);
 
-        return NextResponse.json({ success: true });
-    } catch (error) {
-        console.error("Error creating Stripe session:", error);
-        return new Response(JSON.stringify({ error: error.message }), {
-            status: 500,
-        });
-    }
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Error creating Stripe session:", error);
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+    });
+  }
 };
