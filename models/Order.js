@@ -3,12 +3,12 @@ import mongoose from "../lib/mongodb";
 const OrderSchema = new mongoose.Schema(
   {
     billing_address: {
-      city: { type: String, required: true },
-      country: { type: String, required: true },
-      line1: { type: String, required: true },
-      line2: { type: String },
-      postal_code: { type: String, required: true },
-      state: { type: String, required: true },
+      city: { type: String, default: "" },
+      country: { type: String, default: "" },
+      line1: { type: String, default: "" },
+      line2: { type: String, default: "" },
+      postal_code: { type: String, default: "" },
+      state: { type: String, default: "" },
     },
 
     comment: { type: String, default: "" },
@@ -19,8 +19,8 @@ const OrderSchema = new mongoose.Schema(
 
     discount_amount: { type: Number, default: 0.0 },
 
-    insurance_company: { type: String },
-    insurance_pdf: { type: String },
+    insurance_company: { type: String, default: "" },
+    insurance_pdf: { type: String, default: "" },
 
     items: [
       {
@@ -36,7 +36,7 @@ const OrderSchema = new mongoose.Schema(
     ],
 
     order_id: { type: String },
-    order_date: { type: String, required: true },
+    order_date: { type: String, required: true, default: (new Date()).toLocaleDateString()},
     order_status: {
       type: String,
       enum: ["Pending", "Processing", "Completed", "Cancelled"],
@@ -59,9 +59,10 @@ const OrderSchema = new mongoose.Schema(
     sub_amount: { type: Number, required: true },
     tax_amount: { type: Number, default: 0.0 },
     total_amount: { type: Number, required: true },
+    amount_paid: { type: Number, required: true },
     tracking_number: { type: String, default: "SHIPPO_TRANSIT" },
     carrier: { type: String },
-    checkout_session: { type: String },
+    checkout_session: { type: String, default: null },
     shipping_rate: { type: String },
   },
   { timestamps: true }
