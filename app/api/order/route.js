@@ -52,7 +52,6 @@ export const POST = async (req) => {
       order_id: orderNumber,
       checkout_session: body.sessionID,
       shipping_rate: checkout_session.metadata.shipping_rate,
-      total_amount: checkout_session.amount_total,
       order_status: JSON.parse(checkout_session.metadata.prescription_required)
         ? "Pending"
         : "Completed",
@@ -65,15 +64,16 @@ export const POST = async (req) => {
       // shipping_address: checkout_session.shipping_details.address,
       shipping_address: paymentIntent.shipping.address,
       billing_address: customer.address,
-      total_amount: (checkout_session.amount_total / 100).toFixed(2),
-      sub_amount: (checkout_session.amount_subtotal / 100).toFixed(2),
-      discount_amount: (
+      total_amount: parseFloat((checkout_session.amount_total / 100).toFixed(2)),
+      amount_paid: parseFloat((checkout_session.amount_total / 100).toFixed(2)),
+      sub_amount: parseFloat((checkout_session.amount_subtotal / 100).toFixed(2)),
+      discount_amount: parseFloat((
         checkout_session.total_details.amount_discount / 100
-      ).toFixed(2),
-      shipping_amount: (
+      ).toFixed(2)),
+      shipping_amount: parseFloat((
         checkout_session.total_details.amount_shipping / 100
-      ).toFixed(2),
-      tax_amount: (checkout_session.total_details.amount_tax / 100).toFixed(2),
+      ).toFixed(2)),
+      tax_amount: parseFloat((checkout_session.total_details.amount_tax / 100).toFixed(2)),
       insurance_pdf: checkout_session.metadata.insurance_file ?? "",
       insurance_company: checkout_session.metadata.insurance_company ?? "",
       prescription_required: JSON.parse(
