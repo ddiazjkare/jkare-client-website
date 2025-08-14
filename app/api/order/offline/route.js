@@ -17,15 +17,16 @@ export const POST = async (req) => {
 
         const orderParams = {
             order_id: orderNumber,
-            shipping_rate: selectedRate.isFree ? 0 : shippingAmount,
             ...body,
             amount_paid: 0,
             comment: "",
             order_status: "Pending",
             comment: "",
-            shipping_amount: (shippingAmount).toFixed(2),
+            shipping_amount: selectedRate.isFree ? 0 : (shippingAmount).toFixed(2),
             items: [],
         };
+
+        let rx_required = false;
 
         for (const item of products) {
             const prodResp = await fetch(
@@ -48,12 +49,13 @@ export const POST = async (req) => {
                 image: product.product.prod_images[0],
                 quantity: item.quantity,
                 price: parseFloat(product.product.prod_value),
-                prescription_required:
-                    product.product._id in prescription_items ||
-                    prescription_items[product.product._id] == "",
+                prescription_required: product.product.key_features.rx_required,
                 prescription_file: prescription_items[product.product._id] ?? "",
             });
         }
+
+        const rx_K = orderParams.items.map(item => item.prescription_required).some(v => v);
+        orderParams.prescription_required = rx_K;
 
         await Order.create(orderParams);
 
