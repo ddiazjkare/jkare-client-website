@@ -21,7 +21,7 @@ export const POST = async (req) => {
       // automatic_tax: {
       //   enabled: true,
       // },
-      payment_method_types: total_amount <= card_limit ? ["card", "us_bank_account", "amazon_pay"] : ["us_bank_account", "amazon_pay"],
+      payment_method_types: total_amount <= card_limit ? ["card", "us_bank_account", "amazon_pay"] : ["us_bank_account"],
       // shipping_address_collection: {
       //   allowed_countries: ["US"],
       // },
@@ -50,7 +50,7 @@ export const POST = async (req) => {
             delivery_estimate: {
               minimum: {
                 unit: "business_day",
-                value: selectedRate.estimated_days, // Estimated delivery time
+                value: selectedRate.estimated_days || 0 ,  // Estimated delivery time
               },
               maximum: {
                 unit: "business_day",
