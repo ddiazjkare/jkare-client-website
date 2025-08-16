@@ -7,12 +7,11 @@ import Alert from "../../components/ui/Alert";
 
 function OrderHistory({ orders = [], email }) {
   /* ---------------- state & helpers ---------------- */
-const sortedOrders = [...orders].sort((a, b) => {
-  const dateA = new Date(a.order_date);
-  const dateB = new Date(b.order_date);
-  return dateB - dateA; // latest first
-});
-
+  const sortedOrders = [...orders].sort((a, b) => {
+    const dateA = new Date(a.order_date);
+    const dateB = new Date(b.order_date);
+    return dateB - dateA;
+  });
   const [searchTerm, setSearchTerm] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -23,7 +22,6 @@ const sortedOrders = [...orders].sort((a, b) => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [trackingData, setTrackingData] = useState(null);
   const [trackingLoading, setTrackingLoading] = useState(false);
-
   /* ---- pagination ---- */
   const ordersPerPage = 4;
   const indexOfLastOrder = currentPage * ordersPerPage;
@@ -31,7 +29,6 @@ const sortedOrders = [...orders].sort((a, b) => {
   const orderList = currentOrders.slice(indexOfFirstOrder, indexOfLastOrder);
   const totalPages = Math.ceil(currentOrders.length / ordersPerPage);
   const handlePageChange = (num) => setCurrentPage(num);
-
   const formatDate = (date) =>
     new Intl.DateTimeFormat("en-US", {
       year: "numeric",
@@ -42,7 +39,6 @@ const sortedOrders = [...orders].sort((a, b) => {
       second: "2-digit",
       hour12: true,
     }).format(date);
-
   const resetDate = async () => {
     setFromDate("");
     setToDate("");
@@ -464,7 +460,7 @@ const sortedOrders = [...orders].sort((a, b) => {
                                 {product.quantity}
                               </span>
                             </td>
-                            <td className="py-4 font-semibold text-gray-700">${(product.price / product.quantity) }</td>
+                            <td className="py-4 font-semibold text-gray-700">${(product.price / product.quantity)}</td>
                             <td className="py-4 font-bold text-green-600">
                               ${product.price}
                             </td>
@@ -560,7 +556,7 @@ const sortedOrders = [...orders].sort((a, b) => {
                           <span>Total:</span>
                           <span>
                             ${(
-                              order.items.reduce((sum, item) => sum +  item.price, 0) +
+                              order.items.reduce((sum, item) => sum + item.price, 0) +
                               Number(order.shipping_amount || 0)
                             ).toFixed(2)}
                           </span>
