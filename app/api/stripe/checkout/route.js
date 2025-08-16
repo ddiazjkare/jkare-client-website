@@ -50,7 +50,7 @@ export const POST = async (req) => {
             delivery_estimate: {
               minimum: {
                 unit: "business_day",
-                value: selectedRate.estimated_days || 0 ,  // Estimated delivery time
+                value: selectedRate.estimated_days || 1 ,  // Estimated delivery time
               },
               maximum: {
                 unit: "business_day",
