@@ -275,7 +275,7 @@ export default function Contact() {
 
           {/* MAP */}
           <div className="order-1 lg:order-2 relative h-[450px] lg:h-auto w-full rounded-2xl overflow-hidden shadow-xl">
-            <LoadScript googleMapsApiKey="AIzaSyAlEgLIgIlVsoN7-rNOF06Hr6r6klGYz4g">
+            <LoadScript googleMapsApiKey={process.env.GOOGLE_API_KEY}>
               <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12}>
                 <Marker position={center} />
               </GoogleMap>
