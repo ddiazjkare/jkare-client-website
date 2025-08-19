@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import Order from "../../../../models/Order";
-import sendMail from "../../../../lib/sendMail";
 
 function generateOrderString() {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -170,11 +169,24 @@ export const POST = async (req) => {
       message: "Thank you for your order! We will process it shortly.",
     });
 
-    await sendMail(
-      body.customer_email,
-      "Order Confirmation - Jkare",
-      emailHtml
+    const emailResponse = await fetch(
+      "https://vq4lz0otri.execute-api.ap-south-1.amazonaws.com/send/mail",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: body.customer_email,
+          subject: "Order Confirmation - Jkare",
+          mailBody: emailHtml,
+        }),
+      }
     );
+
+    if (!emailResponse.ok) {
+      throw new Error(
+        `Failed to send order confirmation email: ${emailResponse.statusText}`
+      );
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {

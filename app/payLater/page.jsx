@@ -9,16 +9,11 @@ import { MdPendingActions } from "react-icons/md";
 import { FiClock, FiPhone, FiMail } from "react-icons/fi";
 
 function OfflineSuccessPage() {
-  // const [orderDetails, setOrderDetails] = useState(null);
-  // const [loading, setLoading] = useState(true);
-  // const searchParams = useSearchParams();
   const [, setCartItems] = useContext(CartContext);
-  // const order_id = searchParams.get("order_id");
   const { data: session } = useSession();
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Update login state based on session email
   useEffect(() => {
     if (session && session.user && session.user.email) {
       setIsLoggedIn(true);
@@ -26,25 +21,6 @@ function OfflineSuccessPage() {
       setIsLoggedIn(false);
     }
   }, [session]);
-
-  // Fetch order details from the server using the order_id from query parameters
-  // useEffect(() => {
-  //   const fetchOrderDetails = async () => {
-  //     if (order_id) {
-  //       try {
-  //         const response = await fetch(`/api/orders/offline/${order_id}`, { mode: "cors" });
-  //         const data = await response.json();
-  //         setOrderDetails(data);
-  //         setLoading(false);
-  //       } catch (error) {
-  //         console.error("Error fetching order details:", error);
-  //         setLoading(false);
-  //       }
-  //     }
-  //   };
-  //   fetchOrderDetails();
-  // }, [order_id]);
-
   // Clear cart after order is processed
   useEffect(() => {
     const callApi = async () => {
@@ -59,11 +35,6 @@ function OfflineSuccessPage() {
 
     callApi();
   }, [session, setCartItems]);
-
-  // if (!order_id) {
-  //   router.push("/");
-  //   return null;
-  // }
 
   const handleMyOrders = () => {
     if (isLoggedIn) {
@@ -84,7 +55,7 @@ function OfflineSuccessPage() {
 
       <div className="relative z-10 w-full max-w-lg">
         {/* Main Card */}
-        <div className="bg-white/90 backdrop-blur-lg border border-orange-200/50 rounded-2xl shadow-2xl p-6 transform transition-all duration-500 hover:shadow-3xl">
+        <div className="bg-white/90 backdrop-blur-lg border border-orange-200/50 rounded-2xl shadow-2xl p-6 transform transition-all duration-500 hover:shadow-3xl mt-12">
           {/* Pending Icon */}
           <div className="flex justify-center mb-5">
             <div className="relative">
@@ -171,7 +142,7 @@ function OfflineSuccessPage() {
               className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg transform transition-all duration-200 hover:scale-105 hover:shadow-xl active:scale-95"
             >
               <span className="flex items-center justify-center space-x-2">
-                <span>Track My Orders</span>
+                <span>Your Orders</span>
                 <span className="text-lg">📋</span>
               </span>
             </button>

@@ -24,10 +24,10 @@ export default function Package({ env }) {
     email: "",
     phone: "",
     address: "456 Maple St",
-    address2: "# 200",
+    address2: "",
     postalCode: "33160",
     city: "Florida",
-    region: "CA",
+    region: "FL",
     location: "US",
   });
 

@@ -460,10 +460,10 @@ function OrderHistory({ orders = [], email }) {
                                 {product.quantity}
                               </span>
                             </td>
-                            <td className="py-4 font-semibold text-gray-700">${(product.price / product.quantity)}</td>
                             <td className="py-4 font-bold text-green-600">
                               ${product.price}
                             </td>
+                            <td className="py-4 font-semibold text-gray-700">${(product.price * product.quantity)}</td>
                             <td className="py-4 text-center">
                               {product.prescription_file && (
                                 <a
@@ -535,7 +535,7 @@ function OrderHistory({ orders = [], email }) {
                         <div className="flex justify-between">
                           <span className="text-gray-600">Subtotal:</span>
                           <span className="font-semibold">
-                            ${order.items.reduce((sum, item) => sum + item.price, 0).toFixed(2)}
+                            ${order.sub_amount}
                           </span>
                         </div>
                         <div className="flex justify-between">
@@ -555,10 +555,13 @@ function OrderHistory({ orders = [], email }) {
                         <div className="flex justify-between text-lg font-bold text-green-600 pt-2 border-t border-gray-200">
                           <span>Total:</span>
                           <span>
-                            ${(
-                              order.items.reduce((sum, item) => sum + item.price, 0) +
-                              Number(order.shipping_amount || 0)
-                            ).toFixed(2)}
+                            ${order.total_amount.toFixed(2)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between text-lg font-bold text-green-600 pt-2 border-t border-gray-200">
+                          <span>Amount Paid:</span>
+                          <span>
+                            ${order.amount_paid.toFixed(2)}
                           </span>
                         </div>
                       </div>
