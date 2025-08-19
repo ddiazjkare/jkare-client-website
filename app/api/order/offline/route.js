@@ -115,6 +115,7 @@ export const POST = async (req) => {
       await req.json();
     const orderNumber = `ORD-${generateOrderString()}`;
     const shippingAmount = parseFloat(selectedRate.amount);
+    const date = new Date();
 
     const orderParams = {
       order_id: orderNumber,
@@ -123,7 +124,7 @@ export const POST = async (req) => {
       comment: "",
       order_status: "Pending",
       shipping_amount: selectedRate.isFree ? 0 : shippingAmount.toFixed(2),
-      order_date: new Date().toLocaleDateString(),
+      order_date: date.toLocaleString(),
       items: [],
     };
 

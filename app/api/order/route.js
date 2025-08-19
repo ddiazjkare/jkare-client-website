@@ -240,8 +240,6 @@ export const POST = async (req) => {
     const productItems = checkout_session.line_items.data;
     const date = new Date();
 
-    // console.log("carrier: ", checkout_session.metadata.carrier);
-
     const orderNumber = `ORD-${generateOrderString()}`;
     const orderParams = {
       order_id: orderNumber,
