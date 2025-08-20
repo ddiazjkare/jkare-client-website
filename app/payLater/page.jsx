@@ -45,21 +45,21 @@ function OfflineSuccessPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 flex items-center justify-center p-4 mt-11 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-pink-50 to-blue-50 flex items-center justify-center p-4 mt-11 relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-32 left-16 w-64 h-64 bg-gradient-to-r from-orange-200 to-amber-200 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse"></div>
-        <div className="absolute top-20 right-20 w-80 h-80 bg-gradient-to-r from-yellow-200 to-orange-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-float"></div>
-        <div className="absolute bottom-20 left-32 w-72 h-72 bg-gradient-to-r from-amber-200 to-yellow-200 rounded-full mix-blend-multiply filter blur-xl opacity-35 animate-float-delayed"></div>
+        <div className="absolute top-32 left-16 w-64 h-64 bg-gradient-to-r from-sky-200 to-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse"></div>
+        <div className="absolute top-20 right-20 w-80 h-80 bg-gradient-to-r from-sky-200 to-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-float"></div>
+        <div className="absolute bottom-20 left-32 w-72 h-72 bg-gradient-to-r from-sky-200 to-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-35 animate-float-delayed"></div>
       </div>
 
       <div className="relative z-10 w-full max-w-lg">
         {/* Main Card */}
-        <div className="bg-white/90 backdrop-blur-lg border border-orange-200/50 rounded-2xl shadow-2xl p-6 transform transition-all duration-500 hover:shadow-3xl mt-12">
+        <div className="bg-white/90 backdrop-blur-lg border border-sky-200/50 rounded-2xl shadow-2xl p-6 transform transition-all duration-500 hover:shadow-3xl mt-12">
           {/* Pending Icon */}
           <div className="flex justify-center mb-5">
             <div className="relative">
-              <div className="w-20 h-20 bg-gradient-to-r from-orange-400 to-amber-500 rounded-full flex items-center justify-center shadow-lg animate-pulse">
+              <div className="w-20 h-20 bg-gradient-to-r from-sky-400 to-pink-500 rounded-full flex items-center justify-center shadow-lg animate-pulse">
                 <MdPendingActions className="w-11 h-11 text-white" />
               </div>
               <div className="absolute -top-1 -right-1 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center animate-bounce">
@@ -70,7 +70,7 @@ function OfflineSuccessPage() {
 
           {/* Success Message */}
           <div className="text-center mb-6">
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent mb-3">
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-sky-600 to-pink-600 bg-clip-text text-transparent mb-3">
               Order Booked Successfully!
             </h1>
             <div className="space-y-3">
@@ -86,7 +86,7 @@ function OfflineSuccessPage() {
             
 
               {/* Show message when user is not logged in */}
-              {!isLoggedIn && (
+              {/* {!isLoggedIn && (
                 <div className="bg-yellow-50 rounded-lg p-3 border border-yellow-200">
                   <div className="flex items-center space-x-2">
                     <span className="text-yellow-600 text-sm">⚠️</span>
@@ -100,7 +100,7 @@ function OfflineSuccessPage() {
                     </div>
                   </div>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
 
@@ -151,7 +151,7 @@ function OfflineSuccessPage() {
           {/* Combined Notice & Login Info */}
           <div className="space-y-3">
             {/* Important Notice - Show different content based on login status */}
-            <div className="p-3 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-lg">
+            {/* <div className="p-3 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-lg">
               <div className="flex items-start space-x-2">
                 <span className="text-red-500 text-sm flex-shrink-0">⚠️</span>
                 <div>
@@ -163,7 +163,7 @@ function OfflineSuccessPage() {
                   )}
                 </div>
               </div>
-            </div>
+            </div> */}
 
        
           </div>
