@@ -264,7 +264,7 @@ export default function Package({ env }) {
     }
 
     if (!selectedRate) {
-      toast.warn("Please select a delivery option before proceeding.");
+      toast.error("Please select a delivery option before proceeding.");
       return;
     }
 
@@ -316,11 +316,11 @@ export default function Package({ env }) {
   // Add this function after your handleProceedToPayment function
   const handleOfflinePayment = async () => {
     if (!validateForm()) {
-      toast.warn("Please fill in all required fields correctly.");
+      toast.error("Please fill in all required fields correctly.");
       return;
     }
     if (!selectedRate) {
-      toast.warn("Please select a delivery option before proceeding.");
+      toast.error("Please select a delivery option before proceeding.");
       return;
     }
     const checkoutStorage = localStorage.getItem('checkoutStorage');
