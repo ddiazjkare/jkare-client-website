@@ -1,11 +1,10 @@
-import jwt from 'jsonwebtoken'
-import sendMail from '../../../../lib/sendMail'
-import { NextResponse } from 'next/server'
+import jwt from "jsonwebtoken";
+import { NextResponse } from "next/server";
 // import { getBaseURL } from '../../utils'
 
 export const POST = async (req) => {
   try {
-    const { email } = await req.json()
+    const { email } = await req.json();
     let user = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/user/info/${email}`
     );
@@ -17,7 +16,9 @@ export const POST = async (req) => {
         { status: 400 }
       );
 
-    const token = jwt.sign({ email }, process.env.SECRET_KEY, { expiresIn: '2h' })
+    const token = jwt.sign({ email }, process.env.SECRET_KEY, {
+      expiresIn: "2h",
+    });
     // const baseURL = getBaseURL(req)
     const baseURL = process.env.NEXTAUTH_URL;
     const html = `<!DOCTYPE html>
@@ -51,10 +52,21 @@ export const POST = async (req) => {
   </div>
 </body>
 </html>
-`
-    await sendMail(email, 'Password Reset', html)
-    return new Response('Email sent successfully!', { status: 200 })
+`;
+    await fetch(
+      "https://vq4lz0otri.execute-api.ap-south-1.amazonaws.com/send/mail",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: email,
+          subject: `🌟 Password Reset Request - JKARE`,
+          mailBody: html,
+        }),
+      }
+    );
+    return new Response("Email sent successfully! Please check Your registered Email", { status: 200 });
   } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 })
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
-}
+};

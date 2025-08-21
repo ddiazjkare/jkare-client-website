@@ -7,9 +7,11 @@ import Alert from "../../components/ui/Alert";
 
 function OrderHistory({ orders = [], email }) {
   /* ---------------- state & helpers ---------------- */
-  const sortedOrders = [...orders].sort(
-    (a, b) => new Date(b.order_date) - new Date(a.order_date)
-  );
+  const sortedOrders = [...orders].sort((a, b) => {
+    const dateA = new Date(a.order_date);
+    const dateB = new Date(b.order_date);
+    return dateB - dateA;
+  });
   const [searchTerm, setSearchTerm] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -20,7 +22,6 @@ function OrderHistory({ orders = [], email }) {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [trackingData, setTrackingData] = useState(null);
   const [trackingLoading, setTrackingLoading] = useState(false);
-
   /* ---- pagination ---- */
   const ordersPerPage = 4;
   const indexOfLastOrder = currentPage * ordersPerPage;
@@ -28,7 +29,6 @@ function OrderHistory({ orders = [], email }) {
   const orderList = currentOrders.slice(indexOfFirstOrder, indexOfLastOrder);
   const totalPages = Math.ceil(currentOrders.length / ordersPerPage);
   const handlePageChange = (num) => setCurrentPage(num);
-
   const formatDate = (date) =>
     new Intl.DateTimeFormat("en-US", {
       year: "numeric",
@@ -39,7 +39,6 @@ function OrderHistory({ orders = [], email }) {
       second: "2-digit",
       hour12: true,
     }).format(date);
-
   const resetDate = async () => {
     setFromDate("");
     setToDate("");
@@ -461,10 +460,10 @@ function OrderHistory({ orders = [], email }) {
                                 {product.quantity}
                               </span>
                             </td>
-                            <td className="py-4 font-semibold text-gray-700">${(product.price / product.quantity) }</td>
                             <td className="py-4 font-bold text-green-600">
                               ${product.price}
                             </td>
+                            <td className="py-4 font-semibold text-gray-700">${(product.price * product.quantity)}</td>
                             <td className="py-4 text-center">
                               {product.prescription_file && (
                                 <a
@@ -536,7 +535,7 @@ function OrderHistory({ orders = [], email }) {
                         <div className="flex justify-between">
                           <span className="text-gray-600">Subtotal:</span>
                           <span className="font-semibold">
-                            ${order.items.reduce((sum, item) => sum + item.price, 0).toFixed(2)}
+                            ${order.sub_amount}
                           </span>
                         </div>
                         <div className="flex justify-between">
@@ -556,10 +555,13 @@ function OrderHistory({ orders = [], email }) {
                         <div className="flex justify-between text-lg font-bold text-green-600 pt-2 border-t border-gray-200">
                           <span>Total:</span>
                           <span>
-                            ${(
-                              order.items.reduce((sum, item) => sum +  item.price, 0) +
-                              Number(order.shipping_amount || 0)
-                            ).toFixed(2)}
+                            ${order.total_amount.toFixed(2)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between text-lg font-bold text-green-600 pt-2 border-t border-gray-200">
+                          <span>Amount Paid:</span>
+                          <span>
+                            ${order.amount_paid.toFixed(2)}
                           </span>
                         </div>
                       </div>

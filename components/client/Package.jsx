@@ -24,10 +24,10 @@ export default function Package({ env }) {
     email: "",
     phone: "",
     address: "456 Maple St",
-    address2: "# 200",
+    address2: "",
     postalCode: "33160",
     city: "Florida",
-    region: "CA",
+    region: "FL",
     location: "US",
   });
 
@@ -303,6 +303,7 @@ export default function Package({ env }) {
     }
   };
 
+
   // Add this function after your handleProceedToPayment function
   const handleOfflinePayment = async () => {
     if (!validateForm()) {
@@ -314,11 +315,17 @@ export default function Package({ env }) {
       toast.warn("Please select a delivery option before proceeding.");
       return;
     }
+    const checkoutStorage = localStorage.getItem('checkoutStorage');
+    let metadata = {};
+    if (checkoutStorage) {
+      const parsedStorage = JSON.parse(checkoutStorage);
+      metadata = parsedStorage.metadata || {};
+    }
 
     try {
       setIsProcessingOfflinePayment(true);
       const products = cartItems.map(item => ({
-        id: item.id || item.product_id, 
+        id: item.id || item.product_id,
         quantity: item.quantity
       }));
 
@@ -335,7 +342,9 @@ export default function Package({ env }) {
           isFree: selectedRate.isFree || false
         },
         products,
-        prescription_items,
+        insurance_pdf: metadata.insurance_file || "",
+        insurance_company: metadata.insurance_company || "",
+        prescription_items: metadata.prescription_items ? JSON.parse(metadata.prescription_items) : {},
         customer_name: receiver.name.trim(),
         customer_email: receiver.email,
         customer_phone: receiver.phone,
@@ -347,8 +356,6 @@ export default function Package({ env }) {
           postal_code: receiver.postalCode,
           state: receiver.region
         },
-        insurance_pdf: "", // Add if you have this data
-        insurance_company: "", // Add if you have this data
         total_amount: grandTotal,
         shipping_rate: selectedRate.object_id,
         sub_amount: itemSubtotal,
@@ -366,7 +373,7 @@ export default function Package({ env }) {
       }
 
       // Redirect to success page
-      router.push("/success");
+      router.push("/payLater");
 
     } catch (error) {
       toast.error("Error processing offline payment: " + error.message);
@@ -604,58 +611,65 @@ export default function Package({ env }) {
 
                   {displayedRates.length > 0 ? (
                     <div className="space-y-3">
-                      {displayedRates.map((rate, idx) => {
-                        const isSelected = selectedRate?.object_id === rate.object_id &&
-                          selectedRate?.amount === rate.amount;
-                        const cost = parseFloat(rate.amount);
+                      {displayedRates
+                        .slice() // create a copy to avoid mutating original array
+                        .sort((a, b) => parseFloat(a.amount) - parseFloat(b.amount)) // sort by amount
+                        .map((rate, idx) => {
+                          const isSelected =
+                            selectedRate?.object_id === rate.object_id &&
+                            selectedRate?.amount === rate.amount;
+                          const cost = parseFloat(rate.amount);
 
-                        return (
-                          <div
-                            key={rate.isFree ? "free-shipping" : rate.object_id}
-                            onClick={() => setSelectedRate(rate)}
-                            className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 ${isSelected
-                              ? 'border-blue-500 bg-blue-50'
-                              : 'border-gray-200 hover:border-gray-300'
-                              }`}
-                          >
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center space-x-3">
-                                <input
-                                  type="radio"
-                                  name="shippingRate"
-                                  checked={isSelected}
-                                  onChange={() => setSelectedRate(rate)}
-                                  className="text-blue-600"
-                                />
-                                <div>
-                                  <div className="font-medium text-gray-900">
-                                    {rate.servicelevel?.display_name || 'Standard Shipping'}
-                                    {rate.isFree && (
-                                      <span className="ml-2 inline-block px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">
-                                        FREE
-                                      </span>
-                                    )}
-                                  </div>
-                                  <div className="text-sm text-gray-500">
-                                    {rate.estimated_days
-                                      ? `${rate.estimated_days} business days`
-                                      : 'Standard delivery'}
+                          return (
+                            <div
+                              key={rate.isFree ? "free-shipping" : rate.object_id}
+                              onClick={() => setSelectedRate(rate)}
+                              className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 ${isSelected
+                                  ? "border-blue-500 bg-blue-50"
+                                  : "border-gray-200 hover:border-gray-300"
+                                }`}
+                            >
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center space-x-3">
+                                  <input
+                                    type="radio"
+                                    name="shippingRate"
+                                    checked={isSelected}
+                                    onChange={() => setSelectedRate(rate)}
+                                    className="text-blue-600"
+                                  />
+                                  <div>
+                                    <div className="font-medium text-gray-900">
+                                      {rate.servicelevel?.display_name || "Standard Shipping"}
+                                      {rate.isFree && (
+                                        <span className="ml-2 inline-block px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">
+                                          FREE
+                                        </span>
+                                      )}
+                                    </div>
+                                    <div className="text-sm text-gray-500">
+                                      {rate.estimated_days
+                                        ? `${rate.estimated_days} business days`
+                                        : "Standard delivery"}
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                              <div className="text-lg font-semibold text-gray-900">
-                                ${cost.toFixed(2)}
+                                <div className="text-lg font-semibold text-gray-900">
+                                  ${cost.toFixed(2)}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        );
-                      })}
+                          );
+                        })}
                     </div>
                   ) : (
                     <div className="text-center py-6 text-gray-500">
-                      {isFetchingRates ? 'Loading shipping options...' : 'No shipping options available'}
+                      {isFetchingRates
+                        ? "Loading shipping options..."
+                        : "No shipping options available"}
                     </div>
                   )}
+
                 </div>
               )}
             </div>

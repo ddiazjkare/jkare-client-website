@@ -13,12 +13,10 @@ const containerStyle = {
   width: "100%",
   height: "100%",
 };
-
 const center = {
   lat: 25.7617,
   lng: -80.1918,
 };
-
 export default function Contact() {
   const { data: session } = useSession();
   let localUser = typeof window !== "undefined" && window.localStorage.getItem("nextUser");
@@ -70,7 +68,6 @@ export default function Contact() {
     setIsLoading(true);
 
     try {
-      // Create a beautifully formatted HTML email body
       const htmlBody = `
         <!DOCTYPE html>
         <html>
@@ -117,16 +114,13 @@ export default function Contact() {
                   <span class="info-value">${form.phone}</span>
                 </div>
               </div>
-              
               <div class="divider"></div>
-              
               <div class="message-section">
                 <div class="message-title">💬 Message</div>
                 <div class="message-content">
                   ${form.comment.replace(/\n/g, '<br>')}
                 </div>
               </div>
-              
               <div style="margin-top: 30px; padding: 15px; background-color: #e3f2fd; border-radius: 8px; text-align: center;">
                 <p style="margin: 0; color: #1976d2; font-style: italic;">
                   📅 Received on ${new Date().toLocaleDateString('en-US', {
@@ -152,14 +146,12 @@ export default function Contact() {
         </body>
         </html>
       `;
-
       const response = await fetch(
         "https://vq4lz0otri.execute-api.ap-south-1.amazonaws.com/send/mail",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            // to: form.email,
             to: "support@jkare.com",
             subject: `🌟 New Contact Form Submission from ${form.name} - JKARE`,
             mailBody: htmlBody,
@@ -168,9 +160,7 @@ export default function Contact() {
       );
 
       if (response.ok) {
-        // Show success toast
         setShowToast(true);
-        // Reset form
         setForm({ name: "", phone: "", email: "", comment: "" });
       } else {
         console.error("Failed to send email");
@@ -189,7 +179,6 @@ export default function Contact() {
       <Head>
         <title>{pageTitle}</title>
       </Head>
-
       {/* Toast Notification */}
       {showToast && (
         <div className="fixed top-4 right-4 z-50 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg transform transition-all duration-300 ease-in-out">
@@ -201,7 +190,6 @@ export default function Contact() {
           </div>
         </div>
       )}
-
       {/* -------------------------------------------------- */}
       {/* HERO – same layout as About page */}
       {/* -------------------------------------------------- */}
@@ -218,7 +206,6 @@ export default function Contact() {
           <h1 className="text-customBlue text-4xl font-medium tracking-wide">Contact&nbsp;Us</h1>
         </div>
       </div>
-
       {/* -------------------------------------------------- */}
       {/* FORM + MAP */}
       {/* -------------------------------------------------- */}
