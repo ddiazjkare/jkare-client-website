@@ -396,7 +396,7 @@ const AddressInput = ({
               validationErrors.region ? 'border-red-500' : 'border-gray-300'
             }`}
             placeholder="FL"
-            readOnly
+            
           />
           {validationErrors.region && (
             <p className="text-red-500 text-xs mt-1">{validationErrors.region}</p>
@@ -418,7 +418,7 @@ const AddressInput = ({
               validationErrors.postalCode ? 'border-red-500' : 'border-gray-300'
             }`}
             placeholder="94103"
-            readOnly
+          
           />
           {validationErrors.postalCode && (
             <p className="text-red-500 text-xs mt-1">{validationErrors.postalCode}</p>
