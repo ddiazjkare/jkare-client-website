@@ -68,11 +68,11 @@ const Forgot = () => {
         "
       />
       {/* Mobile logo */}
-      <img
+      {/* <img
         src="https://images.squarespace-cdn.com/content/v1/60aefe75c1a8f258e529fbac/1622081456984-G5MG4OZZJFVIM3R01YN7/jkare-2.png?format=1500w"
         alt="JKare Logo"
         className="absolute top-6 left-1/2 -translate-x-1/2 h-10 w-auto z-20 block lg:hidden"
-      />
+      /> */}
       <ToastContainer />
       {/* Background image for mobiles */}
       <div
@@ -80,7 +80,7 @@ const Forgot = () => {
         style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/jkare.data/banner+image.jpg')" }}
       ></div>
 
-      <div className="relative p-8 mx-4 rounded-lg max-w-md w-full z-10 lg:mr-32 border-2 shadow-2xl bg-black/20 backdrop-blur-md object-center">
+      <div className="relative p-8 mx-4 rounded-lg max-w-md w-full z-10 lg:mr-32 border-2 shadow-2xl bg-black/30 backdrop-blur-xl object-center">
         <h2 className="text-4xl font-bold mb-6 text-center text-white">
           Forgot Password
         </h2>

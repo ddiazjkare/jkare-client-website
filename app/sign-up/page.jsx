@@ -1,6 +1,7 @@
 "use client"
 import React, { useEffect, useState } from "react"
 import Alert from '../../components/ui/Alert'
+import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 import { useRouter } from "next/navigation";
 import { FaEye, FaEyeSlash, FaCheck, FaTimes } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
@@ -13,6 +14,8 @@ const SignUpForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [captchaValue, setCaptchaValue] = useState('');
   const [formData, setFormData] = useState({
     username: '',
     phone: '',
@@ -29,6 +32,9 @@ const SignUpForm = () => {
   const [error, setError] = useState(null)
   const router = useRouter()
   const pageTitle = 'SignUp';
+  useEffect(() => {
+    loadCaptchaEnginge(6); // 6 character captcha
+  }, []);
 
   useEffect(() => {
     document.title = pageTitle;
@@ -37,7 +43,7 @@ const SignUpForm = () => {
   // Password strength calculation
   const calculatePasswordStrength = (password) => {
     if (!password) return { score: 0, label: '', color: '' };
-    
+
     let score = 0;
     let label = '';
     let color = '';
@@ -45,7 +51,7 @@ const SignUpForm = () => {
     // Length check
     if (password.length >= 6) score += 1;
     if (password.length >= 8) score += 1;
-    
+
     // Character variety checks
     if (/[a-z]/.test(password)) score += 1;
     if (/[A-Z]/.test(password)) score += 1;
@@ -82,11 +88,19 @@ const SignUpForm = () => {
     return null;
   };
 
-  const validatePhone = (phone) => {
-    if (!phone || typeof phone !== "string" || phone.trim() === "") return "Phone number is required";
-    if (!isValidPhoneNumber(phone)) return "Please enter a valid phone number";
-    return null;
-  };
+ const validatePhone = (phone) => {
+  if (!phone || typeof phone !== "string" || phone.trim() === "") return "Phone number is required";
+  
+  // For US numbers, check if it has 10 digits (with or without country code)
+  const cleanPhone = phone.replace(/\D/g, ''); // Remove all non-digits
+  
+  // Accept both formats: 5685458584 (10 digits) or 15685458584 (11 digits with country code)
+  if (cleanPhone.length === 10 || (cleanPhone.length === 11 && cleanPhone.startsWith('1'))) {
+    return null; // Valid
+  }
+  
+  return "Please enter a valid US phone number";
+};
 
   const validateEmail = (email) => {
     if (!email.trim()) return "Email is required";
@@ -127,7 +141,7 @@ const SignUpForm = () => {
     if (target.name === 'password') {
       const strength = calculatePasswordStrength(value);
       setPasswordStrength(strength);
-      
+
       // Check password match if confirm password exists
       if (updatedFormData.confirmPassword) {
         setPasswordMatch(checkPasswordMatch(value, updatedFormData.confirmPassword));
@@ -165,6 +179,14 @@ const SignUpForm = () => {
     }
     if (confirmPasswordError) {
       toast.error(confirmPasswordError);
+      return false;
+    }
+    if (!agreedToTerms) {
+      toast.error("Please agree to the Terms and Conditions");
+      return false;
+    }
+    if (!validateCaptcha(captchaValue)) {
+      toast.error("Please enter the correct CAPTCHA");
       return false;
     }
     return true;
@@ -253,18 +275,13 @@ const SignUpForm = () => {
         hidden
         "
       />
-      {/* Mobile logo */}
-      <img
-        src="https://s3.ap-south-1.amazonaws.com/jkare.data/jkarelogo.png"
-        alt="JKare Logo"
-        className="absolute top-6 left-1/2 -translate-x-1/2 h-10 w-auto z-20 block lg:hidden"
-      />
+   
       {/* Background image for mobiles */}
       <div
         className="lg:hidden absolute inset-0 z-0 bg-cover bg-center"
         style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/jkare.data/banner+image.jpg')" }}
       ></div>
-      <div className="relative p-8 mx-4 rounded-lg max-w-md w-full z-10 lg:mr-32 border-2 border-white shadow-2xl bg-black/20 backdrop-blur-md object-center">
+      <div className="relative p-8 mx-4 rounded-lg max-w-md w-full z-10 lg:mr-32 border-2 border-white shadow-2xl bg-black/30 backdrop-blur-xl object-center">
         <h2 className="text-4xl font-bold mb-6 text-white text-center">
           Sign Up
         </h2>
@@ -320,21 +337,20 @@ const SignUpForm = () => {
             <div
               className="absolute right-3 top-10 flex items-center cursor-pointer text-gray-600"
               onClick={() => setShowPassword((prev) => !prev)}
-              // style={{ top: '2.25rem' }}
+            // style={{ top: '2.25rem' }}
             >
               {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
             </div>
-            
+
             {/* Password Strength Indicator */}
             {formData.password && (
               <div className="mt-2">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-sm text-white">Password Strength:</span>
-                  <span className={`text-sm font-medium ${
-                    passwordStrength.label === 'Weak' ? 'text-red-400' :
-                    passwordStrength.label === 'Acceptable' ? 'text-yellow-400' :
-                    'text-green-400'
-                  }`}>
+                  <span className={`text-sm font-medium ${passwordStrength.label === 'Weak' ? 'text-red-400' :
+                      passwordStrength.label === 'Acceptable' ? 'text-yellow-400' :
+                        'text-green-400'
+                    }`}>
                     {passwordStrength.label}
                   </span>
                 </div>
@@ -342,16 +358,15 @@ const SignUpForm = () => {
                   {[1, 2, 3, 4, 5, 6].map((level) => (
                     <div
                       key={level}
-                      className={`h-1 flex-1 rounded ${
-                        level <= passwordStrength.score ? passwordStrength.color : 'bg-gray-300'
-                      }`}
+                      className={`h-1 flex-1 rounded ${level <= passwordStrength.score ? passwordStrength.color : 'bg-gray-300'
+                        }`}
                     />
                   ))}
                 </div>
               </div>
             )}
           </div>
-          
+
           <div className="mb-6 relative">
             <label className="block text-white">Confirm Password</label>
             <input
@@ -366,11 +381,10 @@ const SignUpForm = () => {
             <div
               className="absolute right-3 top-10 flex items-center cursor-pointer text-gray-600"
               onClick={() => setShowConfirmPassword((prev) => !prev)}
-              // style={{ top: '2.25rem' }}
+            // style={{ top: '2.25rem' }}
             >
               {showConfirmPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
             </div>
-            
             {/* Password Match Indicator */}
             {formData.confirmPassword && (
               <div className="mt-2 flex items-center">
@@ -389,7 +403,46 @@ const SignUpForm = () => {
             )}
           </div>
 
-          <button
+          {/* CAPTCHA */}
+          <div className="mb-4">
+            <label className="block text-white mb-2">Please solve the CAPTCHA</label>
+            <div className="bg-white p-2 rounded mb-2 flex justify-center">
+              <LoadCanvasTemplate />
+            </div>
+            <input
+              type="text"
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
+              placeholder="Enter CAPTCHA"
+              value={captchaValue}
+              onChange={(e) => setCaptchaValue(e.target.value)}
+              disabled={isLoading}
+            />
+          </div>
+
+          {/* Terms and Conditions Checkbox */}
+          <div className="mb-6">
+            <div className="flex items-start">
+              <input
+                type="checkbox"
+                id="terms"
+                checked={agreedToTerms}
+                onChange={(e) => setAgreedToTerms(e.target.checked)}
+                className="mt-1 mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                disabled={isLoading}
+              />
+              <label htmlFor="terms" className="text-sm text-white">
+                By signing up, I agree to the{" "}
+                <button
+                  type="button"
+                  onClick={handleTermsClick}
+                  className="text-blue-300 hover:text-blue-100 underline focus:outline-none"
+                >
+                  Terms and Conditions
+                </button>
+              </label>
+            </div>
+          </div>
+            <button
             className="bg-transparent hover:bg-customBlue text-white hover:text-white font-bold py-2 px-4 rounded border border-white hover:border-transparent focus:outline-none focus:shadow-outline w-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed mb-4"
             type="submit"
             disabled={isLoading}
@@ -406,20 +459,6 @@ const SignUpForm = () => {
               "Sign Up"
             )}
           </button>
-
-          {/* Terms and Conditions */}
-          <div className="text-center">
-            <p className="text-sm text-white">
-              By signing up, you agree to our{" "}
-              <button
-                type="button"
-                onClick={handleTermsClick}
-                className="text-blue-300 hover:text-blue-100 underline focus:outline-none"
-              >
-                Terms and Conditions
-              </button>
-            </p>
-          </div>
         </form>
       </div>
     </div>

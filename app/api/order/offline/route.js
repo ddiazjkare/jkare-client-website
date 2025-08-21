@@ -9,28 +9,42 @@ function generateOrderString() {
   }
   return result;
 }
+function formatPrice(price) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(price);
+}
 
 function generateMailHtml(order, user) {
   const tableRows = order.items
     .map((item) => {
-      const subtotal = (item.price * item.quantity).toFixed(2);
+      const subtotal = item.price * item.quantity;
       return `
-        <tr>
-          <td style="border: 1px solid #e2e8f0; padding: 12px; color: #374151;">${item.product_name}</td>
-          <td style="border: 1px solid #e2e8f0; padding: 12px; text-align: center;">
-            <img 
-              src="${item.image}" 
-              alt="${item.product_name}" 
-              style="height: 50px; width: auto; border-radius: 8px;" 
-            />
-          </td>
-          <td style="border: 1px solid #e2e8f0; padding: 12px; text-align: center; font-weight: 600;">
-            ${item.quantity}
-          </td>
-          <td style="border: 1px solid #e2e8f0; padding: 12px; color: #059669;">$${item.price}</td>
-          <td style="border: 1px solid #e2e8f0; padding: 12px; color: #059669; font-weight: 600;">$${subtotal}</td>
-        </tr>
-      `;
+      <tr>
+        <td style="border: 1px solid #e2e8f0; padding: 12px; color: #374151;">${
+          item.product_name
+        }</td>
+        <td style="border: 1px solid #e2e8f0; padding: 12px; text-align: center;">
+          <img 
+            src="${item.image}" 
+            alt="${item.product_name}" 
+            style="height: 50px; width: auto; border-radius: 8px;" 
+          />
+        </td>
+        <td style="border: 1px solid #e2e8f0; padding: 12px; text-align: center; font-weight: 600;">
+          ${item.quantity}
+        </td>
+        <td style="border: 1px solid #e2e8f0; padding: 12px; color: #059669;">${formatPrice(
+          item.price
+        )}</td>
+        <td style="border: 1px solid #e2e8f0; padding: 12px; color: #059669; font-weight: 600;">${formatPrice(
+          subtotal
+        )}</td>
+      </tr>
+    `;
     })
     .join("");
 
@@ -49,16 +63,16 @@ function generateMailHtml(order, user) {
         ${tableRows}
       </tbody>
     </table>
-     <div style="background: #f1f5f9; color: #475569; padding: 16px; border-radius: 12px; margin-top: 20px;">
-      <p style="margin: 0; font-size: 18px; font-weight: 600;">
-        Shipping Amount: $${order.shipping_amount}
-      </p>
-    </div>
-    <div style="background: #f1f5f9; color: #475569; padding: 16px; border-radius: 12px; margin-top: 20px;">
-      <p style="margin: 0; font-size: 18px; font-weight: 600;">
-        Total Order Value: $${order.total_amount}
-      </p>
-    </div>
+   <div style="background: #f1f5f9; color: #475569; padding: 16px; border-radius: 12px; margin-top: 20px;">
+  <p style="margin: 0; font-size: 18px; font-weight: 600;">
+    Shipping Amount: ${formatPrice(order.shipping_amount)}
+  </p>
+</div>
+<div style="background: #f1f5f9; color: #475569; padding: 16px; border-radius: 12px; margin-top: 20px;">
+  <p style="margin: 0; font-size: 18px; font-weight: 600;">
+    Total Order Value: ${formatPrice(order.total_amount)}
+  </p>
+</div>
   `;
 
   return `

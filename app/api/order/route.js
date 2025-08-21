@@ -13,27 +13,42 @@ function generateOrderString() {
   return result;
 }
 
+function formatPrice(price) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(price);
+}
+
 function generateMailHtml(order, user) {
   const tableRows = order.items
     .map((item) => {
-      const subtotal = (item.price * item.quantity).toFixed(2);
+      const subtotal = item.price * item.quantity;
       return `
-        <tr>
-          <td style="border: 1px solid #e2e8f0; padding: 12px; color: #374151;">${item.product_name}</td>
-          <td style="border: 1px solid #e2e8f0; padding: 12px; text-align: center;">
-            <img 
-              src="${item.image}" 
-              alt="${item.product_name}" 
-              style="height: 50px; width: auto; border-radius: 8px;" 
-            />
-          </td>
-          <td style="border: 1px solid #e2e8f0; padding: 12px; text-align: center; font-weight: 600;">
-            ${item.quantity}
-          </td>
-          <td style="border: 1px solid #e2e8f0; padding: 12px; color: #059669;">$${item.price}</td>
-          <td style="border: 1px solid #e2e8f0; padding: 12px; color: #059669; font-weight: 600;">$${subtotal}</td>
-        </tr>
-      `;
+      <tr>
+        <td style="border: 1px solid #e2e8f0; padding: 12px; color: #374151;">${
+          item.product_name
+        }</td>
+        <td style="border: 1px solid #e2e8f0; padding: 12px; text-align: center;">
+          <img 
+            src="${item.image}" 
+            alt="${item.product_name}" 
+            style="height: 50px; width: auto; border-radius: 8px;" 
+          />
+        </td>
+        <td style="border: 1px solid #e2e8f0; padding: 12px; text-align: center; font-weight: 600;">
+          ${item.quantity}
+        </td>
+        <td style="border: 1px solid #e2e8f0; padding: 12px; color: #059669;">${formatPrice(
+          item.price
+        )}</td>
+        <td style="border: 1px solid #e2e8f0; padding: 12px; color: #059669; font-weight: 600;">${formatPrice(
+          subtotal
+        )}</td>
+      </tr>
+    `;
     })
     .join("");
 
@@ -147,43 +162,45 @@ function generateMailHtml(order, user) {
         <h3 style="color: #1e293b; font-size: 18px; margin: 30px 0 15px 0;">📦 Products in Your Order:</h3>
         ${productsTable}
 
-        <div style="background: #f1f5f9; padding: 20px; border-radius: 12px; margin-top: 20px;">
-          <h4 style="color: #1e293b; margin: 0 0 15px 0; font-size: 16px;">💰 Order Summary</h4>
-          <div style="margin-bottom: 8px;">
-            <span style="color: #475569;">Subtotal: </span>
-            <span style="color: #475569; font-weight: 600;">$${
-              order.sub_amount
-            }</span>
-          </div>
-          <div style="margin-bottom: 8px;">
-            <span style="color: #475569;">Shipping: </span>
-            <span style="color: #475569; font-weight: 600;">$${
-              order.shipping_amount
-            }</span>
-          </div>
-          <div style="margin-bottom: 8px;">
-            <span style="color: #475569;">Tax: </span>
-            <span style="color: #475569; font-weight: 600;">$${
-              order.tax_amount
-            }</span>
-          </div>
-          ${
-            order.discount_amount > 0
-              ? `
-          <div style="margin-bottom: 8px;">
-            <span style="color: #dc2626;">Discount: </span>
-            <span style="color: #dc2626; font-weight: 600;">-$${order.discount_amount}</span>
-          </div>`
-              : ""
-          }
-          <hr style="border: none; border-top: 2px solid #e2e8f0; margin: 15px 0;">
-          <div>
-            <span style="color: #1e293b; font-size: 18px; font-weight: 700;">Total: </span>
-            <span style="color: #059669; font-size: 18px; font-weight: 700;">$${
-              order.total_amount
-            }</span>
-          </div>
-        </div>
+       <div style="background: #f1f5f9; padding: 20px; border-radius: 12px; margin-top: 20px;">
+  <h4 style="color: #1e293b; margin: 0 0 15px 0; font-size: 16px;">💰 Order Summary</h4>
+  <div style="margin-bottom: 8px;">
+    <span style="color: #475569;">Subtotal: </span>
+    <span style="color: #475569; font-weight: 600;">${formatPrice(
+      order.sub_amount
+    )}</span>
+  </div>
+  <div style="margin-bottom: 8px;">
+    <span style="color: #475569;">Shipping: </span>
+    <span style="color: #475569; font-weight: 600;">${formatPrice(
+      order.shipping_amount
+    )}</span>
+  </div>
+  <div style="margin-bottom: 8px;">
+    <span style="color: #475569;">Tax: </span>
+    <span style="color: #475569; font-weight: 600;">${formatPrice(
+      order.tax_amount
+    )}</span>
+  </div>
+  ${
+    order.discount_amount > 0
+      ? `
+  <div style="margin-bottom: 8px;">
+    <span style="color: #dc2626;">Discount: </span>
+    <span style="color: #dc2626; font-weight: 600;">-${formatPrice(
+      order.discount_amount
+    )}</span>
+  </div>`
+      : ""
+  }
+  <hr style="border: none; border-top: 2px solid #e2e8f0; margin: 15px 0;">
+  <div>
+    <span style="color: #1e293b; font-size: 18px; font-weight: 700;">Total: </span>
+    <span style="color: #059669; font-size: 18px; font-weight: 700;">${formatPrice(
+      order.total_amount
+    )}</span>
+  </div>
+</div>
 
         <div style="background: #e0f2fe; border-left: 4px solid #0288d1; padding: 20px; margin: 30px 0; border-radius: 0 12px 12px 0;">
           <p style="margin: 0; color: #01579b; font-size: 16px; line-height: 1.6;">

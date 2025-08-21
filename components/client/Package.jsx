@@ -23,9 +23,9 @@ export default function Package({ env }) {
     name: "",
     email: "",
     phone: "",
-    address: "456 Maple St",
+    address: "",
     address2: "",
-    postalCode: "33160",
+    postalCode: "",
     city: "Florida",
     region: "FL",
     location: "US",
@@ -102,6 +102,9 @@ export default function Package({ env }) {
 
     if (!receiver.address.trim()) {
       errors.address = "Address is required";
+    }
+    if (!receiver.address2.trim()) {
+      errors.address2 = "Apartment / Suite is required";
     }
 
     if (!receiver.city.trim()) {
@@ -256,7 +259,7 @@ export default function Package({ env }) {
   // =========================================================
   const handleProceedToPayment = async () => {
     if (!validateForm()) {
-      toast.warn("Please fill in all required fields correctly.");
+      toast.error("Please fill in all required fields correctly. Shipping Address or Contact Info");
       return;
     }
 
@@ -310,15 +313,12 @@ export default function Package({ env }) {
       setIsCreatingShipment(false);
     }
   };
-
-
   // Add this function after your handleProceedToPayment function
   const handleOfflinePayment = async () => {
     if (!validateForm()) {
       toast.warn("Please fill in all required fields correctly.");
       return;
     }
-
     if (!selectedRate) {
       toast.warn("Please select a delivery option before proceeding.");
       return;
@@ -329,7 +329,6 @@ export default function Package({ env }) {
       const parsedStorage = JSON.parse(checkoutStorage);
       metadata = parsedStorage.metadata || {};
     }
-
     try {
       setIsProcessingOfflinePayment(true);
       const products = cartItems.map(item => ({
@@ -369,17 +368,14 @@ export default function Package({ env }) {
         sub_amount: itemSubtotal,
         carrier: selectedRate.provider || "Unknown"
       };
-
       const response = await fetch("/api/order/offline", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-
       if (!response.ok) {
         throw new Error("Failed to process offline payment.");
       }
-
       // Redirect to success page
       router.push("/payLater");
 
@@ -577,14 +573,14 @@ export default function Package({ env }) {
               </div>
               {/* Address validation message */}
               {!isAddressValidated && (
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-                  <div className="flex items-center justify-center space-x-2 text-blue-700">
+                <div className="bg-pink-50 border border-pink-200 rounded-lg p-6">
+                  <div className="flex items-center justify-center space-x-2 text-red-700">
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                     </svg>
                     <span className="font-medium">Please validate your shipping address to see delivery options</span>
                   </div>
-                  <p className="text-sm text-blue-600 text-center mt-2">
+                  <p className="text-sm text-red-600 text-center mt-2">
                     Enter your complete address above and select a validated address from the suggestions to continue.
                   </p>
                 </div>
