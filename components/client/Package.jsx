@@ -558,6 +558,20 @@ export default function Package({ env }) {
 
               {/* Shipping Address */}
               <div className="bg-white rounded-lg shadow-sm border p-6">
+                   {/* Address validation message */}
+              {!isAddressValidated && (
+                <div className="bg-pink-50 border border-pink-200 rounded-lg p-6">
+                  <div className="flex items-center justify-center space-x-2 text-red-700">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                    </svg>
+                    <span className="font-medium">Please validate your shipping address to see delivery options</span>
+                  </div>
+                  <p className="text-sm text-red-600 text-center mt-2">
+                    Enter your complete correct address and select a validated address from the suggestions to continue.
+                  </p>
+                </div>
+              )}
                 <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
                   <FaMapMarkerAlt className="text-blue-600" />
                   Shipping Address
@@ -571,20 +585,7 @@ export default function Package({ env }) {
                   onValidationStatusChange={setIsAddressValidated}
                 />
               </div>
-              {/* Address validation message */}
-              {!isAddressValidated && (
-                <div className="bg-pink-50 border border-pink-200 rounded-lg p-6">
-                  <div className="flex items-center justify-center space-x-2 text-red-700">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                    </svg>
-                    <span className="font-medium">Please validate your shipping address to see delivery options</span>
-                  </div>
-                  <p className="text-sm text-red-600 text-center mt-2">
-                    Enter your complete address above and select a validated address from the suggestions to continue.
-                  </p>
-                </div>
-              )}
+           
 
               {/* Shipping Options */}
               {isAddressValidated && (
