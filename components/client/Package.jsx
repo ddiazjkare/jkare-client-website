@@ -103,9 +103,9 @@ export default function Package({ env }) {
     if (!receiver.address.trim()) {
       errors.address = "Address is required";
     }
-    if (!receiver.address2.trim()) {
-      errors.address2 = "Apartment / Suite is required";
-    }
+    // if (!receiver.address2.trim()) {
+    //   errors.address2 = "Apartment / Suite is required";
+    // }
 
     if (!receiver.city.trim()) {
       errors.city = "City is required";
