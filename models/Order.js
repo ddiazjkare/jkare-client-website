@@ -64,6 +64,7 @@ const OrderSchema = new mongoose.Schema(
     carrier: { type: String },
     checkout_session: { type: String, default: null },
     shipping_rate: { type: String },
+    shipment_id: { type: String }
   },
   { timestamps: true }
 );

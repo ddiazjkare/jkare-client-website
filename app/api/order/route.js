@@ -229,7 +229,7 @@ export const POST = async (req) => {
       `${process.env.NEXT_PUBLIC_API_URL}/user/info/${customer.email}`
     );
     const user = await user_info.json();
-    let paymentIntent;
+    var paymentIntent;
 
     if (checkout_session.payment_intent)
       paymentIntent = await stripe.paymentIntents.retrieve(
@@ -261,7 +261,7 @@ export const POST = async (req) => {
       order_date: date.toLocaleString(),
       // shipping_address: checkout_session.shipping_details.address,
       // shipping_address: paymentIntent.shipping.address,
-      shipping_address: (await getShipment(id)).address_to,
+      shipping_address: (await getShipment(body.shipment_id)).address_to,
       billing_address: customer.address,
       total_amount: parseFloat(
         (checkout_session.amount_total / 100).toFixed(2)

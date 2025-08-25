@@ -305,6 +305,7 @@ useEffect(() => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...checkoutObj,
+          shipment_id: shipment.object_id,
           card_limit: Number(env.card_limit),
           threshold: parseFloat(env?.offer_price ?? 0),
           metadata: {
