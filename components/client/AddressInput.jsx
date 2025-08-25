@@ -16,24 +16,32 @@ const AddressInput = ({
   const [isFetchingAddress, setIsFetchingAddress] = useState(false);
   const [validationResult, setValidationResult] = useState(null);
   const [validationReasons, setValidationReasons] = useState([]);
+  const [isAddressSelectedFromDropdown, setIsAddressSelectedFromDropdown] = useState(false);
 
   // Handle click outside to close suggestions
   const handleClickOutside = (event) => {
     // Check if click is outside any of the address input containers
     const addressContainers = document.querySelectorAll('[data-address-field]');
     let clickedOutside = true;
-    
+
     addressContainers.forEach(container => {
       if (container.contains(event.target)) {
         clickedOutside = false;
       }
     });
-    
+
     if (clickedOutside) {
       setShowSuggestions(false);
       setActiveField(null);
     }
   };
+
+  // In AddressInput component, add this useEffect
+  useEffect(() => {
+    if (onValidationStatusChange) {
+      onValidationStatusChange(isAddressSelectedFromDropdown);
+    }
+  }, [isAddressSelectedFromDropdown, onValidationStatusChange]);
 
   // Add event listener for click outside
   useEffect(() => {
@@ -59,6 +67,7 @@ const AddressInput = ({
     const { name, value } = e.target;
     const updatedReceiver = { ...receiver, [name]: value };
     setReceiver(updatedReceiver);
+    setIsAddressSelectedFromDropdown(false);
 
     // Clear validation error
     if (validationErrors[name]) {
@@ -179,6 +188,7 @@ const AddressInput = ({
     setReceiver(updatedReceiver);
     setShowSuggestions(false);
     setActiveField(null);
+    setIsAddressSelectedFromDropdown(true);
 
     // Mark address as validated
     if (onValidationStatusChange) {
@@ -282,11 +292,10 @@ const AddressInput = ({
                   {validationReasons.map((reason, idx) => (
                     <div key={idx} className="p-3 border-b border-gray-100 last:border-b-0">
                       <div className="flex items-start space-x-2">
-                        <span className={`inline-block w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${
-                          reason.type === 'correction' ? 'bg-yellow-400' :
-                          reason.type === 'error' ? 'bg-red-400' :
-                          reason.type === 'warning' ? 'bg-orange-400' : 'bg-blue-400'
-                        }`}></span>
+                        <span className={`inline-block w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${reason.type === 'correction' ? 'bg-yellow-400' :
+                            reason.type === 'error' ? 'bg-red-400' :
+                              reason.type === 'warning' ? 'bg-orange-400' : 'bg-blue-400'
+                          }`}></span>
                         <div className="flex-1 min-w-0">
                           <div className="text-xs font-medium text-gray-900 capitalize">
                             {reason.type || 'Info'}: {reason.code?.replace(/_/g, ' ') || 'Validation issue'}
@@ -327,9 +336,8 @@ const AddressInput = ({
             value={receiver.address}
             onChange={handleAddressInput}
             onFocus={() => handleFieldFocus('address')}
-            className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              validationErrors.address ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${validationErrors.address ? 'border-red-500' : 'border-gray-300'
+              }`}
             placeholder="123 Main Street"
           />
           {validationErrors.address && (
@@ -348,14 +356,14 @@ const AddressInput = ({
             value={receiver.address2}
             onChange={handleAddressInput}
             onFocus={() => handleFieldFocus('address2')}
-              className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              validationErrors.address ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent border-gray-300
+              
+              `}
             placeholder="Apt 123"
           />
-          {validationErrors.address2 && (
+          {/* {validationErrors.address2 && (
             <p className="text-red-500 text-xs mt-1">{validationErrors.address2}</p>
-          )}
+          )} */}
           {activeField === 'address2' && renderDropdown()}
         </div>
       </div>
@@ -371,9 +379,8 @@ const AddressInput = ({
             value={receiver.city}
             onChange={handleAddressInput}
             onFocus={() => handleFieldFocus('city')}
-            className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              validationErrors.city ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${validationErrors.city ? 'border-red-500' : 'border-gray-300'
+              }`}
             placeholder="San Francisco"
           />
           {validationErrors.city && (
@@ -392,18 +399,15 @@ const AddressInput = ({
             value={receiver.region}
             onChange={handleAddressInput}
             onFocus={() => handleFieldFocus('region')}
-            className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              validationErrors.region ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${validationErrors.region ? 'border-red-500' : 'border-gray-300'
+              }`}
             placeholder="FL"
-            readOnly
           />
           {validationErrors.region && (
             <p className="text-red-500 text-xs mt-1">{validationErrors.region}</p>
           )}
           {activeField === 'region' && renderDropdown()}
         </div>
-
         <div className="relative" data-address-field="postalCode">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Postal Code *
@@ -414,11 +418,10 @@ const AddressInput = ({
             value={receiver.postalCode}
             onChange={handleAddressInput}
             onFocus={() => handleFieldFocus('postalCode')}
-            className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              validationErrors.postalCode ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${validationErrors.postalCode ? 'border-red-500' : 'border-gray-300'
+              }`}
             placeholder="94103"
-            readOnly
+
           />
           {validationErrors.postalCode && (
             <p className="text-red-500 text-xs mt-1">{validationErrors.postalCode}</p>

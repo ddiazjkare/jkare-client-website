@@ -71,11 +71,11 @@ function OfflineSuccessPage() {
               Order Booked Successfully!
             </h1>
             <div className="space-y-3">
-              <div className="bg-gradient-to-r from-sky-100 to-amber-100 rounded-lg p-3 border border-orange-200">
-                <p className="text-base font-semibold text-orange-800 mb-1">
+              <div className="bg-gradient-to-r from-sky-200 to-pink-200 rounded-lg p-3 border border-orange-200">
+                <p className="text-base font-semibold text-red-800 mb-1">
                   📋 Order Confirmed - Payment Pending
                 </p>
-                <p className="text-orange-700 text-xs leading-relaxed">
+                <p className="text-red-700 text-xs leading-relaxed">
                   Your order is booked! We'll contact you shortly for payment and delivery details.
                 </p>
               </div>
@@ -83,7 +83,7 @@ function OfflineSuccessPage() {
           </div>
 
           {/* Contact Information - Only show when logged in */}
-          {isLoggedIn && (
+          {/* {isLoggedIn && (
             <div className="mb-5">
               <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-3 border border-blue-200">
                 <h3 className="text-sm font-semibold text-blue-800 mb-2 flex items-center">
@@ -102,12 +102,12 @@ function OfflineSuccessPage() {
                 </div>
               </div>
             </div>
-          )}
+          )} */}
 
           {/* Action Buttons */}
           <div className="space-y-3 mb-4">
             <Link href="/product" className="block">
-              <button className="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg transform transition-all duration-200 hover:scale-105 hover:shadow-xl active:scale-95">
+              <button className="w-full bg-gradient-to-r from-sky-500 to-sky-500 hover:from-customPink hover:to-customPink text-white font-bold py-3 px-6 rounded-xl shadow-lg transform transition-all duration-200 hover:scale-105 hover:shadow-xl active:scale-95">
                 <span className="flex items-center justify-center space-x-2">
                   <span>Continue Shopping</span>
                   <span className="text-lg">🛍️</span>
@@ -117,7 +117,7 @@ function OfflineSuccessPage() {
 
             <button
               onClick={handleMyOrders}
-              className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg transform transition-all duration-200 hover:scale-105 hover:shadow-xl active:scale-95"
+              className="w-full bg-gradient-to-r from-customPink to-customPink hover:from-customBlue hover:to-customBlue text-white font-bold py-3 px-6 rounded-xl shadow-lg transform transition-all duration-200 hover:scale-105 hover:shadow-xl active:scale-95"
             >
               <span className="flex items-center justify-center space-x-2">
                 <span>Your Orders</span>
@@ -130,7 +130,6 @@ function OfflineSuccessPage() {
           <div className="space-y-3">
           </div>
         </div>
-
         {/* Additional Elements */}
         <div className="mt-4 text-center">
           <p className="text-xs text-gray-500">
