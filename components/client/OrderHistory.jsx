@@ -142,7 +142,7 @@ function OrderHistory({ orders = [], email }) {
       }
 
       const response = await fetch(
-        `http://localhost:3000/api/track?carrier=${order.carrier}&tracking=${order.tracking_number}`
+        `/api/track?carrier=${order.carrier}&tracking=${order.tracking_number}`
       );
 
       if (!response.ok) {

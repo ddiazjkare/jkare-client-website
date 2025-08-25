@@ -6,7 +6,7 @@ export const generateMetadata = () => {
   };
 };
 const apiCall = async () => {
-    const response = await fetch("http://13.127.44.70/api/ship-env", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ship-env`, {
       cache: "no-store",
     });
   if (!response.ok) {

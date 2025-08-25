@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import Order from "../../../models/Order";
 import Stripe from "stripe";
+import { getShipment } from "@/lib/shippo";
 // import { transaction } from "../../../lib/shippo";
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -28,8 +29,7 @@ function generateMailHtml(order, user) {
       const subtotal = item.price * item.quantity;
       return `
       <tr>
-        <td style="border: 1px solid #e2e8f0; padding: 12px; color: #374151;">${
-          item.product_name
+        <td style="border: 1px solid #e2e8f0; padding: 12px; color: #374151;">${item.product_name
         }</td>
         <td style="border: 1px solid #e2e8f0; padding: 12px; text-align: center;">
           <img 
@@ -76,30 +76,24 @@ function generateMailHtml(order, user) {
           <div style="height: 4px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 2px; margin: 0 auto; width: 80px;"></div>
         </div>
         
-        <p style="color: #374151; font-size: 16px; line-height: 1.6;">Dear <strong>${
-          order.customer_name
-        }</strong>,</p>
+        <p style="color: #374151; font-size: 16px; line-height: 1.6;">Dear <strong>${order.customer_name
+    }</strong>,</p>
         
         <p style="color: #374151; font-size: 16px; line-height: 1.6;">
-          We received your order on <strong style="color: #059669;">${
-            order.order_date
-          }</strong> 
+          We received your order on <strong style="color: #059669;">${order.order_date
+    }</strong> 
           and your payment has been processed successfully. Here are the complete details:
         </p>
 
         <div style="background: #f1f5f9; padding: 20px; border-radius: 12px; margin: 20px 0;">
-          <p style="margin: 0 0 8px 0; color: #475569;"><strong>Order ID:</strong> <span style="color: #059669;">${
-            order.order_id
-          }</span></p>
-          <p style="margin: 0 0 8px 0; color: #475569;"><strong>Email:</strong> ${
-            order.customer_email
-          }</p>
-          <p style="margin: 0 0 8px 0; color: #475569;"><strong>Phone:</strong> ${
-            order.customer_phone || "N/A"
-          }</p>
-          <p style="margin: 0; color: #475569;"><strong>Order Status:</strong> <span style="color: #059669;">${
-            order.order_status
-          }</span></p>
+          <p style="margin: 0 0 8px 0; color: #475569;"><strong>Order ID:</strong> <span style="color: #059669;">${order.order_id
+    }</span></p>
+          <p style="margin: 0 0 8px 0; color: #475569;"><strong>Email:</strong> ${order.customer_email
+    }</p>
+          <p style="margin: 0 0 8px 0; color: #475569;"><strong>Phone:</strong> ${order.customer_phone || "N/A"
+    }</p>
+          <p style="margin: 0; color: #475569;"><strong>Order Status:</strong> <span style="color: #059669;">${order.order_status
+    }</span></p>
         </div>
 
         <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin: 20px 0;">
@@ -107,57 +101,50 @@ function generateMailHtml(order, user) {
           <div style="margin-bottom: 15px;">
             <p style="margin: 0 0 8px 0; color: #475569; font-weight: 600;">Shipping Address:</p>
             <p style="margin: 0; color: #6b7280; font-size: 14px; line-height: 1.5;">
-              ${order.shipping_address.line1}${
-    order.shipping_address.line2 ? `, ${order.shipping_address.line2}` : ""
-  }<br/>
-              ${order.shipping_address.city}, ${order.shipping_address.state} ${
-    order.shipping_address.postal_code
-  }<br/>
+              ${order.shipping_address.line1}${order.shipping_address.line2 ? `, ${order.shipping_address.line2}` : ""
+    }<br/>
+              ${order.shipping_address.city}, ${order.shipping_address.state} ${order.shipping_address.postal_code
+    }<br/>
               ${order.shipping_address.country}
             </p>
           </div>
           <div>
             <p style="margin: 0 0 8px 0; color: #475569; font-weight: 600;">Billing Address:</p>
             <p style="margin: 0; color: #6b7280; font-size: 14px; line-height: 1.5;">
-              ${order.billing_address.line1}${
-    order.billing_address.line2 ? `, ${order.billing_address.line2}` : ""
-  }<br/>
-              ${order.billing_address.city}, ${order.billing_address.state} ${
-    order.billing_address.postal_code
-  }<br/>
+              ${order.billing_address.line1}${order.billing_address.line2 ? `, ${order.billing_address.line2}` : ""
+    }<br/>
+              ${order.billing_address.city}, ${order.billing_address.state} ${order.billing_address.postal_code
+    }<br/>
               ${order.billing_address.country}
             </p>
           </div>
         </div>
 
-        ${
-          order.prescription_required
-            ? `
+        ${order.prescription_required
+      ? `
         <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; margin: 20px 0; border-radius: 0 12px 12px 0;">
           <h4 style="color: #92400e; margin: 0 0 10px 0; font-size: 16px;">📋 Prescription Status</h4>
           <p style="margin: 0; color: #92400e;">
             <strong>Status:</strong> ${order.prescription_status}<br/>
-            ${
-              order.prescription_status === "Pending"
-                ? "Please upload your prescription documents to complete your order."
-                : "Prescription documents received and verified."
-            }
+            ${order.prescription_status === "Pending"
+        ? "Please upload your prescription documents to complete your order."
+        : "Prescription documents received and verified."
+      }
           </p>
         </div>`
-            : ""
-        }
+      : ""
+    }
 
-        ${
-          order.insurance_company
-            ? `
+        ${order.insurance_company
+      ? `
         <div style="background: #e0f7fa; padding: 20px; border-radius: 12px; margin: 20px 0;">
           <h4 style="color: #006064; margin: 0 0 10px 0; font-size: 16px;">🏥 Insurance Information</h4>
           <p style="margin: 0; color: #006064;">
             <strong>Insurance Company:</strong> ${order.insurance_company}
           </p>
         </div>`
-            : ""
-        }
+      : ""
+    }
 
         <h3 style="color: #1e293b; font-size: 18px; margin: 30px 0 15px 0;">📦 Products in Your Order:</h3>
         ${productsTable}
@@ -182,17 +169,16 @@ function generateMailHtml(order, user) {
       order.tax_amount
     )}</span>
   </div>
-  ${
-    order.discount_amount > 0
+  ${order.discount_amount > 0
       ? `
   <div style="margin-bottom: 8px;">
     <span style="color: #dc2626;">Discount: </span>
     <span style="color: #dc2626; font-weight: 600;">-${formatPrice(
-      order.discount_amount
-    )}</span>
+        order.discount_amount
+      )}</span>
   </div>`
       : ""
-  }
+    }
   <hr style="border: none; border-top: 2px solid #e2e8f0; margin: 15px 0;">
   <div>
     <span style="color: #1e293b; font-size: 18px; font-weight: 700;">Total: </span>
@@ -243,10 +229,12 @@ export const POST = async (req) => {
       `${process.env.NEXT_PUBLIC_API_URL}/user/info/${customer.email}`
     );
     const user = await user_info.json();
+    let paymentIntent;
 
-    const paymentIntent = await stripe.paymentIntents.retrieve(
-      checkout_session.payment_intent
-    );
+    if (checkout_session.payment_intent)
+      paymentIntent = await stripe.paymentIntents.retrieve(
+        checkout_session.payment_intent
+      );
 
     if (user.message == "Not Found") {
       await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/create`, {
@@ -272,7 +260,8 @@ export const POST = async (req) => {
       customer_phone: customer.phone,
       order_date: date.toLocaleString(),
       // shipping_address: checkout_session.shipping_details.address,
-      shipping_address: paymentIntent.shipping.address,
+      // shipping_address: paymentIntent.shipping.address,
+      shipping_address: (await getShipment(id)).address_to,
       billing_address: customer.address,
       total_amount: parseFloat(
         (checkout_session.amount_total / 100).toFixed(2)
@@ -306,8 +295,7 @@ export const POST = async (req) => {
     const parsedProdList = JSON.parse(checkout_session.metadata.products);
     for (const item of productItems) {
       const prodResp = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/product/${
-          parsedProdList[item.description]
+        `${process.env.NEXT_PUBLIC_API_URL}/product/${parsedProdList[item.description]
         }`,
         {
           method: "PUT",
