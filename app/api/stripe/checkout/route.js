@@ -5,6 +5,7 @@ export const POST = async (req) => {
   try {
     let { line_items, email, metadata, selectedRate, total_amount, name, address, card_limit, threshold } = await req.json();
 
+
     line_items = line_items.map(item => ({ ...item
       // , 
       // tax_rates: ["txr_1R6upeCcxBtZCrgdsRtoPFQ8"]

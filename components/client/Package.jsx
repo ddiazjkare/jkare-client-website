@@ -94,11 +94,11 @@ export default function Package({ env }) {
       errors.email = "Please enter a valid email address";
     }
 
-    if (!receiver.phone.trim()) {
-      errors.phone = "Phone number is required";
-    } else if (!validatePhone(receiver.phone)) {
-      errors.phone = "Please enter a valid phone number ";
-    }
+    // if (!receiver.phone.trim()) {
+    //   errors.phone = "Phone number is required";
+    // } else if (!validatePhone(receiver.phone)) {
+    //   errors.phone = "Please enter a valid phone number ";
+    // }
 
     if (!receiver.address.trim()) {
       errors.address = "Address is required";
@@ -305,13 +305,13 @@ useEffect(() => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...checkoutObj,
-          shipment_id: shipment.object_id,
           card_limit: Number(env.card_limit),
           threshold: parseFloat(env?.offer_price ?? 0),
           metadata: {
             ...checkoutObj.metadata,
             shipping_rate: selectedRate.object_id,
             carrier: selectedRate.provider,
+            shipment_id: shipment.object_id,
           },
           name: receiver.name.trim(),
           address: {
