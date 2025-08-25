@@ -63,7 +63,7 @@ function Cart({ isCartOpen, authSession, cartRef}) {
           ${isCartOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-8'}
           /* Breakpoints */
           sm:left-auto sm:right-6 sm:translate-x-0 sm:w-96 sm:top-16  
-          lg:absolute lg:-left-72 lg:top-16                           
+          lg:absolute lg:-left-72 lg:top-16 font-montserrat                           
         `}
       >
         <div className='p-4 max-h-72 overflow-auto'>

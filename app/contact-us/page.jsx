@@ -3,20 +3,12 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { LoadScript, GoogleMap, Marker } from "@react-google-maps/api";
 import { Mail, Phone, MapPin, Printer } from "lucide-react";
 import { useSession } from "next-auth/react";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { isValidPhoneNumber } from "react-phone-number-input";
-const containerStyle = {
-  width: "100%",
-  height: "100%",
-};
-const center = {
-  lat: 25.7617,
-  lng: -80.1918,
-};
+
 export default function Contact() {
   const { data: session } = useSession();
   let localUser = typeof window !== "undefined" && window.localStorage.getItem("nextUser");
@@ -28,6 +20,9 @@ export default function Contact() {
   const [isLoading, setIsLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const pageTitle = "Contact Us | JKARE";
+
+  // Google Maps link
+  const googleMapsLink = "https://www.google.com/maps/place/JKARE,+Formerly+Known+as+Pediatric+Respiratory+Care+of+South+Florida,+Inc/@25.731259,-80.31862,16z/data=!4m10!1m2!2m1!1s4101+SW+73rd+Ave+Suite+C+jkare!3m6!1s0x88d9e712d4407187:0x5361a8e6e585ed1b!8m2!3d25.7318801!4d-80.3126929!15sCh40MTAxIFNXIDczcmQgQXZlIFN1aXRlIEMgamthcmVaICIeNDEwMSBzdyA3M3JkIGF2ZSBzdWl0ZSBjIGprYXJlkgEabWVkaWNhbF9lcXVpcG1lbnRfc3VwcGxpZXKaASRDaGREU1VoTk1HOW5TMFZKUTBGblNVTXRjMlJ1UzE5UlJSQUKqAWAKDC9nLzEyNjBuMXlxeBABKgkiBWprYXJlKAAyHxABIhsLaVxT_9XOVlpKJWMMJwqz1R3TAzYsJf3y6VwyIhACIh40MTAxIHN3IDczcmQgYXZlIHN1aXRlIGMgamthcmXgAQD6AQUIugEQPg!16s%2Fg%2F1260n1yqx?entry=ttu&g_ep=EgoyMDI1MDgxOS4wIKXMDSoASAFQAw%3D%3D";
 
   useEffect(() => {
     document.title = pageTitle;
@@ -51,7 +46,6 @@ export default function Contact() {
       return () => clearTimeout(timer);
     }
   }, [showToast]);
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -273,13 +267,32 @@ export default function Contact() {
             </form>
           </div>
 
-          {/* MAP */}
-          <div className="order-1 lg:order-2 relative h-[450px] lg:h-auto w-full rounded-2xl overflow-hidden shadow-xl">
-            <LoadScript googleMapsApiKey={process.env.GOOGLE_API_KEY}>
-              <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12}>
-                <Marker position={center} />
-              </GoogleMap>
-            </LoadScript>
+          {/* MAP IMAGE - Clickable */}
+          <div className="order-1 lg:order-2 relative h-[450px] lg:h-auto w-full rounded-2xl overflow-hidden shadow-xl group cursor-pointer">
+            <a 
+              href={googleMapsLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full h-full relative"
+            >
+              <Image
+                src="https://s3.ap-south-1.amazonaws.com/jkare.data/Screenshot+2025-08-25+231842.png"
+                alt="JKARE Location Map - Click to view on Google Maps"
+                layout="fill"
+                objectFit="cover"
+                className="w-full h-full transition-transform duration-300 group-hover:scale-105"
+                priority
+              />
+              {/* Overlay for better visibility */}
+              <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="flex items-center gap-2 text-customBlue font-medium">
+                    <MapPin className="h-5 w-5" />
+                    <span>Click to open in Google Maps</span>
+                  </div>
+                </div>
+              </div>
+            </a>
           </div>
         </div>
       </section>

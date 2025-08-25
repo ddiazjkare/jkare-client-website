@@ -211,7 +211,7 @@ const handleFileChange = (index, e) => {
 
   /* ----------  JSX  ---------- */
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 font-montserrat">
       <div className="h-[50vh] w-[95vw] max-w-5xl overflow-y-auto rounded-lg bg-white p-4 sm:p-6">
         {/* ──────────────────────────  PRESCRIPTION  ───────────────────────── */}
         {prescriptionItems.length > 0 && (

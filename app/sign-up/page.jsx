@@ -252,10 +252,12 @@ const SignUpForm = () => {
   };
 
   return (
-    <div
-      className="flex min-h-screen items-center justify-center lg:justify-center bg-cover bg-center overflow-hidden"
-      style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/jkare.data/banner+image.jpg')" }}
-    >
+   <div className="flex min-h-screen items-center justify-center lg:justify-center overflow-hidden relative">
+  {/* Blurred background */}
+  <div 
+    className="absolute inset-0 bg-cover bg-center blur-md"
+    style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/jkare.data/banner+image.jpg')" }}
+  ></div>
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -277,10 +279,11 @@ const SignUpForm = () => {
       />
    
       {/* Background image for mobiles */}
-      <div
-        className="lg:hidden absolute inset-0 z-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/jkare.data/banner+image.jpg')" }}
-      ></div>
+    {/* Background image for mobiles */}
+<div
+  className="lg:hidden absolute inset-0 z-0 bg-cover bg-center blur-md"
+  style={{ backgroundImage: "url('https://s3.ap-south-1.amazonaws.com/jkare.data/banner+image.jpg')" }}
+></div>
       <div className="relative p-8 mx-4 rounded-lg max-w-md w-full z-10 lg:mr-32 border-2 border-white shadow-2xl bg-black/30 backdrop-blur-xl object-center">
         <h2 className="text-4xl font-bold mb-6 text-white text-center">
           Sign Up

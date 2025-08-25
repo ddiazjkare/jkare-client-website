@@ -179,7 +179,7 @@ const AdvancedProductDetail = ({ data, env }) => {
   const isOutOfStock = data.product.stockQuantity === 0;
 
   return (
-    <div className="min-h-screen bg-white mt-24">
+    <div className="min-h-screen bg-white mt-24 font-montserrat">
       {/* Breadcrumb */}
       <div className="bg-gray-50 border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">

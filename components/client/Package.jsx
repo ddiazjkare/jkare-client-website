@@ -26,7 +26,7 @@ export default function Package({ env }) {
     address: "",
     address2: "",
     postalCode: "",
-    city: "Florida",
+    city: "",
     region: "FL",
     location: "US",
   });
@@ -490,7 +490,7 @@ useEffect(() => {
         />
       )}
 
-      <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8 mt-8 sm:mt-20">
+      <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8 mt-8 sm:mt-20 font-montserrat">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8">
