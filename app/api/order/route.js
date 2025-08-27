@@ -336,7 +336,7 @@ export const POST = async (req) => {
         description: product.product.prod_desc,
         image: product.product.prod_images[0],
         quantity: item.quantity,
-        price: (item.amount_total / 100).toFixed(2),
+        price: product.product.prod_value,
         prescription_required:
           product.product._id in presItems ||
           presItems[product.product._id] == "",

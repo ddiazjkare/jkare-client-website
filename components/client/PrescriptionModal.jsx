@@ -11,6 +11,7 @@ function PrescriptionModal({ cart, isModalOpen, setIsModalOpen, email }) {
   const [insuranceFile, setInsuranceFile] = useState(null);
   const [isCheckoutDisabled, setIsCheckoutDisabled] = useState(true);
   const [sameFile, setSameFile] = useState(null);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   const [prescriptionItems, setPrescriptionItems] = useState(
     cart.length ? cart.filter((i) => i.prescription) : []
@@ -20,21 +21,30 @@ function PrescriptionModal({ cart, isModalOpen, setIsModalOpen, email }) {
   const sameRef = useRef(null);
   const router = useRouter();
 
-  /* ----------  Disable / enable checkout  ---------- */
-const checkDisabled = (later, sameForAll) => {
-  const perItemReady =
-    prescriptionItems.length > 0 &&
-    prescriptionItems.every((item) => item.file);
-  const sameFileReady = sameForAll && sameFile;
-  setIsCheckoutDisabled(
-    !(perItemReady || sameFileReady || later)
-  );
-};
+  const validateFileSize = (file) => {
+    const maxSize = 1024 * 1024; // 1MB in bytes
+    if (file.size > maxSize) {
+      alert("File size exceeds 1MB limit. Please reduce the file size to 1MB or less to upload.");
+      return false;
+    }
+    return true;
+  };
 
-useEffect(() => {
-  checkDisabled(uploadLater, sameFileForAll);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [fileInputRefs, uploadLater, sameFileForAll, sameFile, prescriptionItems, isModalOpen]);
+  /* ----------  Disable / enable checkout  ---------- */
+  const checkDisabled = (later, sameForAll) => {
+    const perItemReady =
+      prescriptionItems.length > 0 &&
+      prescriptionItems.every((item) => item.file);
+    const sameFileReady = sameForAll && sameFile;
+    setIsCheckoutDisabled(
+      !(perItemReady || sameFileReady || later)
+    );
+  };
+
+  useEffect(() => {
+    checkDisabled(uploadLater, sameFileForAll);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fileInputRefs, uploadLater, sameFileForAll, sameFile, prescriptionItems, isModalOpen]);
   if (!isModalOpen) return null;
 
   /* ----------  Helpers  ---------- */
@@ -42,31 +52,35 @@ useEffect(() => {
     fileInputRefs.current.forEach((f) => f && (f.value = ""));
   };
 
-const handleFileChange = (index, e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+  const handleFileChange = (index, e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  const reader = new FileReader();
-  reader.onloadend = () => {
-    setPrescriptionItems((prev) => {
-      const updated = [...prev];
-      updated[index] = {
-        ...updated[index],
-        file: {
-          fileName: file.name,
-          fileSize: file.size,
-          fileType: file.type,
-          filePreview: reader.result,
-        },
-      };
-      // Call checkDisabled after state update
-    //  setTimeout(() => checkDisabled(uploadLater, sameFileForAll), 0);
-      return updated;
-    });
+    // Validate file size
+    if (!validateFileSize(file)) {
+      e.target.value = ""; // Clear the input
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPrescriptionItems((prev) => {
+        const updated = [...prev];
+        updated[index] = {
+          ...updated[index],
+          file: {
+            fileName: file.name,
+            fileSize: file.size,
+            fileType: file.type,
+            filePreview: reader.result,
+          },
+        };
+        return updated;
+      });
+    };
+    reader.readAsDataURL(file);
+    fileInputRefs.current[index] = file;
   };
-  reader.readAsDataURL(file);
-  fileInputRefs.current[index] = file;
-};
 
   const sameUploadHandler = () => {
     setSameFileForAll((prev) => !prev);
@@ -80,7 +94,18 @@ const handleFileChange = (index, e) => {
     }
   };
 
-  const sameFileUploader = (e) => setSameFile(e.target.files[0]);
+  const sameFileUploader = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file size
+    if (!validateFileSize(file)) {
+      e.target.value = ""; // Clear the input
+      return;
+    }
+
+    setSameFile(file);
+  };
 
   const updloadLaterHandler = () => {
     setUploadLater((prev) => !prev);
@@ -94,6 +119,13 @@ const handleFileChange = (index, e) => {
   const handleInsuranceUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+    // Validate file size
+    if (!validateFileSize(file)) {
+      e.target.value = ""; // Clear the input
+      return;
+    }
+
     const reader = new FileReader();
     reader.onloadend = () =>
       setInsuranceFile({
@@ -112,12 +144,14 @@ const handleFileChange = (index, e) => {
 
   /* ----------  Checkout  ---------- */
   const checkoutHandler = async () => {
+    setIsCheckingOut(true);
     if (
       insuranceOption === "upload" &&
       (!insuranceFile || selectedInsurance === "")
     ) {
       alert("Please select an insurance company and upload a file.");
       return;
+
     }
 
     let metadata = {};
@@ -203,10 +237,11 @@ const handleFileChange = (index, e) => {
       total_amount: totalCartValue,
       ...(email && { email }),
     };
-
+    window.dispatchEvent(new CustomEvent('closeCart'));
     localStorage.setItem("checkoutStorage", JSON.stringify(checkoutObj));
     router.push("/package-shipment");
     setIsModalOpen(false);
+    setIsCheckingOut(false);
   };
 
   /* ----------  JSX  ---------- */
@@ -241,7 +276,7 @@ const handleFileChange = (index, e) => {
                     <th className="border p-2">S.no</th>
                     <th className="border p-2">Image</th>
                     <th className="border p-2">Product</th>
-                    <th className="border p-2">Price&nbsp;($)</th>
+                    <th className="border p-2">Price&nbsp;($)/P</th>
                     <th className="border p-2">Qty</th>
                     <th className="border p-2">Upload</th>
                   </tr>
@@ -250,7 +285,7 @@ const handleFileChange = (index, e) => {
                   {prescriptionItems.map((item, idx) => (
                     <tr key={item.product_id} className="text-center">
                       <td className="border p-2">{idx + 1}.</td>
-                      <td className="border p-2">
+                      <td className="p-2 flex justify-center border">
                         <img
                           src={item.images[0]}
                           alt={item.title}
@@ -437,16 +472,22 @@ const handleFileChange = (index, e) => {
           >
             Cancel
           </button>
-
           <button
-            className={`rounded-lg px-4 py-2 text-sm text-white transition ${isCheckoutDisabled
+            className={`rounded-lg px-4 py-2 text-sm text-white transition ${isCheckoutDisabled || isCheckingOut
               ? "cursor-not-allowed bg-gray-400"
               : "bg-customBlue hover:bg-customPink"
               }`}
             onClick={checkoutHandler}
-            disabled={isCheckoutDisabled}
+            disabled={isCheckoutDisabled || isCheckingOut}
           >
-            Checkout
+            {isCheckingOut ? (
+              <div className="flex items-center gap-2">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
+                Checking out...
+              </div>
+            ) : (
+              "Checkout"
+            )}
           </button>
         </div>
       </div>
