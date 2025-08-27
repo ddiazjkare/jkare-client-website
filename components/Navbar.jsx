@@ -316,12 +316,6 @@ const Navbar = () => {
                     </h4>
                     <hr className="border-gray-300 mb-2" />
                     <div className="flex flex-col space-y-1 text-sm">
-                      {/* <HoveredLink href={`/ProductBrochers#${encodeURIComponent(
-                        "biwaze-clear-lung-expansion-device-for-home-care"
-                      )}`}>BiWaze Clear Lung Expansion Device for Home Care</HoveredLink>
-                      <HoveredLink href={`/ProductBrochers#${encodeURIComponent(
-                        "biwaze-cough-for-home-care-english"
-                      )}`}>Biwaze Cough For Home Care (English)</HoveredLink> */}
                       <HoveredLink href={`/ProductBrochers#${encodeURIComponent(
                         "afflovest-english"
                       )}`}>Afflovest (English)</HoveredLink>
@@ -331,27 +325,23 @@ const Navbar = () => {
                       <HoveredLink href={`/ProductBrochers#${encodeURIComponent(
                         "myairvo-use-and-care-guide"
                       )}`}>MyAirvo Use and Care Guide</HoveredLink>
-                      <HoveredLink href={`/ProductBrochers#${encodeURIComponent(
-                        "biwaze-clear-lung-expansion-device-for-home-care"
-                      )}`}>BiWaze Products</HoveredLink>
+                      <div className="mb-2">
+                        <span className="font-semibold text-gray-800">BiWaze Products</span>
+                        <div className="ml-3 mt-1 flex flex-col space-y-1">
+                          <div>
+                            <HoveredLink href={`/ProductBrochers#${encodeURIComponent(
+                              "biwaze-clear-lung-expansion-device-for-home-care"
+                            )}`}> BiWaze Clear Lung Expansion Device for Home Care</HoveredLink>
+                          </div>
+                          <div>
+                            <HoveredLink href={`/ProductBrochers#${encodeURIComponent(
+                              "biwaze-cough-for-home-care-english"
+                            )}`}>BiWaze Cough for Home Care (English)</HoveredLink>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  {/* 6th Column */}
-                  {/* <div>
-                    <h4 className="text-base font-semibold mb-1">
-                      Biwaze Products
-                    </h4>
-                    <hr className="border-gray-300 mb-2" />
-                    <div className="flex flex-col space-y-1 text-sm">
-                          <HoveredLink href={`/ProductBrochers#${encodeURIComponent(
-                        "biwaze-clear-lung-expansion-device-for-home-care"
-                      )}`}>BiWaze Clear Lung Expansion Device for Home Care</HoveredLink>
-                      <HoveredLink href={`/ProductBrochers#${encodeURIComponent(
-                        "biwaze-cough-for-home-care-english"
-                      )}`}>Biwaze Cough For Home Care (English)</HoveredLink>
-              
-                    </div>
-                  </div> */}
                 </div>
 
 
@@ -496,7 +486,6 @@ const Navbar = () => {
               </Link>
             )}
           </div>
-
           {/* Hamburger (Mobile) */}
           <div className="lg:hidden">
             <GiHamburgerMenu
@@ -644,55 +633,30 @@ const Navbar = () => {
                 <Link href="/EquipmentGuide" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Nebulizer/Compressor Therapy & Cleaning Instructions
                 </Link>
-
                 {/* ——— 5. Product Information ——— */}
                 <span className="block font-semibold mt-3">Product Information</span>
-                {/* <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
-                  Biwaze Airway Clearance System User Manual
-                </Link>
-                <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
-                  Biwaze Clear Quick Hits
-                </Link> */}
                 <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Afflovest (English)
                 </Link>
-                <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
-                  Biwaze Products
-                </Link>
-                {/* <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
-                  Biwaze Cough User Manual (English)
-                </Link>
-                <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
-                  Biwaze Cough User Manual (Spanish)
-                </Link> */}
                 <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   Oxlife Liberty User Manual
                 </Link>
                 <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
                   MyAirvo Use and Care Guide
                 </Link>
-                {/* ——— 6.Biwaze Product  ——— */}
-                {/* <span className="block font-semibold mt-3">Biwaze Products</span>
-                 <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
-                  Biwaze Airway Clearance System User Manual
+                <span className="block font-semibold mt-1 px-3">BiWaze Products</span>
+                <Link href={`/ProductBrochers#${encodeURIComponent("biwaze-clear-lung-expansion-device-for-home-care")}`} onClick={delayedCloseMobileMenu} className="block px-6 py-1 rounded text-gray-600 hover:bg-gray-100">
+                  BiWaze Clear Lung Expansion Device for Home Care
                 </Link>
-                <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
-                  Biwaze Clear Quick Hits
+                <Link href={`/ProductBrochers#${encodeURIComponent("biwaze-cough-for-home-care-english")}`} onClick={delayedCloseMobileMenu} className="block px-6 py-1 rounded text-gray-600 hover:bg-gray-100">
+                  BiWaze Cough for Home Care (English)
                 </Link>
-                <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
-                  Biwaze Cough User Manual (English)
-                </Link>
-                <Link href="/ProductBrochers" onClick={delayedCloseMobileMenu} className="block px-3 py-1 rounded text-gray-600 hover:bg-gray-100">
-                  Biwaze Cough User Manual (Spanish)
-                </Link> */}
               </div>
             )}
-
             <Link
               href="/about-us"
               className="block text-gray-700 hover:bg-gray-100 px-3 py-2 rounded"
               onClick={delayedCloseMobileMenu}
-
             >
               About Us
             </Link>

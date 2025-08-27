@@ -1,9 +1,8 @@
-/* eslint-disable react/no-unescaped-entities */
 "use client";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Mail, Phone, MapPin, Printer } from "lucide-react";
+import { Mail, Phone, MapPin, Printer, Clock } from "lucide-react";
 import { useSession } from "next-auth/react";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
@@ -269,7 +268,7 @@ export default function Contact() {
 
           {/* MAP IMAGE - Clickable */}
           <div className="order-1 lg:order-2 relative h-[450px] lg:h-auto w-full rounded-2xl overflow-hidden shadow-xl group cursor-pointer">
-            <a 
+            <a
               href={googleMapsLink}
               target="_blank"
               rel="noopener noreferrer"
@@ -301,7 +300,7 @@ export default function Contact() {
       {/* INFO STRIP */}
       {/* -------------------------------------------------- */}
       <section className="bg-white py-12 px-6 md:px-10 lg:px-16 xl:px-20 font-montserrat">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-10">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-5 gap-10">
           <div className="flex md:flex-col md:items-start items-center gap-4">
             <MapPin className="h-10 w-10 text-customBlue flex-shrink-0" />
             <div>
@@ -332,6 +331,13 @@ export default function Contact() {
             <div>
               <h4 className="text-lg font-semibold text-customBlue">Fax</h4>
               <p className="text-gray-700 leading-snug">305‑248‑1009</p>
+            </div>
+          </div>
+          <div className="flex md:flex-col md:items-start items-center gap-4">
+            <Clock className="h-10 w-10 text-customBlue flex-shrink-0" />
+            <div>
+              <h4 className="text-lg font-semibold text-customBlue">Working Hours</h4>
+              <p className="text-gray-700 leading-snug">7:30 am – 4:00 pm</p>
             </div>
           </div>
         </div>
