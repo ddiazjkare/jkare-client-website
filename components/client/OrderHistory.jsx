@@ -164,11 +164,12 @@ function OrderHistory({ orders = [], email }) {
       case "pending":
         return "bg-gradient-to-r from-amber-400 to-yellow-500";
       case "completed":
+        return "bg-gradient-to-r from-emerald-400 to-green-500";
       case "received":
         return "bg-gradient-to-r from-emerald-400 to-green-500";
       case "cancelled":
         return "bg-gradient-to-r from-red-400 to-red-500";
-      case "transit":
+      case "in transit":
         return "bg-gradient-to-r from-blue-400 to-blue-500";
       case "delivered":
         return "bg-gradient-to-r from-green-500 to-emerald-600";
@@ -176,12 +177,15 @@ function OrderHistory({ orders = [], email }) {
         return "bg-gradient-to-r from-gray-400 to-gray-500";
     }
   };
+  const getOrderStatusText = (status) => {
+    return status?.toLowerCase() === "completed" ? "Ready to Ship" : status;
+  };
 
   const getTrackingStatusIcon = (status) => {
     switch (status?.toLowerCase()) {
       case "unknown":
         return "🔍";
-      case "transit":
+      case "in transit":
         return "🚚";
       case "delivered":
         return "📦";
@@ -349,7 +353,7 @@ function OrderHistory({ orders = [], email }) {
                         Prescription: {order.prescription_status}
                       </span>
                       <span className={`${getStatusColor(order.order_status)} text-white text-xs font-bold px-4 py-2 rounded-full text-center shadow-lg`}>
-                        Order: {order.order_status}
+                        Order: {getOrderStatusText(order.order_status)}
                       </span>
                     </div>
                   </div>
@@ -566,7 +570,7 @@ function OrderHistory({ orders = [], email }) {
                         </div>
                       </div>
 
-                      {(order.order_status === "Completed" || (order.order_status === "Delivered" || order.order_status ==="In Transit" && order.tracking_number && order.carrier)) && (
+                      {( (order.order_status === "Delivered" || order.order_status === "In Transit" && order.tracking_number && order.carrier)) && (
                         <button
                           onClick={() => handleTrackShipment(order)}
                           className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold py-3 px-4 rounded-xl hover:from-blue-600 hover:to-indigo-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center"
