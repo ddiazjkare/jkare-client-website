@@ -566,7 +566,7 @@ function OrderHistory({ orders = [], email }) {
                         </div>
                       </div>
 
-                      {(order.order_status === "Completed" && order.tracking_number && order.carrier) && (
+                      {(order.order_status === "Completed" || (order.order_status === "Delivered" || order.order_status ==="In Transit" && order.tracking_number && order.carrier)) && (
                         <button
                           onClick={() => handleTrackShipment(order)}
                           className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold py-3 px-4 rounded-xl hover:from-blue-600 hover:to-indigo-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center"
