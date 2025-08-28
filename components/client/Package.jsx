@@ -12,7 +12,7 @@ import "react-phone-number-input/style.css";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import AddressInput from "./AddressInput"
 
-export default function Package({ env }) {
+export default function Package({ env, userData }) {
   const [showConfetti, setShowConfetti] = useState(false);
   const [isProcessingOfflinePayment, setIsProcessingOfflinePayment] = useState(false);
   const router = useRouter();
@@ -50,6 +50,32 @@ export default function Package({ env }) {
   // For free shipping
   const [isFreeShipping, setIsFreeShipping] = useState(false);
   const [displayedRates, setDisplayedRates] = useState([]);
+
+  useEffect(() => {
+    // Your existing cart loading code...
+
+    // Populate user data if available
+    if (userData) {
+      setReceiver(prev => ({
+        ...prev,
+        name: userData.fullName || "",
+        email: userData.email || userEmail,
+        phone: userData.phone || "",
+        address: userData.address?.line1 || "",
+        address2: userData.address?.line2 || "",
+        city: userData.address?.city || "",
+        region: userData.address?.state || "FL",
+        postalCode: userData.address?.postal_code || "",
+        location: userData.address?.country || "US",
+      }));
+
+      // If user has complete address, mark as validated
+      if (userData.address?.line1 && userData.address?.city &&
+        userData.address?.state && userData.address?.postal_code) {
+        setIsAddressValidated(true);
+      }
+    }
+  }, [userData]); // Add userData as dependency
 
   useEffect(() => {
     if (!shipment?.rates?.length) {
@@ -553,7 +579,7 @@ export default function Package({ env }) {
                       <input
                         type="email"
                         name="email"
-                        value={receiver.email || userEmail}
+                        value={receiver.email || userData?.email}
                         onChange={handleInputChange}
                         className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${validationErrors.email ? 'border-red-500' : 'border-gray-300'
                           }`}
