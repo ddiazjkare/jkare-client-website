@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Confetti from "react-confetti";
 import { FaShippingFast, FaShoppingCart, FaRegAddressBook, FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
 import { MdOutlineLocalShipping } from "react-icons/md";
+import { useSession } from "next-auth/react";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { isValidPhoneNumber } from "react-phone-number-input";
@@ -15,6 +16,10 @@ export default function Package({ env }) {
   const [showConfetti, setShowConfetti] = useState(false);
   const [isProcessingOfflinePayment, setIsProcessingOfflinePayment] = useState(false);
   const router = useRouter();
+  const { data: session } = useSession();
+  let localUser = typeof window !== "undefined" && window.localStorage.getItem("nextUser");
+  localUser = localUser ? JSON.parse(localUser) : null;
+  const userEmail = (localUser && localUser.email) || (session && session.user && session.user.email) || "";
 
   // =========================================================
   // 1) State
@@ -132,20 +137,20 @@ export default function Package({ env }) {
   };
 
   // Add this useEffect in Package.js after the existing useEffects
-useEffect(() => {
-  if (isAddressValidated) {
-    // Clear address-related validation errors when address is validated
-    setValidationErrors(prev => {
-      const newErrors = { ...prev };
-      delete newErrors.address;
-      delete newErrors.address2;
-      delete newErrors.city;
-      delete newErrors.region;
-      delete newErrors.postalCode;
-      return newErrors;
-    });
-  }
-}, [isAddressValidated]);
+  useEffect(() => {
+    if (isAddressValidated) {
+      // Clear address-related validation errors when address is validated
+      setValidationErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.address;
+        delete newErrors.address2;
+        delete newErrors.city;
+        delete newErrors.region;
+        delete newErrors.postalCode;
+        return newErrors;
+      });
+    }
+  }, [isAddressValidated]);
 
   const isFormValid = () => {
     return receiver.name.trim() &&
@@ -548,7 +553,7 @@ useEffect(() => {
                       <input
                         type="email"
                         name="email"
-                        value={receiver.email}
+                        value={receiver.email || userEmail}
                         onChange={handleInputChange}
                         className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${validationErrors.email ? 'border-red-500' : 'border-gray-300'
                           }`}

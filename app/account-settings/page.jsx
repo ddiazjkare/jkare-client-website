@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
+import AddressInput from "../../components/client/AddressInput";
 import { isValidPhoneNumber } from "react-phone-number-input";
 
 const EditProfile = () => {
@@ -20,6 +21,7 @@ const EditProfile = () => {
 
   const [name, setName] = useState("");
   const [activeOption, setActiveOption] = useState("/profile-detail");
+  const [hasAddressChanged, setHasAddressChanged] = useState(false);
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState({});
   const [loading, setLoading] = useState(false);
@@ -29,6 +31,16 @@ const EditProfile = () => {
   );
   const [file, setFile] = useState(null);
   const [userInfo, setUserInfo] = useState({});
+  const [receiver, setReceiver] = useState({
+    address: "",
+    address2: "",
+    city: "Florida",
+    region: "FL",
+    postalCode: "",
+    location: "US"
+  });
+  const [isAddressValidated, setIsAddressValidated] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
 
   const router = useRouter();
   const pageTitle = "Profile Detail";
@@ -44,6 +56,16 @@ const EditProfile = () => {
         setName(userData.fullName || "");
         setPhone(userData.phone || "");
         setAddress(userData.address || {});
+        setReceiver({
+          address: userData.address?.line1 || "",
+          address2: userData.address?.line2 || "",
+          city: userData.address?.city || "",
+          region: userData.address?.state || "",
+          postalCode: userData.address?.postal_code || "",
+          location: userData.address?.country || "US"
+        });
+        setHasAddressChanged(false); // Initialize as false when data is loaded
+        setIsAddressValidated(false); // Initialize validation state
         setProfilePhoto(
           userData.image && userData.image.trim() !== ""
             ? userData.image
@@ -59,6 +81,19 @@ const EditProfile = () => {
       setDataLoading(false);
     }
   };
+  const syncReceiverToAddress = () => {
+    setAddress({
+      line1: receiver.address,
+      line2: receiver.address2,
+      city: receiver.city,
+      state: receiver.region,
+      postal_code: receiver.postalCode,
+      country: receiver.location
+    });
+  };
+  useEffect(() => {
+    syncReceiverToAddress();
+  }, [receiver]);
 
   useEffect(() => {
     document.title = pageTitle;
@@ -126,7 +161,10 @@ const EditProfile = () => {
   const triggerPhotoUpload = () => {
     document.getElementById("profilePhotoInput").click();
   };
-
+  const handleAddressFieldChange = () => {
+    setHasAddressChanged(true);
+    setIsAddressValidated(false); // Reset validation when address changes
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -136,12 +174,11 @@ const EditProfile = () => {
       if (
         name === "" ||
         phone === "" ||
-        !address ||
-        address?.country === "" ||
-        address?.state === "" ||
-        address?.city === "" ||
-        address?.postal_code === "" ||
-        address?.line1 === ""
+        !receiver.address ||
+        !receiver.city ||
+        !receiver.region ||
+        !receiver.postalCode ||
+        !receiver.location
       ) {
         toast.error("Some fields are missing!");
         setLoading(false);
@@ -284,7 +321,8 @@ const EditProfile = () => {
                   </label>
                   <PhoneInput
                     international
-                    defaultCountry="IN"
+                    defaultCountry="US"
+                    countries={["US"]}
                     value={phone}
                     onChange={value => setPhone(value || "")}
                     className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 focus:outline-none transition-all duration-300 hover:border-gray-300 bg-gray-50 focus:bg-white"
@@ -293,108 +331,48 @@ const EditProfile = () => {
                 </div>
               </div>
 
-              {/* Address Section */}
               <div className="space-y-4">
                 <div className="flex items-center mb-4">
                   <div className="w-0.5 h-6 bg-gradient-to-b from-purple-400 to-pink-400 rounded-full mr-3"></div>
                   <h3 className="text-xl font-bold text-gray-700">📍 Address Information</h3>
                 </div>
 
-                <div>
-                  <label className="block text-gray-700 mb-2 font-semibold text-sm uppercase tracking-wide">
-                    Address Line 1
-                  </label>
-                  <input
-                    type="text"
-                    value={address?.line1 || ""}
-                    name="line1"
-                    onChange={handleAddressChange}
-                    className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 focus:outline-none transition-all duration-300 hover:border-gray-300 bg-gray-50 focus:bg-white"
-                    placeholder="Street address, P.O. Box, company name"
-                  />
-                </div>
+                <AddressInput
+                  receiver={receiver}
+                  setReceiver={(newReceiver) => {
+                    setReceiver(newReceiver);
+                    // Check if any address field has changed
+                    const addressChanged =
+                      newReceiver.address !== (address?.line1 || "") ||
+                      newReceiver.address2 !== (address?.line2 || "") ||
+                      newReceiver.city !== (address?.city || "") ||
+                      newReceiver.region !== (address?.state || "") ||
+                      newReceiver.postalCode !== (address?.postal_code || "") ||
+                      newReceiver.location !== (address?.country || "US");
 
-                <div>
-                  <label className="block text-gray-700 mb-2 font-semibold text-sm uppercase tracking-wide">
-                    Address Line 2
-                  </label>
-                  <input
-                    type="text"
-                    value={address?.line2 || ""}
-                    name="line2"
-                    onChange={handleAddressChange}
-                    className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 focus:outline-none transition-all duration-300 hover:border-gray-300 bg-gray-50 focus:bg-white"
-                    placeholder="Apartment, suite, unit, building, floor, etc."
-                  />
-                </div>
-              </div>
-
-              {/* City, State, Zip, Country Section */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-gray-700 mb-2 font-semibold text-sm uppercase tracking-wide">
-                    🏙️ City
-                  </label>
-                  <input
-                    type="text"
-                    name="city"
-                    value={address?.city || ""}
-                    onChange={handleAddressChange}
-                    className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 focus:outline-none transition-all duration-300 hover:border-gray-300 bg-gray-50 focus:bg-white"
-                    placeholder="Enter city"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700 mb-2 font-semibold text-sm uppercase tracking-wide">
-                    🏛️ State
-                  </label>
-                  <input
-                    type="text"
-                    name="state"
-                    value={address?.state || ""}
-                    onChange={handleAddressChange}
-                    className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 focus:outline-none transition-all duration-300 hover:border-gray-300 bg-gray-50 focus:bg-white"
-                    placeholder="Enter state"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-gray-700 mb-2 font-semibold text-sm uppercase tracking-wide">
-                    📮 Zip Code
-                  </label>
-                  <input
-                    type="text"
-                    name="postal_code"
-                    value={address?.postal_code || ""}
-                    maxLength={6}
-                    onChange={handleAddressChange}
-                    className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 focus:outline-none transition-all duration-300 hover:border-gray-300 bg-gray-50 focus:bg-white"
-                    placeholder="Enter postal code"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700 mb-2 font-semibold text-sm uppercase tracking-wide">
-                    🌍 Country
-                  </label>
-                  <input
-                    type="text"
-                    name="country"
-                    value={address?.country || ""}
-                    onChange={handleAddressChange}
-                    className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 focus:outline-none transition-all duration-300 hover:border-gray-300 bg-gray-50 focus:bg-white"
-                    placeholder="Enter country"
-                  />
-                </div>
+                    if (addressChanged) {
+                      setHasAddressChanged(true);
+                      setIsAddressValidated(false);
+                    }
+                  }}
+                  validationErrors={validationErrors}
+                  setValidationErrors={setValidationErrors}
+                  onAddressChange={syncReceiverToAddress}
+                  onValidationStatusChange={(isValid) => {
+                    setIsAddressValidated(isValid);
+                    if (isValid) {
+                      setHasAddressChanged(false); // Reset when validated address is selected
+                    }
+                  }}
+                />
               </div>
 
               {/* Submit Button */}
               <div className="flex justify-end pt-6">
                 <button
                   type="submit"
-                  disabled={loading}
-                  className={`${loading
+                  disabled={loading || (hasAddressChanged && !isAddressValidated)} // Add this condition
+                  className={`${loading || (hasAddressChanged && !isAddressValidated) // Add this condition
                     ? 'bg-gray-400 cursor-not-allowed'
                     : 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 shadow-lg hover:shadow-xl transform hover:scale-105'
                     } text-white font-bold py-4 px-10 rounded-xl transition-all duration-300 flex items-center space-x-2 min-w-[160px] justify-center`}

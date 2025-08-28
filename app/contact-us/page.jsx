@@ -12,9 +12,7 @@ export default function Contact() {
   const { data: session } = useSession();
   let localUser = typeof window !== "undefined" && window.localStorage.getItem("nextUser");
   localUser = localUser ? JSON.parse(localUser) : null;
-
   const userEmail = (localUser && localUser.email) || (session && session.user && session.user.email) || "";
-
   const [form, setForm] = useState({ name: "", phone: "", email: "", comment: "" });
   const [isLoading, setIsLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
