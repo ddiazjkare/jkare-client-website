@@ -13,12 +13,10 @@ const EditProfile = () => {
   const { data: session, update, status } = useSession();
   const isGoogleProvider = session?.provider === "google";
   let localUser = typeof window !== "undefined" && window.localStorage.getItem("nextUser");
-  console.log("session :", session);
   localUser = localUser ? JSON.parse(localUser) : null;
   const username = (localUser && localUser.username) || (session && session.user && session.user.username) || "";
   const userEmail = (localUser && localUser.email) || (session && session.user && session.user.email) || "";
   const fileInputRef = useRef(null);
-
   const [name, setName] = useState("");
   const [activeOption, setActiveOption] = useState("/profile-detail");
   const [hasAddressChanged, setHasAddressChanged] = useState(false);
@@ -70,8 +68,8 @@ const EditProfile = () => {
           postalCode: userData.address?.postal_code || "",
           location: userData.address?.country || "US"
         });
-        setHasAddressChanged(false); // Initialize as false when data is loaded
-        setIsAddressValidated(false); // Initialize validation state
+        setHasAddressChanged(false); 
+        setIsAddressValidated(false);
         setProfilePhoto(
           userData.image && userData.image.trim() !== ""
             ? userData.image
@@ -215,16 +213,13 @@ const EditProfile = () => {
 
       const updatedUser = await res.json();
 
-      // Immediately update the session (partial update)
       await update({
         user: {
           ...session?.user,
-          ...updatedUser.user,  // e.g., { image, fullName, etc. } returned by your API
-          name,                 // ensure name is updated
+          ...updatedUser.user,  
+          name,               
         },
       });
-
-      // Keep localStorage in sync for your app's usage
       window.localStorage.setItem(
         "nextUser",
         JSON.stringify({
