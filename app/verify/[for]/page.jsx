@@ -17,7 +17,7 @@ function page({ params }) {
         return <Notification subject="User Created Successful!" body="Congratulations, you have been successfully registered with us." />
     
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center p-4 mt-12">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center p-4 mt-12 font-montserrat">
             <div className="max-w-md w-full bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 overflow-hidden">
                 {/* Success Icon */}
                 <div className="bg-gradient-to-r from-green-500 to-emerald-600 p-8 text-center relative">

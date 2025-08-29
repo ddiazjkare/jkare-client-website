@@ -11,12 +11,12 @@ import { isValidPhoneNumber } from "react-phone-number-input";
 
 const EditProfile = () => {
   const { data: session, update, status } = useSession();
+  const isGoogleProvider = session?.provider === "google";
   let localUser = typeof window !== "undefined" && window.localStorage.getItem("nextUser");
+  console.log("session :", session);
   localUser = localUser ? JSON.parse(localUser) : null;
-  const username =
-    (localUser && localUser.username) || (session && session.user && session.user.username) || "";
-  const userEmail =
-    (localUser && localUser.email) || (session && session.user && session.user.email) || "";
+  const username = (localUser && localUser.username) || (session && session.user && session.user.username) || "";
+  const userEmail = (localUser && localUser.email) || (session && session.user && session.user.email) || "";
   const fileInputRef = useRef(null);
 
   const [name, setName] = useState("");
@@ -44,7 +44,13 @@ const EditProfile = () => {
 
   const router = useRouter();
   const pageTitle = "Profile Detail";
-  // Fetch user data on component mount
+
+  const handleChangePhotoHoverFocus = () => {
+    if (isGoogleProvider) {
+      toast.warn("You can't change the profile picture since you're logged in with Google provider.");
+    }
+  };
+
   const fetchUserData = async () => {
     try {
       setDataLoading(true);
@@ -141,15 +147,18 @@ const EditProfile = () => {
   };
 
   const handlePhotoChange = (e) => {
+    if (isGoogleProvider) {
+      // prevent any modification if someone triggers the input manually
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      toast.warn("You can't change the profile picture since you're logged in with Google provider.");
+      return;
+    }
+
     const fileInput = e.target.files?.[0];
     if (!fileInput) return;
 
-    // Validate file size (2MB = 2 * 1024 * 1024 bytes)
     if (fileInput.size > 2 * 1024 * 1024) {
-      // Clear the file input using ref
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
+      if (fileInputRef.current) fileInputRef.current.value = "";
       toast.error("Please select image less than 2MB in size.");
       return;
     }
@@ -159,8 +168,14 @@ const EditProfile = () => {
   };
 
   const triggerPhotoUpload = () => {
+    if (isGoogleProvider) {
+      toast.warn("You can't change the profile picture since you're logged in with Google provider.");
+      return;
+    }
     document.getElementById("profilePhotoInput").click();
   };
+
+
   const handleAddressFieldChange = () => {
     setHasAddressChanged(true);
     setIsAddressValidated(false); // Reset validation when address changes
@@ -199,14 +214,26 @@ const EditProfile = () => {
 
 
       const updatedUser = await res.json();
-      const updatedSession = {
-        ...session,
+
+      // Immediately update the session (partial update)
+      await update({
         user: {
-          ...session.user,
-          name,
-          ...updatedUser.user
+          ...session?.user,
+          ...updatedUser.user,  // e.g., { image, fullName, etc. } returned by your API
+          name,                 // ensure name is updated
         },
-      };
+      });
+
+      // Keep localStorage in sync for your app's usage
+      window.localStorage.setItem(
+        "nextUser",
+        JSON.stringify({
+          ...session?.user,
+          ...updatedUser.user,
+          name,
+        })
+      );
+
 
 
       await update(updatedSession, { redirect: false });
@@ -264,10 +291,15 @@ const EditProfile = () => {
 
             <button
               onClick={triggerPhotoUpload}
-              className="bg-white/90 backdrop-blur-sm text-purple-600 font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-white hover:scale-105 transition-all duration-300 mb-6 border border-white/20"
+              disabled={isGoogleProvider}  // disable when google
+              className={`${isGoogleProvider
+                ? "bg-gray-300 text-gray-600 cursor-not-allowed" // grayed out
+                : "bg-white/90 backdrop-blur-sm text-purple-600 hover:bg-white hover:scale-105"
+                } font-semibold py-3 px-8 rounded-full shadow-lg transition-all duration-300 mb-6 border border-white/20`}
             >
               📸 Change Photo
             </button>
+
 
             {/* Display Username and Email (Read-only) */}
             <div className="w-full space-y-4">

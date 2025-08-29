@@ -10,7 +10,7 @@ const NewsMedia = () => {
   }, [pageTitle]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center font-montserrat">
       <div className="text-center p-8">
         {/* Icon */}
         <div className="mb-6">

@@ -166,13 +166,13 @@ export default function Footer() {
                          text-[12px] sm:text-xs text-white/80 text-center sm:text-left">
           <span>© 2024 JKARE. All Rights Reserved.</span>
           <span className="space-x-2">
-            <Link href="#" className="hover:text-white">
+            {/* <Link href="#" className="hover:text-white">
               Privacy Policy
             </Link>
             <span aria-hidden> | </span>
             <Link href="#" className="hover:text-white">
               Cookie Policy
-            </Link>
+            </Link> */}
             <span aria-hidden> | </span>
             <Link href="https://hexerve.com/" className="hover:text-white">
               Designed and Developed by Hexerve Solutions

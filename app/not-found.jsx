@@ -153,7 +153,7 @@ export default function NotFound() {
         }
       `}</style>
 
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50 flex items-center justify-center px-4 sm:px-6 lg:px-8 relative overflow-hidden mt-12">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50 flex items-center justify-center px-4 sm:px-6 lg:px-8 relative overflow-hidden mt-12 font-montserrat">
         
         {/* Background Medical Icons Animation */}
         <div className="absolute inset-0 pointer-events-none">

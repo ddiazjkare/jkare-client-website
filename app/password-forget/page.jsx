@@ -54,7 +54,7 @@ const Forgot = () => {
 
 
   return (
-   <div className="flex min-h-screen items-center justify-center overflow-hidden relative">
+   <div className="flex min-h-screen items-center justify-center overflow-hidden relative font-montserrat">
   {/* Blurred background */}
   <div 
     className="absolute inset-0 bg-cover bg-center blur-md"

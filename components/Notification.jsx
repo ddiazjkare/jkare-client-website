@@ -37,7 +37,7 @@ function Notification({ subject, body }) {
     const config = getNotificationConfig();
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50 flex items-center justify-center p-4 font-montserrat">
             <div className="max-w-lg w-full bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 overflow-hidden animate-fadeIn">
                 {/* Header with icon */}
                 <div className={`bg-gradient-to-r ${config.bgGradient} p-10 text-center relative`}>
