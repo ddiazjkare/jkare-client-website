@@ -57,9 +57,9 @@ export default function ProductCategory({ categories = [] }) {
               From diagnostic tools to therapeutic devices, ensure optimal patient care with our
               state-of-the-art solutions. Quality you can trust.
             </p> */}
-            <p className="text-white text-sm sm:text-base leading-normal">
+            {/* <p className="text-white text-sm sm:text-base leading-normal">
               Find the Right Medical Equipment for Your Needs.
-            </p>
+            </p> */}
           </div>
         </aside>
 
