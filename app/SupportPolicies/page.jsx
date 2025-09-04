@@ -40,7 +40,7 @@ const guides = [
     //   </>
     // ),
     imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/pexels-photo-7163956.jpg',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/Insurance+Information_2.jpg',
     link: "https://s3.ap-south-1.amazonaws.com/jkare.data/patient+resources+files/Jkare+HME+Accepted+Insurances+updated.pdf",
   },
   {
@@ -49,7 +49,7 @@ const guides = [
     blurb:
       "All medical equipment and supplies require a valid prescription. At JKARE, we ensure all prescriptions meet federal and insurance guidelines, helping you receive the right products safely, efficiently, and in full compliance.",
     imgAlt: 'Woman using nebulizer',
-    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/Prescription+Requirements.webp',
+    imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/Prescription+Requirements.jpg',
     link: "",
   },
   // {
