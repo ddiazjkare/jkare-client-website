@@ -30,7 +30,7 @@ export default function Package({ env, userData }) {
     phone: "",
     address: "",
     address2: "",
-    postalCode: "",
+    postalCode: "32821",
     city: "",
     region: "FL",
     location: "US",

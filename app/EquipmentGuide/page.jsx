@@ -16,7 +16,7 @@ const guides = [
       'JKARE offers comprehensive instructions for using and cleaning nebulizers and compressors. Regular cleaning and proper usage ensure effective therapy and prolong the life of your equipment. Follow our step-by-step guide for optimal performance and hygiene.',
     imgAlt: 'Woman using nebulizer',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/Nebulizer%2CCompressure+Therapy+%26+Cleaning+Instruction.webp',
-    link: "",
+    link: "https://s3.ap-south-1.amazonaws.com/jkare.data/patient+resources+files/nebulizer+leaning+instructions.pdf",
   }
 ];
 
