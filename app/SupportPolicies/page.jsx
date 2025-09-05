@@ -62,7 +62,6 @@ const guides = [
   //   link: "",
   // },
 ];
-
 export default function PatientRights() {
   return (
     <GuidesSection
