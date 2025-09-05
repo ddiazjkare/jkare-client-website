@@ -9,6 +9,12 @@ const nextConfig = {
         port: '', 
         pathname: '/**', 
       },
+ {
+        protocol: 'https', 
+        hostname: 'admin.jkare.com', 
+        port: '', 
+        pathname: '/**', 
+      },
       {
         protocol: 'https', 
         hostname: 'res.cloudinary.com', 
