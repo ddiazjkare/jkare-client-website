@@ -47,7 +47,7 @@ const guides = [
     id: 4,
     title: 'Prescription Requirements',
     blurb:
-      "All medical equipment and supplies require a valid prescription. At JKARE, we ensure all prescriptions meet federal and insurance guidelines, helping you receive the right products safely, efficiently, and in full compliance.",
+      "All medical equipment and supplies require a valid prescription. At JKARE, we ensure that all prescriptions meet federal and insurance guidelines, helping you receive the right products safely, efficiently, and in full compliance. A signed prescription (Rx) is required. In most cases, doctors know what information to include when sending an Rx. However, since we manually review each prescription, we may need to contact the doctor if any information is missing.",
     imgAlt: 'Woman using nebulizer',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/Prescription+Requirements.jpg',
     link: "",

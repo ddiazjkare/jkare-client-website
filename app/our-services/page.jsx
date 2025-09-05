@@ -22,7 +22,7 @@ const guides = [
     id: 3,
     title: "Durable Medical Equipment (DME)",
     blurb:
-      'JKARE offers a wide range of Durable Medical Equipment (DME) to support patients in their homes. Our DME includes items such as oxygen concentrators, CPAP machines, and mobility aids, all designed to enhance patient comfort and independence.',
+      'JKARE provides a comprehensive range of high-quality medical equipment, respiratory devices, and healthcare consumables designed to support patient care at home. We specialize in advanced respiratory solutions and durable medical equipment (DME) tailored to meet the unique needs of each patient. Our team ensures timely delivery, personalized setup, and ongoing support to promote safety, independence, and better health outcomes.',
     imgAlt: 'Woman using nebulizer',
     imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/Durable+Medical+Equipment+(DME).jpg',
     link: "",
@@ -36,9 +36,7 @@ const guides = [
   //   imgSrc: 'https://s3.ap-south-1.amazonaws.com/jkare.data/Patient_resources_images/medicalinstrument.jpeg',
   //   link: "",
   // },
-
 ];
-
 export default function OurServices() {
   return (
     <GuidesSection

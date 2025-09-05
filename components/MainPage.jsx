@@ -9,7 +9,7 @@ import CenteredBox from "./CenteredBox";
 async function fetchHomepageData() {
   try {
     const response = await fetch('https://h5m2m7a2if.execute-api.ap-south-1.amazonaws.com/homepage/6863b9eb524d3a4b3f3dc4bf', {
-      cache: 'no-store', // or 'force-cache' depending on your caching strategy
+      cache: 'no-store', 
     });
     
     if (!response.ok) {
