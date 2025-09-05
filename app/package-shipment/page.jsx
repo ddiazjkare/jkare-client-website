@@ -7,7 +7,7 @@ export const generateMetadata = () => {
     title: "Package Shipment"
   };
 };
-const apiCall = async () => {
+const getEnvData = async () => {
     const response = await fetch(`https://admin.jkare.com/api/ship-env`, {
       cache: "no-store",
     });
