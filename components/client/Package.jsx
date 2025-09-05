@@ -846,7 +846,7 @@ export default function Package({ env, userData }) {
                       </button>
 
                       {/* Show offline payment option if total exceeds card limit */}
-                      {env && env.card_limit && grandTotal > parseFloat(env.card_limit) && (
+                      {env && env.card_limit && grandTotal >= parseFloat(env.card_limit) && (
                         <>
                           {/* OR divider */}
                           <div className="flex items-center my-4">
