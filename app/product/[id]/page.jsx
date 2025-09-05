@@ -15,7 +15,7 @@ const fetchApi = async (id) => {
 };
 
 async function fetchShippingOffer() {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ship-env`, {
+  const response = await fetch(`https://admin.jkare.com/api/ship-env`, {
     cache: "no-store",
   });
   return await response.json();

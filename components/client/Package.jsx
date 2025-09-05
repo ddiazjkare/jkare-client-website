@@ -88,9 +88,11 @@ export default function Package({ env, userData }) {
     if (isFreeShipping) {
       const randomIndex = Math.floor(Math.random() * shipment.rates.length);
       const freeShippingRate = {
-        object_id: shipment.rates[randomIndex].object_id,
-        servicelevel: { display_name: "JKARE Free Shipping" },
-        estimated_days: 7,
+        ...shipment.rates[randomIndex],
+        // object_id: shipment.rates[randomIndex].object_id,
+        // servicelevel: { display_name: "JKARE Free Shipping" },
+        servicelevel: { ...shipment.rates[randomIndex].servicelevel, display_name: "JKARE Free Shipping" },
+        // estimated_days: 7,
         amount: "0.00",
         isFree: true,
       };
@@ -274,7 +276,7 @@ export default function Package({ env, userData }) {
         carrier_accounts: null,
         shipment_date: new Date().toISOString().replace("Z", "+00:00"),
       };
-      console.log("parcels payload", env);
+      // console.log("parcels payload", env);
       const response = await fetch("/api/shipment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -496,6 +498,8 @@ export default function Package({ env, userData }) {
 
   const shippingCost = selectedRate ? parseFloat(selectedRate.amount) : 0;
   const grandTotal = itemSubtotal + shippingCost;
+
+  // console.log("display rates: ", displayedRates)
 
   // =========================================================
   // 8) Render
