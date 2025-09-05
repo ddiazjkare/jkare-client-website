@@ -7,13 +7,10 @@ export const generateMetadata = () => {
     title: "Package Shipment"
   };
 };
-
-
-
-const getEnvData = async () => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ship-env`, {
-    cache: "no-store",
-  });
+const apiCall = async () => {
+    const response = await fetch(`https://admin.jkare.com/api/ship-env`, {
+      cache: "no-store",
+    });
   if (!response.ok) {
     throw new Error("Failed to fetch environment data (/api/ship-env).");
   }
