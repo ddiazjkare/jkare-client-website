@@ -1,0 +1,76 @@
+import mongoose from "../lib/mongodb";
+
+const OrderSchema = new mongoose.Schema(
+  {
+    billing_address: {
+      city: { type: String, default: "" },
+      country: { type: String, default: "" },
+      line1: { type: String, default: "" },
+      line2: { type: String, default: "" },
+      postal_code: { type: String, default: "" },
+      state: { type: String, default: "" },
+    },
+
+    comment: { type: String, default: "" },
+
+    customer_email: { type: String, required: true },
+    customer_name: { type: String, required: true },
+    customer_phone: { type: String, required: true },
+
+    discount_amount: { type: Number, default: 0.0 },
+
+    insurance_company: { type: String, default: "" },
+    insurance_pdf: { type: String, default: "" },
+
+    items: [
+      {
+        description: { type: String, required: true },
+        image: { type: String, required: true },
+        prescription_file: { type: String, default: "" },
+        prescription_required: { type: Boolean, required: true },
+        price: { type: Number, required: true },
+        product_id: { type: String, required: true },
+        product_name: { type: String, required: true },
+        quantity: { type: Number, required: true, min: 1 },
+      },
+    ],
+
+    order_id: { type: String },
+    order_date: { type: String, required: true, default: (new Date()).toLocaleDateString()},
+    order_status: {
+      type: String,
+      enum: ["Pending", "Processing", "Completed", "Cancelled"],
+      required: true,
+    },
+
+    prescription_required: { type: Boolean, default: false },
+    prescription_status: { type: String, default: "" },
+
+    shipping_address: {
+      city: { type: String, required: true },
+      country: { type: String, required: true },
+      line1: { type: String, required: true },
+      line2: { type: String },
+      postal_code: { type: String, required: true },
+      state: { type: String, required: true },
+    },
+
+    shipping_amount: { type: Number, default: 0.0 },
+    sub_amount: { type: Number, required: true },
+    tax_amount: { type: Number, default: 0.0 },
+    total_amount: { type: Number, required: true },
+    amount_paid: { type: Number, required: true },
+    tracking_number: { type: String, default: "SHIPPO_TRANSIT" },
+    carrier: { type: String },
+    checkout_session: { type: String, default: null },
+    shipping_rate: { type: String },
+    shipment_id: { type: String }
+  },
+  { timestamps: true }
+);
+
+// Check if the model has already been defined
+const Order =
+  mongoose.models.Order || mongoose.model("Order", OrderSchema, "Order");
+
+export default Order;
