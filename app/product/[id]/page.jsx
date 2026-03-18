@@ -15,10 +15,19 @@ const fetchApi = async (id) => {
 };
 
 async function fetchShippingOffer() {
-  const response = await fetch(`https://admin.jkare.com/api/ship-env`, {
-    cache: "no-store",
-  });
-  return await response.json();
+  try {
+    const response = await fetch(`https://admin.jkare.com/api/ship-env`, {
+      cache: "no-store",
+    });
+    if (!response.ok) {
+      console.warn(`Shipping offer fetch failed: ${response.status}`);
+      return null;
+    }
+    return await response.json();
+  } catch (error) {
+    console.warn("Error fetching shipping offer:", error.message);
+    return null;
+  }
 }
 
 async function ProductDetailPage({ params }) {
