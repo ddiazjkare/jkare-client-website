@@ -2,107 +2,250 @@ import { NextResponse } from "next/server";
 import { removeStopWords } from "../../../../lib/helperFunction";
 import Product from "../../../../models/Product";
 
+/**
+ * Remove duplicate objects from array
+ * @param {Array} arr - Array of objects
+ * @returns {Array} Unique objects
+ */
 function getUniqueObjects(arr) {
+  if (!Array.isArray(arr)) return [];
+  
   const uniqueObjects = [];
   const seenObjects = new Set();
 
   for (const obj of arr) {
-    const serializedObj = JSON.stringify(obj);
-
-    if (!seenObjects.has(serializedObj)) {
-      uniqueObjects.push(obj);
-      seenObjects.add(serializedObj);
+    try {
+      const serializedObj = JSON.stringify(obj);
+      if (!seenObjects.has(serializedObj)) {
+        uniqueObjects.push(obj);
+        seenObjects.add(serializedObj);
+      }
+    } catch (error) {
+      console.warn("Failed to serialize object:", error);
     }
   }
 
   return uniqueObjects;
 }
 
+/**
+ * Validate MongoDB ObjectId format
+ * @param {string} id - ID to validate
+ * @returns {boolean}
+ */
+function isValidObjectId(id) {
+  return /^[0-9a-fA-F]{24}$/.test(id);
+}
+
+/**
+ * GET /api/product/:id - Fetch product details with related products
+ */
 export const GET = async (req, ctx) => {
   try {
-    const product = await Product.findOne({ _id: ctx.params.id });
+    // Validate product ID format
+    const productId = ctx?.params?.id;
+    if (!productId || !isValidObjectId(productId)) {
+      return NextResponse.json(
+        { error: "Invalid product ID format" },
+        { status: 400 }
+      );
+    }
+
+    // Fetch product from database
+    const product = await Product.findOne({ _id: productId }).lean();
 
     if (!product) {
       return NextResponse.json(
-        { message: "Product not found" },
+        { error: "Product not found" },
         { status: 404 }
       );
     }
 
-    const jsonRes = await fetch(
-      "https://s3.ap-south-1.amazonaws.com/jkare.data/expanded_stopwords.json"
-    );
-    const { stopwords: stopWords } = await jsonRes.json();
+    // Fetch stopwords with error handling
+    let relatedProducts = [];
+    try {
+      const jsonRes = await fetch(
+        "https://s3.ap-south-1.amazonaws.com/jkare.data/expanded_stopwords.json",
+        { 
+          cache: "force-cache", // Cache stopwords for performance
+          next: { revalidate: 86400 } // Revalidate once per day
+        }
+      );
 
-    const filteredText = removeStopWords(product.prod_name, stopWords);
+      if (jsonRes.ok) {
+        const { stopwords: stopWords } = await jsonRes.json();
 
-    const keywords = filteredText.trim().split(" ").filter(Boolean);
-    const regexPattern = keywords.map((word) => `\\b${word}\\b`).join("|");
-    const query = {
-      _id: { $ne: ctx.params.id }, 
-      prod_name: { $regex: regexPattern, $options: "i" }, 
-    };
+        // Extract keywords from product name
+        const filteredText = removeStopWords(product.prod_name, stopWords);
+        const keywords = filteredText.trim().split(" ").filter(Boolean);
 
-    const relatedProducts = await Product.find(query).limit(10); // Limit to avoid excessive results
+        // Only fetch related products if we have keywords
+        if (keywords.length > 0) {
+          const regexPattern = keywords
+            .map((word) => `\\b${word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`) // Escape special regex characters
+            .join("|");
+
+          const query = {
+            _id: { $ne: productId }, 
+            prod_name: { $regex: regexPattern, $options: "i" }, 
+          };
+
+          relatedProducts = await Product.find(query)
+            .select("_id prod_name price image stockQuantity") // Select only needed fields
+            .limit(10)
+            .lean();
+        }
+      } else {
+        console.warn(`Failed to fetch stopwords: ${jsonRes.status}`);
+      }
+    } catch (error) {
+      console.warn("Error fetching related products (non-critical):", error.message);
+      // Continue without related products
+    }
 
     const uniqueRelatedProducts = getUniqueObjects(relatedProducts);
 
     return NextResponse.json(
-      { product, relatedProducts: uniqueRelatedProducts },
-      { status: 200 }
+      { 
+        product, 
+        relatedProducts: uniqueRelatedProducts 
+      },
+      { 
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        }
+      }
     );
   } catch (error) {
-    console.error("Error in GET /products/:id:", error);
+    console.error("Error in GET /api/product/:id:", error);
+    
+    // Don't expose internal error details in production
+    const isDevelopment = process.env.NODE_ENV === "development";
+    
     return NextResponse.json(
-      { error: "Internal server error", details: error.message },
-      { status: 500 }
+      { 
+        error: "Internal server error",
+        ...(isDevelopment && { details: error.message })
+      },
+      { 
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+        }
+      }
     );
   }
 };
 
+/**
+ * PUT /api/product/:id - Update product stock quantity
+ */
 export const PUT = async (req, ctx) => {
   try {
-    let { quantity } = await req.json(); // Get quantity to reduce
-    const productId = ctx.params.id; // Get product ID from request params
-    quantity = parseInt(quantity);
-
-    if (!quantity || quantity <= 0) {
+    // Validate product ID format
+    const productId = ctx?.params?.id;
+    if (!productId || !isValidObjectId(productId)) {
       return NextResponse.json(
-        { message: "Invalid quantity value" },
+        { error: "Invalid product ID format" },
+        { status: 400 }
+      );
+    }
+
+    // Parse and validate request body
+    let body;
+    try {
+      body = await req.json();
+    } catch (error) {
+      return NextResponse.json(
+        { error: "Invalid JSON in request body" },
+        { status: 400 }
+      );
+    }
+
+    const quantity = parseInt(body?.quantity, 10);
+
+    // Validate quantity
+    if (isNaN(quantity) || quantity <= 0) {
+      return NextResponse.json(
+        { error: "Invalid quantity value. Must be a positive integer." },
+        { status: 400 }
+      );
+    }
+
+    // Prevent excessive quantity updates (security measure)
+    if (quantity > 1000) {
+      return NextResponse.json(
+        { error: "Quantity exceeds maximum allowed value" },
         { status: 400 }
       );
     }
 
     // Find the product and check stock availability
-    const product = await Product.findOne({ _id: productId });
+    const product = await Product.findOne({ _id: productId }).lean();
 
     if (!product) {
       return NextResponse.json(
-        { message: "Product not found" },
+        { error: "Product not found" },
         { status: 404 }
       );
     }
 
-    if (product.stockQuantity < quantity) {
+    // Check stock availability
+    if (!product.stockQuantity || product.stockQuantity < quantity) {
       return NextResponse.json(
-        { message: "Insufficient stock" },
+        { 
+          error: "Insufficient stock",
+          available: product.stockQuantity || 0,
+          requested: quantity
+        },
         { status: 400 }
       );
     }
 
     // Update stock quantity by decrementing the given value
     const updatedProduct = await Product.findOneAndUpdate(
-      { _id: productId },
-      { $inc: { stockQuantity: -quantity } }, // Reduce stock quantity
-      { new: true } // Return updated product
+      { _id: productId, stockQuantity: { $gte: quantity } }, // Additional safety check
+      { $inc: { stockQuantity: -quantity } },
+      { new: true, lean: true }
     );
 
+    // Double-check update succeeded
+    if (!updatedProduct) {
+      return NextResponse.json(
+        { error: "Stock update failed. Please try again." },
+        { status: 409 }
+      );
+    }
+
     return NextResponse.json(
-      { message: "Stock updated successfully", product: updatedProduct },
-      { status: 200 }
+      { 
+        message: "Stock updated successfully", 
+        product: updatedProduct 
+      },
+      { 
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        }
+      }
     );
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error("Error in PUT /api/product/:id:", error);
+    
+    const isDevelopment = process.env.NODE_ENV === "development";
+    
+    return NextResponse.json(
+      { 
+        error: "Internal server error",
+        ...(isDevelopment && { details: error.message })
+      },
+      { 
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+        }
+      }
+    );
   }
 };
