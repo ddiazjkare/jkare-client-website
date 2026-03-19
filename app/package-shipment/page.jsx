@@ -8,47 +8,42 @@ export const generateMetadata = () => {
   };
 };
 const getEnvData = async () => {
-    const response = await fetch(`https://admin.jkare.com/api/ship-env`, {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ship-env`, {
       cache: "no-store",
     });
-  if (!response.ok) {
-    throw new Error("Failed to fetch environment data (/api/ship-env).");
+    if (!response.ok) {
+      console.warn(`Ship env fetch failed: ${response.status}`);
+      return null;
+    }
+    return await response.json();
+  } catch (error) {
+    console.warn("Error fetching ship env:", error.message);
+    return null;
   }
-  const data = await response.json();
-  return data;
-
 };
-
 const getUserData = async (userEmail) => {
   if (!userEmail) return null;
-
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/info/${userEmail}`, {
       cache: "no-store",
     });
-
     if (!response.ok) {
       return null;
     }
-
     return await response.json();
   } catch (error) {
     console.error("Failed to fetch user data:", error);
     return null;
   }
 };
-
 const Shipment = async () => {
-  // Get session on server side
   const session = await getServerSession(authOptions);
   const userEmail = session?.user?.email || "";
-  
-  // Fetch both environment and user data
   const [envData, userData] = await Promise.all([
     getEnvData(),
     getUserData(userEmail)
   ]);
-  
   return <Package env={envData} userData={userData} />;
 };
 export default Shipment;
